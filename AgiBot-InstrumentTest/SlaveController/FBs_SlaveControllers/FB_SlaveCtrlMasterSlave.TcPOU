@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_SlaveCtrlMasterSlave" Id="{5b96f309-da76-444d-a9fb-2d4321895cd7}" SpecialFunc="None">
+    <Declaration><![CDATA[// Brief: Slave Arm MasterSlave controller
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlMasterSlave EXTENDS FB_SlaveArmCtrlBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// minimum distance between instrument tip and remote center
+	m_minInstruRCDis:LREAL := 0.05;
+	
+	// master-slave motion scale
+	m_MSMotionScale :LREAL;
+		
+	// gripper match angle threshold
+	m_gripperMatchAngThres :LREAL := 2*g_deg2Rad;
+	
+	// control error thershold from joint limit back to free space
+	m_jntLimitOriErr :LREAL :=g_deg2Rad * 5;
+	
+	// master-slave error thershold to halt control 
+	m_safetyOriErr :LREAL :=g_deg2Rad * 150;
+	
+	// filter cut-off frequency for master-slave control
+	m_macroCmdJntPosLpfCutoffFreq : LREAL :=5;
+	m_microCmdJntPosLpfCutoffFreq : LREAL :=15;
+	
+	// last command joint position
+	m_lastCmdJntPos :Vec8d;
+	
+	// simulated DH joint position
+	m_simDHJntPos : Vec6d;
+	
+	// simulated slave twist of DH joint
+	m_simDHJointVel :Vec6d;
+		
+	// enter master-slave control for the first time
+	m_firstIn :BOOL := TRUE;
+	
+	// flag if reach joint limit
+	m_reachMacroJntLimit :BOOL;
+	m_reachWristJntLimit :BOOL;
+	
+	// master/slave origin pose when first enter master-slave control
+	m_masterOriginPose : ST_Frame;
+	m_slaveOriginPose : ST_Frame;
+	
+	// orientation deviation(in master coordinate) between master and slave when first enter control
+	m_MSOriDeviation : Mat3d;
+	
+	// command joint position filter
+	m_cmdJntPosLpf:ARRAY[1..8] OF FB_LowPassFilter;
+	
+	// commmand yaw angle and velocity
+	m_cmdYawAngle :LREAL;
+	m_cmdYawVel :LREAL;
+	
+	// comand yaw angle and velocity filter
+	m_cmdYawAngLpf : FB_LowPassFilter;
+	m_cmdYawVelLpf : FB_LowPassFilter;
+	
+	// master pose/velocity in monitor coordinate
+	m_masterPose :ST_Frame;
+	m_masterTwist : Vec6d;
+	
+	// master grip angle
+	m_masterGripAngle : LREAL;
+	
+	// slave command/current pose in endoscope coordinate
+	m_slaveCmdPoseInScope :ST_Frame;
+	m_slavePoseInScope : ST_Frame;
+	
+	// slave command/current pose in cart
+	m_slaveCmdPoseInCart :ST_Frame;
+	m_slavePoseInCart : ST_Frame;
+	
+	// instrument controller
+	m_basicInstruController : FB_BasicInstruControl;
+	m_usKnifeController : FB_UltrosonicKnifeControl;
+	
+	// slave command grip angle and grip force level
+	m_slaveCmdGripAngle :LREAL;
+	m_slaveCmdGripForceLevel:LREAL;
+	
+	// slave pose error
+	m_slavePosErr :Vec3d;
+	m_slaveRotErr :Mat3d;
+	m_errAngle : LREAL;
+	m_errAxisLocal, m_errAxis :Vec3d;
+	m_masterSlavePoseError :Vec6d;
+	
+	// velocity for slave to track master motion
+	m_slaveTrackTwist :Vec6d;
+	m_slaveCmdVel, m_slaveCmdWVel : Vec3d;
+	
+	// flag to start gripper control
+	m_gripperCtrlFlag :BOOL;
+	
+	//################# variable to interpolate master pose ##############
+	m_firstInterpolate :BOOL :=TRUE;
+	m_lastMasterPose : ST_Frame;
+	m_lastMasterGripAngle :LREAL;
+	m_masterInterpolateCycle :INT := 4;
+	m_curInterpolateCylce :INT := 1;
+	m_masterPosInterStep :Vec3d;
+	m_masterOriInterStep :Mat3d;
+	m_masterGripAngleInterStep :LREAL;
+	m_interplotedMasterPose :ST_Frame;
+	m_interplotedMasterGripAngle :LREAL;
+	
+	
+	// code execute time measure
+	m_codeTime : Profiler;
+	
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <LineIds Name="FB_SlaveCtrlMasterSlave">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

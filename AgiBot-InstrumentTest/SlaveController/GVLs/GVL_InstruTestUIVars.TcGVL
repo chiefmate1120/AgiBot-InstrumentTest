@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <GVL Name="GVL_InstruTestUIVars" Id="{06880bc2-8293-4e74-a4a5-5e57bb316da1}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	//################ input variables from HMI ########################
+	// instrument test status flag
+	g_instruMountFlag :BOOL := TRUE;
+	g_instruCaliFlag :BOOL:= FALSE;
+	g_instruTestFlag :BOOL := FALSE;
+	
+	// control variable for instrument calibration
+	g_searchZeroPosFlag :BOOL := FALSE;
+	g_writeZeroPosFlag :BOOL :=FALSE;
+	g_newInstruSN :ULINT;
+	g_writeSNFlag :BOOL := FALSE;
+	
+	// control variable for instrument test
+	g_instruAutoTestMode :INT :=0; // 0: gripper close and open; 1: move with gripper open ; 2: move with max grip force
+	g_instruAutoTestFlag :BOOL :=FALSE;
+	g_maxInstruAutoTestCycles :DINT :=0;
+	
+	g_instruManulTestFlag :BOOL :=FALSE;
+	g_moveToSetPosFlag :BOOL :=FALSE;
+	g_targetRollAng :LREAL :=0; //deg
+	g_targetPitchAng :LREAL :=-90;//deg
+	g_targetYawAng :LREAL :=0;//deg
+	g_targetGripAng :LREAL :=0;//deg
+	g_targetGripForceLevel:INT :=0;
+	g_gripperOpenFlag :BOOL :=FALSE;
+	g_gripperCloseFlag :BOOL :=FALSE;
+	g_maxGripForceFlag :BOOL :=FALSE;
+	
+	g_instruPosVerifyFlag :BOOL :=FALSE;
+	g_instruPosVerifySteps :INT:=0;
+	g_instruPosVerifyLastStepFlag :BOOL:=FALSE;
+	g_instruPosVerifyNextStepFlag :BOOL :=FALSE;
+	
+	//################ output variables  HMI ########################
+	g_curInstruJntPos :Vec5d;
+	g_curInstruJntCurrent:Vec5d;
+	g_curInstruDHPos :Vec3d;
+	g_curGripAng:LREAL;
+	g_instruZeroPos :Vec5d;
+	g_instruSN :ULINT;
+
+END_VAR]]></Declaration>
+  </GVL>
+</TcPlcObject>
