@@ -44,10 +44,7 @@ VAR
 	// endoscope motion angle to original position
 	m_scopeJnt4CenterMotionAng :LREAL :=175*g_deg2Rad;
 	m_scopeJnt5CenterMotionAng :LREAL :=150*g_deg2Rad;
-	
-	m_backslash :LREAL := 6.0*g_deg2rad;
-	m_gripperCloseAng :LREAL := 1.5*g_deg2rad;
-	
+
 END_VAR
 ]]></Declaration>
     <Implementation>
