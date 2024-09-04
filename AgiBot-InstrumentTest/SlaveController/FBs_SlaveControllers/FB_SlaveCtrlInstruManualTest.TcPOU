@@ -1,29 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="FB_SlaveCtrlTest" Id="{25b7ca7b-a3c0-4d1d-9db6-09421c0085dc}" SpecialFunc="None">
+  <POU Name="FB_SlaveCtrlInstruManualTest" Id="{dbf632a1-f924-4c4a-9c08-3e3912584188}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
-FUNCTION_BLOCK PUBLIC FB_SlaveCtrlTest EXTENDS FB_SlaveArmCtrlBase
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruManualTest EXTENDS FB_SlaveArmCtrlBase
 VAR
-// ################ variables for single DH  joint test ##################
-	m_enableFrictionComp :BOOL :=false;
-	m_freqTestFlag :BOOL:=FALSE;
-	m_initJntPos :Vec6d;
+																
+	// final target DH joint position and grip angle
+	m_targetDHJntPos:Vec3d;
+	m_targetGripAng:LREAL;
+	m_targetGripForceLevel :LREAL :=0;
+	
+	// interploated command joint position and grip angle 
 	m_cmdDHJntPos :Vec6d;
 	m_cmdDHJntVel :Vec6d;
 	m_cmdGripAng:LREAL;
-	m_jntMotionFreq :Vec6d :=[0.2, 0.2, 0.1, 3(0.1)];
-	m_jntMotionRange :Vec6d :=[pi/6, pi/6, 0.1, 3(pi/6)];
-	m_testJntIdx :INT :=1;
-	m_gripperAngle : LREAL :=0;
-	m_gripForceLevel :LREAL :=0;
+
+	// last joint position 
 	m_lastCmdJntPos :Vec8d ;
-	
-	m_stepTestFlag :BOOL :=FALSE;
-	m_jntStep : LREAL := 5*g_deg2Rad;
 	
 	// instrument controller
 	m_instruController : FB_BasicInstruControl;
@@ -31,22 +24,18 @@ VAR
 	m_instruCmdJntPos,m_instruCmdJntVel : Vec5d;
 	m_instruCmdJntTrq :Vec5d;
 	
-	
-	m_errCmdPos, m_errCurPos :LREAL;
-	m_errPosIdx : INT;
-	
-	m_originalJntPos:Vec8d;
-		m_jntOTG:array[1..6] of FB_secOrdTrajFilter;
-		m_gripAngleOTG : FB_secOrdTrajFilter;
-	
-//####################################################################
+	// OTG
+	m_DHJntOTG:ARRAY[1..3] OF FB_secOrdTrajFilter;
+	m_gripAngleOTG : FB_secOrdTrajFilter;
+	m_maxJntVel:Vec3d:=[3(2.0)];
+	m_maxJntAcc:Vec3d:=[3(4.0)];
 
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="calcCmdJntPos" Id="{010d1f8e-611a-45d6-a3e6-a98e946007a3}">
+    <Method Name="calcCmdJntPos" Id="{9ac6c1d4-8249-4e40-93a3-6d5814eb3008}">
       <Declaration><![CDATA[METHOD PROTECTED calcCmdJntPos : BOOL
 VAR_IN_OUT CONSTANT
 	i_endoscopePose : ST_Frame;
@@ -62,39 +51,31 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[IF m_testJntIdx <4 OR m_testJntIdx >6 THEN
-	RETURN;
+        <ST><![CDATA[// determine target DH joint position and gripper motion
+IF GVL_InstruTestUIVars.g_moveToSetPosFlag THEN
+	m_targetDHJntPos[1] := GVL_InstruTestUIVars.g_targetRollAng*g_deg2rad;
+	m_targetDHJntPos[2] := GVL_InstruTestUIVars.g_targetPitchAng*g_deg2rad;
+	m_targetDHJntPos[3] := GVL_InstruTestUIVars.g_targetYawAng*g_deg2rad;
+	m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
+	m_targetGripForceLevel := LIMIT(0, GVL_InstruTestUIVars.g_targetGripForceLevel, 100);
+ELSIF GVL_InstruTestUIVars.g_gripperOpenFlag THEN
+	m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+	m_targetGripForceLevel :=0;
+ELSIF GVL_InstruTestUIVars.g_gripperCloseFlag THEN
+	m_targetGripAng := 0;
+	m_targetGripForceLevel :=0;
+ELSIF GVL_InstruTestUIVars.g_maxGripForceFlag THEN
+	m_targetGripAng := 0;
+	m_targetGripForceLevel :=100;
 END_IF
 
-// frequency test
-IF m_freqTestFlag THEN 
-	m_cmdDHJntPos[m_testJntIdx]:=m_initJntPos[m_testJntIdx]+m_jntMotionRange[m_testJntIdx]/2
-									+0.5*m_jntMotionRange[m_testJntIdx]*SIN(2*pi*m_jntMotionFreq[m_testJntIdx]*m_timePeriod-pi/2);
-	m_cmdDHJntVel[m_testJntIdx]:=0.5*m_jntMotionRange[m_testJntIdx]*2*pi*m_jntMotionFreq[m_testJntIdx]*COS(2*pi*m_jntMotionFreq[m_testJntIdx]*m_timePeriod-pi/2);
-// step test
-ELSIF m_stepTestFlag THEN;
-	m_jntOTG[m_testJntIdx].run(m_initJntPos[m_testJntIdx]+m_jntStep,0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[m_testJntIdx],o_cmdPos=> m_cmdDHJntPos[m_testJntIdx]);
-// reset controller
-ELSE
-	m_timePeriod:=0;
-	m_initJntPos :=i_slaveArm.curDHJntPos;
-	m_originalJntPos := i_slaveArm.curJntPos;
-	m_cmdDHJntPos :=m_initJntPos;
-	m_cmdDHJntVel :=g_zeroVec6d;
-	m_gripperAngle := i_slaveArm.curGripAngle;
-	// init instrument controller
-	m_instruController.init(i_slaveArm);
-	m_usKnifeController.init(i_slaveArm);
-	
-	FOR i:=1 TO 6  DO
-		m_jntOTG[i].init(m_initJntPos[i], 0,12, 100, g_slaveArmCtrlCycleTime);
-	END_FOR
-	
-	m_gripAngleOTG.init(m_gripperAngle, 0, 2, 8, g_slaveArmCtrlCycleTime);
-END_IF
+// run OTG
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].run(m_targetDHJntPos[i],0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[i],o_cmdPos=> m_cmdDHJntPos[i+3]);
+END_FOR
+m_gripAngleOTG.run(m_targetGripAng,0.0, o_cmdAcc=>,o_cmdVel=>,o_cmdPos=>m_cmdGripAng);
 
 // calculate target motor joint position from DH joint position
-m_gripAngleOTG.run(m_gripperAngle,0.0, o_cmdAcc=>,o_cmdVel=>,o_cmdPos=>m_cmdGripAng);
 i_slaveArm.instrument.instruIK(m_cmdDHJntPos,m_cmdGripAng, o_jntPos=>m_cmdJntPos);
 
 // command velocity
@@ -103,7 +84,7 @@ vecSelfMultiNum(m_cmdJntVel, g_slaveArmCtrlFreq);
 m_lastCmdJntPos:=m_cmdJntPos;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="calcCmdJntTrq" Id="{7ca43581-7589-4aef-a767-3681b3b7ea42}">
+    <Method Name="calcCmdJntTrq" Id="{672b1be1-2807-47dd-8f1d-525fb978a27b}">
       <Declaration><![CDATA[// override this function in each exact controller
 METHOD PROTECTED calcCmdJntTrq : BOOL
 VAR_IN_OUT CONSTANT
@@ -130,23 +111,18 @@ FOR i:=1 TO 5 DO
 END_FOR
 
 IF i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeS OR i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeU THEN
-	m_usKnifeController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_gripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+	m_usKnifeController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
 ELSE
-	m_instruController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_cmdDHJntPos[6], m_cmdDHJntVel[6], m_gripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+	m_instruController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_cmdDHJntPos[6], m_cmdDHJntVel[6], m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
 END_IF
 
 FOR i:=1 TO 5 DO
 	m_cmdJntTrq[i+3]:=m_instruCmdJntTrq[i];
 END_FOR
-
-// add friction
-IF m_enableFrictionComp THEN
-	enableFrictionCompensation(i_slaveArm);
-END_IF
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="init" Id="{59631f67-fc70-45f4-a6d2-b7e272ec8be8}">
+    <Method Name="init" Id="{406632cf-8059-46ab-b0c2-acbe734ef5ab}">
       <Declaration><![CDATA[METHOD PUBLIC init : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm	:FB_SlaveArm;
@@ -171,21 +147,22 @@ m_jntOPMode[6] := DriverOPMode_Trq;
 m_jntOPMode[7] := DriverOPMode_Trq;
 m_jntOPMode[8] := DriverOPMode_Trq;
 
-m_initJntPos :=i_slaveArm.curDHJntPos;
-m_originalJntPos := i_slaveArm.curJntPos;
-m_cmdDHJntPos :=m_initJntPos;
+m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
 m_cmdDHJntVel :=g_zeroVec6d;
-m_gripperAngle := i_slaveArm.curGripAngle;
+m_targetGripAng := i_slaveArm.curGripAngle;
+m_targetDHJntPos[1] := i_slaveArm.curDHJntPos[4];
+m_targetDHJntPos[2] := i_slaveArm.curDHJntPos[5];
+m_targetDHJntPos[3] := i_slaveArm.curDHJntPos[6];
 
 // init instrument controller
 m_instruController.init(i_slaveArm);
 m_usKnifeController.init(i_slaveArm);
 
-FOR i:=1 TO 6  DO
-	m_jntOTG[i].init(m_initJntPos[i], 0,12, 100, g_slaveArmCtrlCycleTime);
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].init(m_cmdDHJntPos[i+3], 0, m_maxJntVel[i], m_maxJntAcc[i], g_slaveArmCtrlCycleTime);
 END_FOR
 
-m_gripAngleOTG.init(m_gripperAngle, 0,2, 8, g_slaveArmCtrlCycleTime);
+m_gripAngleOTG.init(m_targetGripAng, 0, 2*m_maxJntVel[3], 2*m_maxJntAcc[3], g_slaveArmCtrlCycleTime);
 // update commands to arm
 copyCmds(r_slaveArmCtrlCmd);
 
@@ -193,38 +170,25 @@ copyCmds(r_slaveArmCtrlCmd);
 ]]></ST>
       </Implementation>
     </Method>
-    <LineIds Name="FB_SlaveCtrlTest">
+    <LineIds Name="FB_SlaveCtrlInstruManualTest">
       <LineId Id="9" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlTest.calcCmdJntPos">
-      <LineId Id="302" Count="0" />
-      <LineId Id="304" Count="1" />
-      <LineId Id="283" Count="0" />
-      <LineId Id="114" Count="0" />
-      <LineId Id="202" Count="0" />
-      <LineId Id="205" Count="1" />
-      <LineId Id="203" Count="0" />
-      <LineId Id="306" Count="0" />
-      <LineId Id="204" Count="0" />
-      <LineId Id="247" Count="0" />
-      <LineId Id="307" Count="0" />
-      <LineId Id="209" Count="1" />
-      <LineId Id="309" Count="3" />
-      <LineId Id="308" Count="0" />
-      <LineId Id="314" Count="1" />
-      <LineId Id="321" Count="0" />
-      <LineId Id="316" Count="4" />
-      <LineId Id="313" Count="0" />
-      <LineId Id="207" Count="0" />
-      <LineId Id="161" Count="1" />
+    <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntPos">
+      <LineId Id="443" Count="0" />
+      <LineId Id="428" Count="14" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="391" Count="3" />
       <LineId Id="261" Count="0" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="396" Count="0" />
       <LineId Id="164" Count="0" />
       <LineId Id="287" Count="0" />
       <LineId Id="211" Count="0" />
       <LineId Id="187" Count="1" />
       <LineId Id="131" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlTest.calcCmdJntTrq">
+    <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntTrq">
       <LineId Id="121" Count="0" />
       <LineId Id="34" Count="1" />
       <LineId Id="135" Count="0" />
@@ -235,21 +199,18 @@ copyCmds(r_slaveArmCtrlCmd);
       <LineId Id="141" Count="0" />
       <LineId Id="200" Count="0" />
       <LineId Id="142" Count="2" />
-      <LineId Id="176" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="178" Count="2" />
       <LineId Id="177" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlTest.init">
+    <LineIds Name="FB_SlaveCtrlInstruManualTest.init">
       <LineId Id="13" Count="0" />
       <LineId Id="101" Count="0" />
       <LineId Id="86" Count="6" />
       <LineId Id="19" Count="0" />
-      <LineId Id="68" Count="0" />
-      <LineId Id="67" Count="0" />
       <LineId Id="120" Count="0" />
       <LineId Id="84" Count="1" />
       <LineId Id="93" Count="0" />
+      <LineId Id="175" Count="1" />
+      <LineId Id="174" Count="0" />
       <LineId Id="81" Count="2" />
       <LineId Id="162" Count="0" />
       <LineId Id="148" Count="0" />

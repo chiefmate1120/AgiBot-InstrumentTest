@@ -39,7 +39,7 @@ VAR
 	m_armPackage :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlPackage;
 	m_armCart :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlCart;
 	m_armGraCali :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlGraCali;
-	m_armTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruTest;
+	m_armTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlTest;
 	m_instruRetract :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruRetract;
 	m_instruInvasion :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruInvasion;
 	m_armDisable :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlDisable;
@@ -47,6 +47,9 @@ VAR
 	m_scopeToggle :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlScopeToggle;
 	m_Performance :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlPerformance;
 	m_armStop :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlStop;
+	m_instruAutoTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruAutoTest;
+	m_instruManualTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruManualTest;
+	m_instruVerify :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruVerify;
 	
 	// arm controller interface
 	m_armCtrl :ARRAY[1..g_sArmNum] OF I_SlaveArmCtrl;
@@ -135,6 +138,9 @@ END_VAR
 	m_armCtrlFactory[i,SlaveArmState_ScopeToggle] := m_scopeToggle[i];
 	m_armCtrlFactory[i,SlaveArmState_Performance] := m_Performance[i];
 	m_armCtrlFactory[i,SlaveArmState_Stop] := m_armStop[i];
+	m_armCtrlFactory[i,SlaveArmState_InstruAutoTest] := m_instruAutoTest[i];
+	m_armCtrlFactory[i,SlaveArmState_InstruManualTest] := m_instruManualTest[i];
+	m_armCtrlFactory[i,SlaveArmState_InstruVerify] := m_instruVerify[i];
 	
 	// assign controller
 	m_armCtrl[i]:=m_armCtrlFactory[i,m_slaveArmState[i]];
@@ -185,7 +191,7 @@ FOR i:=1 TO g_sArmNum DO
 END_FOR
 
 
-// update insrument UI data 
+// ################# update insrument UI data #########################################
 FOR i:=1 TO 5 DO 
 	GVL_InstruTestUIVars.g_curInstruJntPos[i]:= m_slaveArms[1].curJntPos[i+3];
 	GVL_InstruTestUIVars.g_curInstruJntCurrent[i]:= m_slaveArms[1].filtJntCurrent[i+3];
@@ -304,9 +310,17 @@ FOR i:=1 TO g_sArmNum DO
 			ELSIF GVL_InstruTestUIVars.g_instruCaliFlag THEN
 				m_nextSlaveArmState[i] := SlaveArmState_InstruCali;
 				
-			// to instrument test
-			ELSIF GVL_InstruTestUIVars.g_instruTestFlag THEN
-				m_nextSlaveArmState[i] := SlaveArmState_Test;
+			// to instrument auto test
+			ELSIF GVL_InstruTestUIVars.g_instruAutoTestFlag THEN
+				m_nextSlaveArmState[i] := SlaveArmState_InstruAutoTest;
+				
+			// to instrument manual test
+			ELSIF GVL_InstruTestUIVars.g_instruManualTestFlag THEN
+				m_nextSlaveArmState[i] := SlaveArmState_InstruManualTest;
+				
+			// to instrument verify
+			ELSIF GVL_InstruTestUIVars.g_instruVerifyFlag THEN
+				m_nextSlaveArmState[i] := SlaveArmState_InstruVerify;
 			END_IF
 		
 		//instrument caliberation
@@ -316,17 +330,24 @@ FOR i:=1 TO g_sArmNum DO
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 			
-		//endoscope ready
-		SlaveArmState_ScopeReady:
-			// to stand by
-			IF NOT(m_slaveArms[i].instruOn) THEN
-				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
-			END_IF	
-			
-		//arm test
-		SlaveArmState_Test:
+		//instrument auto test
+		SlaveArmState_InstruAutoTest:
 			// to standby
-			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruTestFlag)  THEN
+			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruAutoTestFlag)  THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+			END_IF
+		
+		//instrument manual test
+		SlaveArmState_InstruManualTest:
+			// to standby
+			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruManualTestFlag)  THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+			END_IF
+			
+		//instrument verify
+		SlaveArmState_InstruVerify:
+			// to standby
+			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruVerifyFlag)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 	
@@ -407,6 +428,7 @@ END_FOR
       <LineId Id="168" Count="0" />
       <LineId Id="182" Count="0" />
       <LineId Id="175" Count="0" />
+      <LineId Id="189" Count="2" />
       <LineId Id="110" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="12" Count="0" />
@@ -520,18 +542,26 @@ END_FOR
       <LineId Id="891" Count="0" />
       <LineId Id="894" Count="1" />
       <LineId Id="892" Count="0" />
+      <LineId Id="896" Count="0" />
+      <LineId Id="898" Count="1" />
+      <LineId Id="897" Count="0" />
+      <LineId Id="900" Count="0" />
+      <LineId Id="902" Count="1" />
+      <LineId Id="901" Count="0" />
       <LineId Id="272" Count="0" />
       <LineId Id="406" Count="0" />
       <LineId Id="884" Count="4" />
       <LineId Id="883" Count="0" />
       <LineId Id="889" Count="0" />
-      <LineId Id="407" Count="1" />
-      <LineId Id="557" Count="0" />
-      <LineId Id="409" Count="1" />
-      <LineId Id="419" Count="0" />
-      <LineId Id="310" Count="2" />
+      <LineId Id="311" Count="1" />
       <LineId Id="307" Count="0" />
       <LineId Id="506" Count="2" />
+      <LineId Id="904" Count="0" />
+      <LineId Id="906" Count="4" />
+      <LineId Id="905" Count="0" />
+      <LineId Id="911" Count="0" />
+      <LineId Id="913" Count="4" />
+      <LineId Id="912" Count="0" />
       <LineId Id="858" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>

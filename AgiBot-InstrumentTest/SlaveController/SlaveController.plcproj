@@ -418,6 +418,12 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruCali.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruManualTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruVerify.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlPerformance.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -469,7 +475,7 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlGraCali.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruTest.TcPOU">
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruAutoTest.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_TrajectoryPlanning\FB_BasicDoubleS.TcPOU">

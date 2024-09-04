@@ -26,8 +26,11 @@
 	SlaveArmState_ScopeToggle :=21,
 	SlaveArmState_Performance:=22,
 	SlaveArmState_Stop :=23,
+	SlaveArmState_InstruAutoTest :=24,
+	SlaveArmState_InstruManualTest :=25,
+	SlaveArmState_InstruVerify :=26,
 	
-	SlaveArmState_totalNum :=SlaveArmState_Stop
+	SlaveArmState_totalNum :=SlaveArmState_InstruVerify
 );
 END_TYPE
 ]]></Declaration>
