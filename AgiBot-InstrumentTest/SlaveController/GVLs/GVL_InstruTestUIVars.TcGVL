@@ -5,41 +5,41 @@
 VAR_GLOBAL
 	//################ input variables from HMI ########################
 	// control variable for instrument calibration
-	g_instruCaliFlag :BOOL:= FALSE;
-	g_searchZeroPosFlag :BOOL := FALSE;
-	g_writeZeroPosFlag :BOOL :=FALSE;
-	g_newInstruSN :ULINT;
-	g_writeSNFlag :BOOL := FALSE;
+	g_instruCaliFlag :BOOL:= FALSE; // 允许标定按键，按下不反弹
+	g_searchZeroPosFlag :BOOL := FALSE; // 器械找零点按键， 按下反弹
+	g_writeZeroPosFlag :BOOL :=FALSE; // 器械零位写入，按下反弹
+	g_newInstruSN :ULINT; // 新序列号
+	g_writeSNFlag :BOOL := FALSE; // 新序列号写入， 按下反弹
 	
 	// control variable for instrument auto test
-	g_instruAutoTestFlag :BOOL :=FALSE;
-	g_instruAutoTestMode :INT :=0; // 0: gripper close and open; 1: move with gripper open ; 2: move with max grip force
-	g_maxInstruAutoTestCycles :DINT :=0;
+	g_instruAutoTestFlag :BOOL :=FALSE; // 器械自动测试按键，按下不反弹
+	g_instruAutoTestMode :INT :=0; //  自动测试模式 0: 器械开合 1: 器械开合加运动 ; 2: 器械加紧运动
+	g_maxInstruAutoTestCycles :DINT :=0; // 最大测试次数
 	
 	// control variable for instrument manual test
-	g_instruManualTestFlag :BOOL :=FALSE;
-	g_moveToSetPosFlag :BOOL :=FALSE;
-	g_targetRollAng :LREAL :=0; //deg
-	g_targetPitchAng :LREAL :=-90;//deg
-	g_targetYawAng :LREAL :=0;//deg
-	g_targetGripAng :LREAL :=0;//deg
-	g_targetGripForceLevel:INT :=0;
-	g_gripperOpenFlag :BOOL :=FALSE;
-	g_gripperCloseFlag :BOOL :=FALSE;
-	g_maxGripForceFlag :BOOL :=FALSE;
+	g_instruManualTestFlag :BOOL :=FALSE; // 器械手动测试按键，按下不反弹
+	g_moveToSetPosFlag :BOOL :=FALSE; // 运动到指令位置 ，按下反弹
+	g_targetRollAng :LREAL :=0; //器械回转角度
+	g_targetPitchAng :LREAL :=-90;//器械俯仰角度
+	g_targetYawAng :LREAL :=0;//器械偏摆角度
+	g_targetGripAng :LREAL :=0;//器械张开角度
+	g_targetGripForceLevel:INT :=0; // 器械夹持力百分比
+	g_gripperOpenFlag :BOOL :=FALSE; // 命令器械张开按键, 按下反弹
+	g_gripperCloseFlag :BOOL :=FALSE; // 命令器械闭合按键, 按下反弹
+	g_maxGripForceFlag :BOOL :=FALSE;// 命令器械最大加紧力按键, 按下反弹
 	
 	// control variable for instrument verify
-	g_instruVerifyFlag :BOOL :=FALSE;
-	g_instruVerifyLastStepFlag :BOOL:=FALSE;
-	g_instruVerifyNextStepFlag :BOOL :=FALSE;
+	g_instruVerifyFlag :BOOL :=FALSE; // 器械验证按键，按下不反弹
+	g_instruVerifyLastStepFlag :BOOL:=FALSE; // 下一步按键， 按下反弹
+	g_instruVerifyNextStepFlag :BOOL :=FALSE; // 上一步按键，按下反弹
 	
 	//################ output variables  HMI ########################
-	g_curInstruJntPos :Vec5d;
-	g_curInstruJntCurrent:Vec5d;
-	g_curInstruDHPos :Vec3d;
-	g_curGripAng:LREAL;
-	g_instruZeroPos :Vec5d;
-	g_instruSN :ULINT;
+	g_curInstruJntPos :Vec5d;   // 当前器械角度位置
+	g_curInstruJntCurrent:Vec5d; // 当前关节电流
+	g_curInstruDHPos :Vec3d; // DH 角度
+	g_curGripAng:LREAL; // 当前张开角度
+	g_instruZeroPos :Vec5d; // 当前零位
+	g_instruSN :ULINT; // 当前序列号
 
 END_VAR]]></Declaration>
   </GVL>
