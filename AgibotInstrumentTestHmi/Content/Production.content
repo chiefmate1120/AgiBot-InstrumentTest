@@ -1,0 +1,19 @@
+<div id="Content2" data-tchmi-type="TcHmi.Controls.System.TcHmiContent" data-tchmi-top="0" data-tchmi-left="0" data-tchmi-width="1500" data-tchmi-height="800" data-tchmi-creator-viewport-width="1680" data-tchmi-creator-viewport-height="800" data-tchmi-zindex="3" data-tchmi-zindex="2">
+
+<div id="TcHmiRegion_10" data-tchmi-type="TcHmi.Controls.System.TcHmiRegion" data-tchmi-height="640" data-tchmi-height-unit="px" data-tchmi-left="12" data-tchmi-left-unit="px" data-tchmi-top="13" data-tchmi-top-unit="px" data-tchmi-width="580" data-tchmi-width-unit="px" data-tchmi-target-content="contect/MotorControl - P.content" data-tchmi-zindex="13">
+</div>
+<div id="TcHmiRegion_11" data-tchmi-type="TcHmi.Controls.System.TcHmiRegion" data-tchmi-height="184" data-tchmi-height-unit="px" data-tchmi-left="602" data-tchmi-left-unit="px" data-tchmi-top="13" data-tchmi-top-unit="px" data-tchmi-width="638" data-tchmi-width-unit="px" data-tchmi-target-content="contect/InstrumentTesting - P.content" data-tchmi-zindex="14">
+</div>
+<div id="TcHmiRegion_12" data-tchmi-type="TcHmi.Controls.System.TcHmiRegion" data-tchmi-height="200" data-tchmi-height-unit="px" data-tchmi-left="605" data-tchmi-left-unit="px" data-tchmi-top="210" data-tchmi-top-unit="px" data-tchmi-width="635" data-tchmi-width-unit="px" data-tchmi-target-content="contect/InstrumentMoveTesting.content" data-tchmi-zindex="15">
+</div>
+<div id="TcHmiRegion_13" data-tchmi-type="TcHmi.Controls.System.TcHmiRegion" data-tchmi-height="287" data-tchmi-height-unit="px" data-tchmi-left="602" data-tchmi-left-unit="px" data-tchmi-top="410" data-tchmi-top-unit="px" data-tchmi-width="635" data-tchmi-width-unit="px" data-tchmi-target-content="contect/MotorMoveTest.content" data-tchmi-zindex="16">
+</div>
+<div id="TcHmiRectangle_43" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="640" data-tchmi-height-unit="px" data-tchmi-left="10" data-tchmi-left-unit="px" data-tchmi-top="13" data-tchmi-top-unit="px" data-tchmi-width="582" data-tchmi-width-unit="px" data-tchmi-zindex="5">
+</div>
+<div id="TcHmiRectangle_44" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="684" data-tchmi-height-unit="px" data-tchmi-left="602" data-tchmi-left-unit="px" data-tchmi-top="13" data-tchmi-top-unit="px" data-tchmi-width="638" data-tchmi-width-unit="px" data-tchmi-zindex="0">
+</div>
+<div id="TcHmiRectangle_45" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="185" data-tchmi-height-unit="px" data-tchmi-left="602" data-tchmi-left-unit="px" data-tchmi-top="13" data-tchmi-top-unit="px" data-tchmi-width="638" data-tchmi-width-unit="px" data-tchmi-zindex="8">
+</div>
+<div id="TcHmiRectangle_46" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="200" data-tchmi-height-unit="px" data-tchmi-left="602" data-tchmi-left-unit="px" data-tchmi-top="210" data-tchmi-top-unit="px" data-tchmi-width="638" data-tchmi-width-unit="px" data-tchmi-zindex="2">
+</div>
+</div>

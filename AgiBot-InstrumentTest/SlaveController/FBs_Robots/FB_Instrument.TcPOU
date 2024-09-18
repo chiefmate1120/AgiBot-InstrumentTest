@@ -1030,7 +1030,7 @@ END_CASE]]></ST>
     <Method Name="writeSNToChip" Id="{46d16f11-7c2f-4956-b676-eaa2a04f1630}">
       <Declaration><![CDATA[METHOD writeSNToChip : BOOL
 VAR_INPUT
-	newSNNum : ULINT;
+	newSNNum : STRING;
 END_VAR
 ]]></Declaration>
       <Implementation>

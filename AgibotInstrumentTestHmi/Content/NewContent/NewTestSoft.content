@@ -1,0 +1,45 @@
+<div id="Content2_5" data-tchmi-type="TcHmi.Controls.System.TcHmiContent" data-tchmi-top="0" data-tchmi-left="0" data-tchmi-width="1920" data-tchmi-height="900" data-tchmi-creator-viewport-width="1920" data-tchmi-creator-viewport-height="900">
+<div id="TcHmiTabNavigation_2" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTabNavigation" data-tchmi-height="900" data-tchmi-height-unit="px" data-tchmi-left="1" data-tchmi-left-unit="px" data-tchmi-top="1" data-tchmi-top-unit="px" data-tchmi-width="1920" data-tchmi-width-unit="px">
+<script data-tchmi-target-attribute="data-tchmi-tabs" type="application/json">
+[
+  {
+    "name": "器械卡接",
+    "displayName": "器械卡接",
+    "targetFile": {
+      "path": "Content/NewContent/InsturmentClamping.content"
+    },
+    "targetFileHostPreload": false,
+    "targetFileHostPreAttach": false,
+    "targetFileHostKeepAlive": false,
+    "horizontalAlignment": "Left",
+    "verticalAlignment": "Center"
+  },
+  {
+    "name": "器械标定",
+    "displayName": "器械标定",
+    "targetFile": {
+      "path": "Content/NewContent/InstrumentStandardization.content"
+    },
+    "targetFileHostPreload": false,
+    "targetFileHostPreAttach": false,
+    "targetFileHostKeepAlive": false,
+    "horizontalAlignment": "Left",
+    "verticalAlignment": "Center"
+  },
+  {
+    "name": "器械测试",
+    "displayName": "器械测试",
+    "targetFile": {
+      "path": "Content/NewContent/InstrumentTest.content"
+    },
+    "targetFileHostPreload": false,
+    "targetFileHostPreAttach": false,
+    "targetFileHostKeepAlive": false,
+    "horizontalAlignment": "Left",
+    "verticalAlignment": "Center"
+  }
+]
+</script>
+
+</div>
+</div>
