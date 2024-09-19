@@ -190,7 +190,8 @@ copyCmds(r_slaveArmCtrlCmd);
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntTrq">
       <LineId Id="121" Count="0" />
-      <LineId Id="34" Count="1" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="218" Count="0" />
       <LineId Id="135" Count="0" />
       <LineId Id="137" Count="1" />
       <LineId Id="161" Count="0" />

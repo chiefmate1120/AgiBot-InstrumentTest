@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveArm" Id="{623926f8-06e2-46b6-bb1f-baa6bc16e9cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveArm
 VAR_INPUT
@@ -102,6 +102,14 @@ VAR
 	//Joint port number
 	m_jointAddrJ8:UINT;	
 	m_jointAddrPbox:UINT;	
+	
+	// ultrosonic knife energe state: 0:off, 1: min, 2:max
+	m_USKnifeEnerge AT%I*	:INT;
+	m_USKnifeMinEnerge:BOOL:=FALSE;
+	m_USKnifeMaxEnerge:BOOL:=FALSE;
+	m_USKnifeMinEnergeCheck:R_TRIG;
+	m_USKnifeMaxEnergeCheck:R_TRIG;
+	m_USKnifeOnTime :LREAL:=0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -301,6 +309,47 @@ IF NOT m_SdoWrite[1].bBusy AND  NOT m_SdoWrite[2].bBusy THEN
 	m_SdoWrite[2](bExecute:=FALSE);
 END_IF
 ]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="checkUSKnifeEnerge" Id="{dbdab68f-ae34-4587-8e37-9377092506fc}">
+      <Declaration><![CDATA[METHOD checkUSKnifeEnerge : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	trigFlag:BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF m_USKnifeEnerge =1 THEN
+	m_USKnifeMinEnerge := TRUE;
+	m_USKnifeMaxEnerge := FALSE;
+ELSIF m_USKnifeEnerge =2 THEN
+	m_USKnifeMinEnerge := FALSE;
+	m_USKnifeMaxEnerge :=TRUE;
+ELSE
+	m_USKnifeMinEnerge := FALSE;
+	m_USKnifeMaxEnerge :=FALSE;
+END_IF
+
+// 
+m_USKnifeMinEnergeCheck(CLK:=m_USKnifeMinEnerge, Q=> trigFlag);
+IF trigFlag THEN
+	m_instrument.USKnifeMinOutputCounts := m_instrument.USKnifeMinOutputCounts +1;
+END_IF
+
+m_USKnifeMaxEnergeCheck(CLK:=m_USKnifeMaxEnerge, Q=> trigFlag);
+IF trigFlag THEN
+	m_instrument.USKnifeMaxOutputCounts := m_instrument.USKnifeMaxOutputCounts +1;
+END_IF
+
+
+// USKnife on time
+IF m_USKnifeMaxEnerge OR m_USKnifeMinEnerge THEN
+	m_USKnifeOnTime := m_USKnifeOnTime + g_slaveArmCtrlCycleTime;
+	m_instrument.USKnifeTotalOuputTime := m_instrument.USKnifeTotalOuputTime + g_slaveArmCtrlCycleTime;
+	m_instrument.writeOutputTimeToChip();
+ELSE
+	m_USKnifeOnTime :=0;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Property Name="cmdCartPose" Id="{72bf034f-e694-478b-8fc6-77f6ebb37ccd}" FolderPath="property\">
@@ -1093,6 +1142,9 @@ END_FOR
 // check IO informantion
 checkIO();
 
+// check USKnife
+checkUSKnifeEnerge();
+
 // get joint data
 FOR i:=1 TO g_sJntNum DO
 	m_curMotorPos[i]:=m_joints[i].motorPos;
@@ -1190,6 +1242,28 @@ END_FOR
       <LineId Id="64" Count="4" />
       <LineId Id="70" Count="0" />
       <LineId Id="63" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveArm.checkUSKnifeEnerge">
+      <LineId Id="5" Count="1" />
+      <LineId Id="10" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="12" Count="2" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="28" Count="2" />
+      <LineId Id="32" Count="3" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="17" Count="1" />
+      <LineId Id="36" Count="1" />
+      <LineId Id="20" Count="1" />
+      <LineId Id="19" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.cmdCartPose.Get">
       <LineId Id="2" Count="0" />
@@ -1439,6 +1513,9 @@ END_FOR
       <LineId Id="135" Count="0" />
       <LineId Id="103" Count="0" />
       <LineId Id="120" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="159" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="11" Count="0" />

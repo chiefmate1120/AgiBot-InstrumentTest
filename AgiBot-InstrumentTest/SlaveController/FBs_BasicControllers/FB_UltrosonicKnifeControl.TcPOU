@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_UltrosonicKnifeControl" Id="{675f3909-c472-4838-a346-da9f4950f3d4}" SpecialFunc="None">
     <Declaration><![CDATA[// instrument joints control
 FUNCTION_BLOCK FB_UltrosonicKnifeControl
@@ -13,7 +13,7 @@ VAR
 	m_instruKd:ARRAY[1..5] OF LREAL:=[5(0.25)];
 	m_instruKi:ARRAY[1..5] OF LREAL:=[5(10.0)];
 	m_instruKiLimit:ARRAY[1..5] OF LREAL:=[5(50.0)];
-	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[5(200.0)];
+	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[4(120.0), 200.0];
 	
 	// max grip force/current(mA)
 	m_maxGripForce:LREAL;

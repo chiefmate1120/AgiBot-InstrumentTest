@@ -17,6 +17,10 @@ VAR
 	m_pitchJntCaliStatus :INT := 0;
 	m_yawJntCaliStatus :INT := 0;
 	
+	// flag if to clear instrument used number
+	m_usedNumCleared :BOOL;
+	m_usedNumClearStart :BOOL;
+	
 	// flag if zero position is written to CoE
 	m_zeroPosWritten :BOOL;
 	m_zeroPosWriteStart :BOOL;
@@ -81,6 +85,34 @@ IF NOT i_slaveArm.instrument.onChipData.m_InstruReadSucceed THEN
 		m_jointMounted[i]:=FALSE;
 	END_FOR
 	return;
+END_IF
+
+// clear used number
+IF GVL_InstruTestUIVars.g_clearUsedNumFlag THEN
+	m_usedNumClearStart := TRUE;
+ELSE
+	IF m_usedNumClearStart THEN
+		IF   NOT m_usedNumCleared THEN
+			m_usedNumCleared := i_slaveArm.instrument.writeSNToChip(GVL_InstruTestUIVars.g_newInstruSN);
+		ELSE
+			m_usedNumClearStart :=FALSE;
+			m_usedNumCleared:=FALSE;
+		END_IF
+	END_IF
+END_IF
+
+// write SN to CoE
+IF GVL_InstruTestUIVars.g_writeSNFlag THEN
+	m_SNWriteStart := TRUE;
+ELSE
+	IF m_SNWriteStart THEN
+		IF   NOT m_SNWritten THEN
+			m_SNWritten := i_slaveArm.instrument.writeSNToChip(GVL_InstruTestUIVars.g_newInstruSN);
+		ELSE
+			m_SNWriteStart :=FALSE;
+			m_SNWritten:=FALSE;
+		END_IF
+	END_IF
 END_IF
 
 // write SN to CoE
@@ -191,6 +223,8 @@ m_zeroPosWriteStart:=FALSE;
 m_SNWritten :=FALSE;
 m_SNWriteStart:=FALSE;
 m_instruCaliStart:=FALSE;
+m_usedNumCleared :=FALSE;
+m_usedNumClearStart :=false;
 
 // update commands to arm
 copyCmds(r_slaveArmCtrlCmd);
@@ -507,7 +541,12 @@ m_jntOTG[5].run(m_targetMountPos[5],0.0, o_cmdAcc=>m_cmdJntAcc[5],o_cmdVel=>m_cm
       <LineId Id="543" Count="0" />
       <LineId Id="539" Count="0" />
       <LineId Id="494" Count="1" />
-      <LineId Id="618" Count="1" />
+      <LineId Id="736" Count="12" />
+      <LineId Id="735" Count="0" />
+      <LineId Id="721" Count="12" />
+      <LineId Id="618" Count="0" />
+      <LineId Id="734" Count="0" />
+      <LineId Id="619" Count="0" />
       <LineId Id="663" Count="1" />
       <LineId Id="629" Count="0" />
       <LineId Id="667" Count="7" />
@@ -550,6 +589,7 @@ m_jntOTG[5].run(m_targetMountPos[5],0.0, o_cmdAcc=>m_cmdJntAcc[5],o_cmdVel=>m_cm
       <LineId Id="220" Count="0" />
       <LineId Id="232" Count="3" />
       <LineId Id="231" Count="0" />
+      <LineId Id="246" Count="1" />
       <LineId Id="192" Count="3" />
       <LineId Id="92" Count="0" />
     </LineIds>

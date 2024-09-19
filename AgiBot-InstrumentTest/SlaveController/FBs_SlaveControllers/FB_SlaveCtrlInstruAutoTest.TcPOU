@@ -1,12 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveCtrlInstruAutoTest" Id="{d70115e7-7668-49fd-9f57-bdf3458ba446}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruAutoTest EXTENDS FB_SlaveArmCtrlBase
 VAR CONSTANT
-	m_instruOpenGripMoveTrajNum :INT :=18;
-	m_instruGripMoveTrajNum :INT :=8;
-	m_instruYawRange :LREAL := 75 * g_deg2Rad;
+	m_instruOpenGripMoveTrajNum :INT :=13;
+	m_instruGripMoveTrajNum :INT :=4;
 END_VAR
 VAR
 	// test mode. 
@@ -45,42 +44,33 @@ VAR
 	m_maxJntVel:Vec3d:=[3(2.0)];
 	m_maxJntAcc:Vec3d:=[3(4.0)];
 	
-	// instrument open and grip move motion via points[roll, pitch, yaw]
-	m_openGripStep :INT :=0;
-	m_gripOpenStep :INT :=0;
-	m_instruOpenGrioMovePos:ARRAY [1..m_instruOpenGripMoveTrajNum, 1..3] OF LREAL:=
-	// move with gripper close
-	[0,		-pi/2,		0,	
-	0,		-pi/2,		pi/3,	
-	0,		-pi/2,		-pi/3,
-	0,		-pi/2+m_instruYawRange,		0,
-	0,		-pi/2+m_instruYawRange,		pi/3,
-	0,		-pi/2+m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		0,
-	0,		-pi/2-m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		pi/3,
-	// move with gripper open
-	pi,		-pi/2,		0,	
-	pi,		-pi/2,		pi/3,	
-	pi,		-pi/2,		-pi/3,
-	pi,		-pi/2+m_instruYawRange,		0,
-	pi,		-pi/2+m_instruYawRange,		pi/3,
-	pi,		-pi/2+m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		0,
-	pi,		-pi/2-m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		pi/3];
+	// instrument open and grip move motion via points[roll, pitch, yaw, gripAng, gripForce]
+	m_instruOpenGrioMovePos:ARRAY [1..m_instruOpenGripMoveTrajNum, 1..5] OF LREAL:=
+	[0,		-pi/2,		0,	0,		0,
+	0,		-pi/2,		0,	pi/4,	0,
+	0,		-pi/2,		0,	-10*g_deg2rad, 0, 
+	0,		-pi/2,		0,	-pi/4, 100, 
+	
+	pi,		-pi/2,		0,	-pi/4,	100,
+	pi,		-pi/2,		0,	pi/4,	0,
+	pi,		-pi/2,		0,	-10*g_deg2rad, 0, 
+	pi,		-pi/2,		0,	-pi/4, 100, 
+	
+	0,		-pi/2,		0,	-pi/4,	100,
+	0,		-pi/2,		0,	pi/4,	0,
+	
+	pi,		-pi/2,		0,	pi/4,	0,
+	
+	0,		-pi/2,		0,	pi/4, 	0, 
+	0,		-pi/2,		0,	0, 		0];
 	
 	// instrument move motion via points[roll, pitch, yaw]
 	m_instruGripMovePos:ARRAY [1..m_instruGripMoveTrajNum, 1..3] OF LREAL:=
 	// move with gripper close
-	[0,		-pi/2+m_instruYawRange,		pi/3,
-	0,		-pi/2+m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		pi/3,
-	0,		-pi/2-m_instruYawRange,		-pi/3,
-	pi,		-pi/2+m_instruYawRange,		pi/3,
-	pi,		-pi/2+m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		pi/3,
-	pi,		-pi/2-m_instruYawRange,		-pi/3];
+	[pi,		-pi/2,		0,
+	0,		-pi/2,		0,
+	-pi,	-pi/2,		0,
+	0,		-pi/2,		0];
 																				
 END_VAR
 ]]></Declaration>
@@ -103,8 +93,7 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-IF GVL_InstruTestUIVars.g_maxInstruAutoTestCycles > 0 AND m_autoTestCycles > GVL_InstruTestUIVars.g_maxInstruAutoTestCycles THEN
+        <ST><![CDATA[IF GVL_InstruTestUIVars.g_maxInstruAutoTestCycles > 0 AND m_autoTestCycles > GVL_InstruTestUIVars.g_maxInstruAutoTestCycles THEN
 	RETURN;
 END_IF
 
@@ -192,7 +181,7 @@ FOR i:=1 TO 3 DO
 END_FOR
 	 
 IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
-		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow AND ABS(m_cmdGripAng - m_targetGripAng)< g_jntCtrlAngTolLow  THEN
 	m_autoTestStep :=m_autoTestStep + 1;
 END_IF
  
@@ -200,39 +189,6 @@ IF m_autoTestStep >= m_instruGripMoveTrajNum THEN
 	m_autoTestCycles := m_autoTestCycles + 1;
 	m_autoTestStep := 0;
 END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerGripOpenOnce" Id="{eecdcd4b-6163-4fb0-ac83-a217b04d8eb3}">
-      <Declaration><![CDATA[METHOD fingerGripOpenOnce : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE m_gripOpenStep OF
-	0:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;		
-	2:
-		m_targetGripAng := -45* g_deg2rad;
-		m_targetGripForceLevel :=100;
-	3:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
-		m_targetGripForceLevel :=0;
-END_CASE
-
-IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-	 m_gripOpenStep :=m_gripOpenStep + 1;
-END_IF
-
-fingerGripOpenOnce := m_gripOpenStep > 4;
-]]></ST>
       </Implementation>
     </Method>
     <Method Name="fingerOpenCloseTest" Id="{7cc8daed-3bf9-42ca-9d17-f827b074e621}">
@@ -244,21 +200,15 @@ END_VAR]]></Declaration>
         <ST><![CDATA[m_autoTestStep := LIMIT(0,m_autoTestStep, 5);
 CASE m_autoTestStep OF
 	0:
-		m_targetGripAng := 0;
+		m_targetGripAng := 45*g_deg2Rad;
 		m_targetGripForceLevel :=0;
 	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+		m_targetGripAng := -10*g_deg2Rad;
 		m_targetGripForceLevel :=0;
 	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;
+		m_targetGripAng := -45*g_deg2Rad;
+		m_targetGripForceLevel :=100;
 	3:
-		m_targetGripAng := -pi/2;
-		m_targetGripForceLevel :=100;
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-	5:
 		m_targetGripAng := 0;
 		m_targetGripForceLevel :=0;
 END_CASE
@@ -267,7 +217,7 @@ IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
 	 m_autoTestStep :=m_autoTestStep + 1;
 END_IF
 
-IF m_autoTestStep > 5 THEN
+IF m_autoTestStep > 3 THEN
 	m_autoTestCycles := m_autoTestCycles + 1;
 	m_autoTestStep := 0;
 END_IF]]></ST>
@@ -289,58 +239,14 @@ FOR i:=1 TO 3 DO
 END_FOR
 	 
 IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
-		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
-	
-	IF m_autoTestStep < m_instruOpenGripMoveTrajNum/2 THEN
-		fingerMotionFlag:=fingerOpenGripOnce(i_slaveArm);
-	ELSE
-		fingerMotionFlag:=fingerGripOpenOnce(i_slaveArm);
-	END_IF
-	
-	IF fingerMotionFlag THEN
-		m_autoTestStep :=m_autoTestStep + 1;
-		m_openGripStep :=0;
-		m_gripOpenStep :=0;
-	END_IF
-	
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow AND ABS(m_cmdGripAng - m_targetGripAng)< g_jntCtrlAngTolLow  THEN
+	m_autoTestStep :=m_autoTestStep + 1;
 END_IF
  
 IF m_autoTestStep >= m_instruOpenGripMoveTrajNum THEN
 	m_autoTestCycles := m_autoTestCycles + 1;
 	m_autoTestStep := 0;
 END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerOpenGripOnce" Id="{b00fafe9-f130-44f7-ad16-8ec8acf445cf}">
-      <Declaration><![CDATA[METHOD fingerOpenGripOnce : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE m_openGripStep OF
-	0:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
-		m_targetGripForceLevel :=0;
-	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;
-	3:
-		m_targetGripAng := -45 * g_deg2rad;
-		m_targetGripForceLevel :=100;
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-END_CASE
-
-IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-	 m_openGripStep :=m_openGripStep + 1;
-END_IF
-
-fingerOpenGripOnce := m_openGripStep > 4;
-]]></ST>
       </Implementation>
     </Method>
     <Method Name="init" Id="{1224d61d-417a-4654-acf9-99ef0220f449}">
@@ -371,8 +277,6 @@ m_jntOPMode[8] := DriverOPMode_Trq;
 m_instruTestMode := GVL_InstruTestUIVars.g_instruAutoTestMode;
 m_autoTestStep:=0 ;
 m_autoTestCycles := 0;
-m_openGripStep :=0;
-m_gripOpenStep :=0;
 m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
 m_cmdDHJntVel :=g_zeroVec6d;
 m_targetGripAng := i_slaveArm.curGripAngle;
@@ -400,7 +304,7 @@ copyCmds(r_slaveArmCtrlCmd);
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.calcCmdJntPos">
-      <LineId Id="447" Count="2" />
+      <LineId Id="448" Count="1" />
       <LineId Id="446" Count="0" />
       <LineId Id="450" Count="0" />
       <LineId Id="324" Count="0" />
@@ -439,30 +343,12 @@ copyCmds(r_slaveArmCtrlCmd);
       <LineId Id="9" Count="13" />
       <LineId Id="5" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerGripOpenOnce">
-      <LineId Id="7" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="9" Count="2" />
-      <LineId Id="38" Count="1" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="41" Count="1" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="26" Count="5" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="44" Count="0" />
-    </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerOpenCloseTest">
       <LineId Id="27" Count="0" />
-      <LineId Id="67" Count="1" />
-      <LineId Id="71" Count="1" />
+      <LineId Id="67" Count="0" />
       <LineId Id="70" Count="0" />
-      <LineId Id="73" Count="13" />
+      <LineId Id="73" Count="7" />
+      <LineId Id="84" Count="2" />
       <LineId Id="69" Count="0" />
       <LineId Id="20" Count="0" />
       <LineId Id="40" Count="6" />
@@ -474,23 +360,11 @@ copyCmds(r_slaveArmCtrlCmd);
       <LineId Id="30" Count="1" />
       <LineId Id="28" Count="0" />
       <LineId Id="33" Count="1" />
-      <LineId Id="61" Count="2" />
-      <LineId Id="65" Count="1" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="68" Count="2" />
-      <LineId Id="72" Count="1" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="36" Count="0" />
+      <LineId Id="70" Count="0" />
       <LineId Id="35" Count="0" />
       <LineId Id="29" Count="0" />
       <LineId Id="52" Count="2" />
       <LineId Id="37" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerOpenGripOnce">
-      <LineId Id="7" Count="15" />
-      <LineId Id="26" Count="5" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="32" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.init">
       <LineId Id="13" Count="0" />
@@ -501,7 +375,6 @@ copyCmds(r_slaveArmCtrlCmd);
       <LineId Id="188" Count="0" />
       <LineId Id="120" Count="0" />
       <LineId Id="189" Count="0" />
-      <LineId Id="202" Count="1" />
       <LineId Id="84" Count="1" />
       <LineId Id="93" Count="0" />
       <LineId Id="175" Count="1" />

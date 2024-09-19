@@ -206,6 +206,11 @@ GVL_InstruTestUIVars.g_curGripAng := m_slaveArms[1].curGripAngle;
 //20240906 屏蔽
 //GVL_InstruTestUIVars.g_instruSN := m_slaveArms[1].instrument.onChipData.m_InstruseriesNum;
 
+GVL_InstruTestUIVars.g_curEnergeState := m_slaveArms[1].m_USKnifeEnerge;
+GVL_InstruTestUIVars.g_curOutputTime := m_slaveArms[1].m_USKnifeOnTime;
+GVL_InstruTestUIVars.g_totalOutputTime := m_slaveArms[1].instrument.USKnifeTotalOuputTime;
+GVL_InstruTestUIVars.g_minEnergeCounts := m_slaveArms[1].instrument.USKnifeMinOutputCounts;
+GVL_InstruTestUIVars.g_maxEnergeCounts := m_slaveArms[1].instrument.USKnifeMaxOutputCounts;
 
 ]]></ST>
       </Implementation>
@@ -437,7 +442,12 @@ END_FOR
       <LineId Id="61" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.run">
-      <LineId Id="268" Count="45" />
+      <LineId Id="268" Count="43" />
+      <LineId Id="324" Count="0" />
+      <LineId Id="323" Count="0" />
+      <LineId Id="312" Count="0" />
+      <LineId Id="325" Count="2" />
+      <LineId Id="313" Count="0" />
       <LineId Id="22" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.stateMachine">

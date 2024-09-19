@@ -92,7 +92,13 @@ VAR
 	// rising edge generator for instrument information reading
 	m_writeLDP:R_TRIG;
 	
-	m_instruController : FB_BasicInstruControl;
+	// variable for energy output time of ultrosonic knife
+	m_minOutputCounts :INT;
+	m_maxOutputCounts :INT;
+	m_totalOutputTime :LREAL; // seconds
+	
+	// counts that insturment's information have been reset
+	m_chipResetCounts :INT;
 	
 END_VAR
 
@@ -844,6 +850,9 @@ CASE m_Step OF
 		END_IF
 		m_Step:=120;
 		
+	// TODO: add step to read energy output time of ultrosonic knife
+	
+	// TODO: add step to read instrument chip reset counts
 		
 	120://结果诊断
 		m_onChipData.m_InstruReadSucceed:=checkInstruType();
@@ -969,6 +978,63 @@ m_gripAngle := i_gripAngle;
 ultrasoundKnifeGripAngleIK := (g_uknifeGripTravel * (SIN(g_uknifeGripDividAngle) - SIN(g_uknifeGripDividAngle - m_gripAngle))/(g_uknifeMotorLead*g_uknifeLeverRatio/(2*pi)));]]></ST>
       </Implementation>
     </Method>
+    <Property Name="USKnifeMaxOutputCounts" Id="{2ec34b01-1c3c-4010-9582-cf61c1ea710f}" FolderPath="property\">
+      <Declaration><![CDATA[PROPERTY USKnifeMaxOutputCounts : Int]]></Declaration>
+      <Get Name="Get" Id="{0cfc764a-098f-46b5-8cb9-9b41a4c47299}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[USKnifeMaxOutputCounts := m_maxOutputCounts;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{d6c33304-75cb-4622-84d5-bda8ab9fcffe}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[m_maxOutputCounts := USKnifeMaxOutputCounts;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="USKnifeMinOutputCounts" Id="{9da29983-7dea-4507-a37e-439d4ae0fa81}" FolderPath="property\">
+      <Declaration><![CDATA[PROPERTY USKnifeMinOutputCounts : Int]]></Declaration>
+      <Get Name="Get" Id="{8a3454e3-0556-497c-aa7e-0dc732dbdfe5}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[USKnifeMinOutputCounts := m_minOutputCounts;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{a7d0c79b-6840-41a5-b506-af856dc3e552}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[m_minOutputCounts := USKnifeMinOutputCounts;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="USKnifeTotalOuputTime" Id="{1b9b09e0-96bc-4804-9b42-6fe3399cf83a}" FolderPath="property\">
+      <Declaration><![CDATA[PROPERTY USKnifeTotalOuputTime : LREAL]]></Declaration>
+      <Get Name="Get" Id="{d22e2fd7-08ec-41f7-899a-6dddb5fad8de}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[USKnifeTotalOuputTime := m_totalOutputTime;]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{31e416ed-6cd2-4755-be94-d97c6f7bd74f}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[m_totalOutputTime := USKnifeTotalOuputTime;]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
     <Method Name="writeNumOfUseToChip" Id="{c72f85d3-5b0f-42d8-878f-c490a6c1ecdf}">
       <Declaration><![CDATA[METHOD writeNumOfUseToChip : BOOL
 VAR_INPUT
@@ -1025,6 +1091,24 @@ CASE m_useNumStep OF
 		END_IF
 	
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="writeOutputTimeToChip" Id="{cd73e595-3a9d-41a5-a4ee-65b8314b7c2b}">
+      <Declaration><![CDATA[METHOD writeOutputTimeToChip : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//TODO]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="writeResetCountsToChip" Id="{6625a4e1-8370-4c70-80ac-2a5eae7f68aa}">
+      <Declaration><![CDATA[METHOD writeResetCountsToChip : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//TODO]]></ST>
       </Implementation>
     </Method>
     <Method Name="writeSNToChip" Id="{46d16f11-7c2f-4956-b676-eaa2a04f1630}">
@@ -1344,7 +1428,8 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="167" Count="0" />
       <LineId Id="161" Count="0" />
       <LineId Id="436" Count="0" />
-      <LineId Id="273" Count="1" />
+      <LineId Id="444" Count="3" />
+      <LineId Id="274" Count="0" />
       <LineId Id="170" Count="0" />
       <LineId Id="387" Count="0" />
       <LineId Id="172" Count="0" />
@@ -1405,6 +1490,24 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="3" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeMaxOutputCounts.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeMaxOutputCounts.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeMinOutputCounts.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeMinOutputCounts.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeTotalOuputTime.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.USKnifeTotalOuputTime.Set">
+      <LineId Id="2" Count="0" />
+    </LineIds>
     <LineIds Name="FB_Instrument.writeNumOfUseToChip">
       <LineId Id="54" Count="0" />
       <LineId Id="26" Count="0" />
@@ -1438,6 +1541,12 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="48" Count="0" />
       <LineId Id="46" Count="0" />
       <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.writeOutputTimeToChip">
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.writeResetCountsToChip">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.writeSNToChip">
       <LineId Id="5" Count="0" />
