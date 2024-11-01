@@ -8,7 +8,7 @@ VAR_GLOBAL
 	g_instruCaliFlag :BOOL:= FALSE; // 允许标定按键，按下不反弹
 	g_searchZeroPosFlag :BOOL := FALSE; // 器械找零点按键， 按下反弹
 	g_writeZeroPosFlag :BOOL :=FALSE; // 器械零位写入，按下反弹
-	g_newInstruSN :ULINT; // 新序列号
+	g_newInstruSN :STRING; // 新序列号
 	g_writeSNFlag :BOOL := FALSE; // 新序列号写入， 按下反弹
 	
 	// control variable for instrument auto test

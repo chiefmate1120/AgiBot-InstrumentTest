@@ -332,22 +332,32 @@ FOR i:=1 TO g_sArmNum DO
 			
 		//instrument auto test
 		SlaveArmState_InstruAutoTest:
-			// to standby
+			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruAutoTestFlag)  THEN
-				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+				m_armStop[i].setInstruBacklash(m_instruAutoTest[i].InstruBacklash);
 			END_IF
 		
 		//instrument manual test
 		SlaveArmState_InstruManualTest:
-			// to standby
+			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruManualTestFlag)  THEN
-				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+				m_armStop[i].setInstruBacklash(m_instruManualTest[i].InstruBacklash);
 			END_IF
 			
 		//instrument verify
 		SlaveArmState_InstruVerify:
-			// to standby
+			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruVerifyFlag)  THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+				m_armStop[i].setInstruBacklash(m_instruVerify[i].InstruBacklash);
+			END_IF
+			
+		//arm stop
+		SlaveArmState_Stop:
+			// to standby
+			IF  m_armCtrl[i].isFinished THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 	
@@ -505,7 +515,8 @@ END_FOR
       <LineId Id="360" Count="0" />
       <LineId Id="264" Count="1" />
       <LineId Id="555" Count="0" />
-      <LineId Id="266" Count="1" />
+      <LineId Id="926" Count="0" />
+      <LineId Id="267" Count="0" />
       <LineId Id="890" Count="0" />
       <LineId Id="881" Count="1" />
       <LineId Id="365" Count="0" />
@@ -525,13 +536,20 @@ END_FOR
       <LineId Id="889" Count="0" />
       <LineId Id="311" Count="1" />
       <LineId Id="307" Count="0" />
-      <LineId Id="506" Count="2" />
+      <LineId Id="506" Count="0" />
+      <LineId Id="927" Count="1" />
+      <LineId Id="508" Count="0" />
       <LineId Id="904" Count="0" />
       <LineId Id="906" Count="4" />
+      <LineId Id="929" Count="0" />
       <LineId Id="905" Count="0" />
       <LineId Id="911" Count="0" />
       <LineId Id="913" Count="4" />
+      <LineId Id="930" Count="0" />
       <LineId Id="912" Count="0" />
+      <LineId Id="931" Count="0" />
+      <LineId Id="933" Count="4" />
+      <LineId Id="932" Count="0" />
       <LineId Id="858" Count="2" />
       <LineId Id="2" Count="0" />
     </LineIds>

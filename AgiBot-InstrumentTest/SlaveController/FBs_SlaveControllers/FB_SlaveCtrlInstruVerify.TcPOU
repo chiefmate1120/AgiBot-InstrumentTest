@@ -53,6 +53,9 @@ VAR
 	m_gripAngleOTG : FB_secOrdTrajFilter;
 	m_maxJntVel:Vec3d:=[3(2.0)];
 	m_maxJntAcc:Vec3d:=[3(4.0)];
+	
+	// instrument tyep
+	m_instruType : E_InstrumentType;
 
 END_VAR
 ]]></Declaration>
@@ -180,6 +183,21 @@ copyCmds(r_slaveArmCtrlCmd);
 ]]></ST>
       </Implementation>
     </Method>
+    <Property Name="InstruBacklash" Id="{9820f408-1b59-41ce-a0a0-035b297b0869}">
+      <Declaration><![CDATA[PROPERTY InstruBacklash : Vec5d]]></Declaration>
+      <Get Name="Get" Id="{c0f44f7c-b60e-447a-bb80-6aea7ee07520}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF m_instruType = InstruType_UltrasoundKnifeS OR m_instruType = InstruType_UltrasoundKnifeU THEN
+	instruBacklash := g_zeroVec5d;
+ELSE
+	instruBacklash := m_instruController.m_jntBacklash;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
     <Method Name="instruVerifyTest" Id="{d16e87c5-3252-438b-9458-4acbad9aeb7e}">
       <Declaration><![CDATA[METHOD instruVerifyTest : BOOL
 VAR_IN_OUT CONSTANT
@@ -262,6 +280,10 @@ END_IF
       <LineId Id="80" Count="0" />
       <LineId Id="59" Count="0" />
       <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruVerify.InstruBacklash.Get">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruVerify.instruVerifyTest">
       <LineId Id="49" Count="0" />
