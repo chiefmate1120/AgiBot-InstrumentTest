@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveCtrlMountInstru" Id="{db93de24-03af-45f5-8edb-e02a943fe1f8}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Mounting Instrument
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlMountInstru EXTENDS FB_SlaveArmCtrlBase
@@ -220,7 +220,6 @@ CASE m_instruMountStatus OF
 			
 			// set target joint position
 			IF FALSE = m_jointMounted[i] THEN
-//				IF i = 4 OR i < 3 THEN
 				IF i = 4 THEN
 					m_targetMountPos[i+3]:=curJntPos[i+3]+m_mountMotionAng[i];
 				ELSE
@@ -267,7 +266,7 @@ CASE m_instruMountStatus OF
 		END_FOR
 		m_instruMountStatus :=3;
 	
-	3: // make fingers is closed
+	3: // move to zero position
 		m_instruMountStatus :=4;
 		FOR i:=1 TO 4 DO 
 			m_jntPosErr[i]:=m_targetMountPos[i+3]-curJntPos[i+3];
@@ -280,14 +279,9 @@ CASE m_instruMountStatus OF
 		
 		// record current joint position as offset for instrument
 		i_slaveArm.instrument.initInstruJntPos(i_slaveArm.curJntPos);
-		IF m_instruMountStatus =4 AND NOT( i_slaveArm.instrument.m_isSingleFinger) THEN
-			m_targetMountPos[4] := curJntPos[4]+g_gripperCloseAng;
-			m_targetMountPos[5] := curJntPos[5]+g_gripperCloseAng;
-		END_IF
 		
 	4:
-		m_isFinished :=  ABS(m_targetMountPos[4]-curJntPos[4]) < GVL_SlaveControlParameters.g_jntCtrlAngTolLow AND
-			 ABS(m_targetMountPos[5]-curJntPos[5]) < GVL_SlaveControlParameters.g_jntCtrlAngTolLow;
+		m_isFinished :=  TRUE;
 
 END_CASE
 
@@ -414,27 +408,7 @@ END_FOR]]></ST>
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountInstrument">
-      <LineId Id="204" Count="20" />
-      <LineId Id="294" Count="0" />
-      <LineId Id="307" Count="0" />
-      <LineId Id="295" Count="0" />
-      <LineId Id="297" Count="1" />
-      <LineId Id="296" Count="0" />
-      <LineId Id="225" Count="39" />
-      <LineId Id="316" Count="1" />
-      <LineId Id="321" Count="0" />
-      <LineId Id="323" Count="6" />
-      <LineId Id="322" Count="0" />
-      <LineId Id="330" Count="0" />
-      <LineId Id="342" Count="0" />
-      <LineId Id="341" Count="0" />
-      <LineId Id="319" Count="1" />
-      <LineId Id="331" Count="0" />
-      <LineId Id="318" Count="0" />
-      <LineId Id="266" Count="1" />
-      <LineId Id="271" Count="0" />
-      <LineId Id="332" Count="0" />
-      <LineId Id="277" Count="8" />
+      <LineId Id="351" Count="91" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountUltraKnife">
