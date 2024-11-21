@@ -172,13 +172,13 @@
     <Compile Include="DUTs\Structure\ST_Frame.TcDUT">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DUTs\Structure\ST_InstruKinematicParam.TcDUT">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="DUTs\Structure\ST_InstruOnChipData.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Structure\ST_InstruStatus.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DUTs\Structure\ST_InstruTypeInfo.TcDUT">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DUTs\Structure\ST_SetupArmCtrlCmds.TcDUT">
@@ -424,6 +424,9 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruVerify.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlMountInstru.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlPerformance.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -458,9 +461,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlMasterSlave.TcPOU">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlMountInstru.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlAdjust.TcPOU">
@@ -514,10 +514,6 @@
     <Compile Include="FBs_Filters\FB_LowPassFilter.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="GVLs\GVL_InstruCtrlParams.TcGVL">
-      <SubType>Code</SubType>
-      <LinkAlways>true</LinkAlways>
-    </Compile>
     <Compile Include="GVLs\GVL_InstruTestUIVars.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -557,6 +553,14 @@
     </Compile>
     <Compile Include="FBs_SlaveControllers\I_SlaveArmCtrl.TcIO">
       <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GVLs\Instrument\GVL_InstruCtrlParams.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
+    <Compile Include="GVLs\Instrument\GVL_InstruTypeDefine.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="GVLs\SlaveArms\GVL_SlaveArmDynamics.TcGVL">
       <SubType>Code</SubType>
@@ -661,6 +665,7 @@
     <Folder Include="FBs_SlaveControllers" />
     <Folder Include="FBs_Robots" />
     <Folder Include="GVLs\configs" />
+    <Folder Include="GVLs\Instrument" />
     <Folder Include="GVLs\SlaveArms" />
     <Folder Include="FBs_Auxiliary" />
     <Folder Include="SafetyCheck\ErrRecord" />

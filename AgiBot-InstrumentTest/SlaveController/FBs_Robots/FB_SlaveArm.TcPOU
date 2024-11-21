@@ -162,9 +162,9 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q3:=i_DHJntPos[3];
 c1:=COS(i_DHJntPos[1]);
@@ -532,9 +532,9 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q3:=i_DHJntPos[3];
 c1:=COS(i_DHJntPos[1]);
@@ -698,8 +698,8 @@ END_VAR
 	RETURN;
 END_IF
 
-instruReady := m_curJntPos[3] < (m_instrument.kinematicParameters.m_rodLength+m_instrument.kinematicParameters.m_headLength
-									+ m_instrument.kinematicParameters.m_fingerLength - GVL_SlaveArmKinematic.g_minInstruRCDis+checkBuffer);
+instruReady := m_curJntPos[3] < (m_instrument.instruTypeInfo.m_rodLength+m_instrument.instruTypeInfo.m_headLength
+									+ m_instrument.instruTypeInfo.m_fingerLength - GVL_SlaveArmKinematic.g_minInstruRCDis+checkBuffer);
 ]]></ST>
       </Implementation>
     </Method>
@@ -799,9 +799,9 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q2 := i_DHJntPos[2];
 IF q2 < m_Jnt2PosThres THEN
@@ -924,8 +924,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[m_instruInvasionDepth := m_curJntPos[3]-m_instrument.kinematicParameters.m_rodLength-m_instrument.kinematicParameters.m_headLength
-						- m_instrument.kinematicParameters.m_fingerLength;]]></ST>
+        <ST><![CDATA[m_instruInvasionDepth := m_curJntPos[3]-m_instrument.instruTypeInfo.m_rodLength-m_instrument.instruTypeInfo.m_headLength
+						- m_instrument.instruTypeInfo.m_fingerLength;]]></ST>
       </Implementation>
     </Method>
     <Property Name="simCartPose" Id="{6426ffc4-f74f-4984-ac32-a9f9d8b8c8ca}" FolderPath="property\">

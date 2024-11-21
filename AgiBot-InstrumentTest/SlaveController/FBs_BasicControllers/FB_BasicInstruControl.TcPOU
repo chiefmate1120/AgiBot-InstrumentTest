@@ -101,7 +101,7 @@ FOR i:=1 TO 4 DO
 	// integral compensated backslash angle
 	deltaAng:=i_cmdInstruJntPos[i]-m_instruLastCmdJntPos[i];
 	IF ABS(deltaAng)>m_jntMoveStep THEN
-		m_jntBacklash [i] := m_jntBacklash [i] +  m_jntMoveStep*sign(deltaAng);
+		m_jntBacklash [i] := m_jntBacklash [i] + m_jntMoveStep*sign(deltaAng);
 		m_instruLastCmdJntPos[i] := i_cmdInstruJntPos[i];
 	END_IF
 END_FOR
@@ -131,9 +131,9 @@ IF m_graspForceLevel >0  THEN
 	IF ABS(i_cmdYawPos - m_lastCmdYawAng) > m_jntMoveStep  THEN
 		// determin  compensated yaw  angle
 		IF (i_cmdYawPos - m_lastCmdYawAng) * m_gripYawCompAng <= 0 THEN
-			m_gripYawCompAng := m_gripYawCompAng + 4*m_jntMoveStep * (i_cmdYawPos-m_lastCmdYawAng);
+			m_gripYawCompAng := m_gripYawCompAng + 4*m_jntMoveStep * sign(i_cmdYawPos-m_lastCmdYawAng);
 		ELSE
-			m_gripYawCompAng := m_gripYawCompAng + 2*m_jntMoveStep * (i_cmdYawPos-m_lastCmdYawAng);
+			m_gripYawCompAng := m_gripYawCompAng + 2*m_jntMoveStep * sign(i_cmdYawPos-m_lastCmdYawAng);
 		END_IF
 		m_lastCmdYawAng := i_cmdYawPos;
 	END_IF
@@ -150,24 +150,22 @@ FOR i:=1 TO 4 DO
 
 	IF i<3 THEN 
 		IF g_instruBacklashDir[i] > 0 THEN
-			m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], g_instruYawBacklash[i_slaveArm.instrument.m_instruTypeIdx]);		
+			m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], i_slaveArm.instrument.instruTypeInfo.m_instruYawBacklash);		
 		ELSE
-			m_jntBacklash [i] := LIMIT(-g_instruYawBacklash[i_slaveArm.instrument.m_instruTypeIdx], m_jntBacklash[i], 0);	
+			m_jntBacklash [i] := LIMIT(-i_slaveArm.instrument.instruTypeInfo.m_instruYawBacklash, m_jntBacklash[i], 0);	
 		END_IF
 
 	ELSIF i=3 THEN
 		IF g_instruBacklashDir[i] > 0 THEN
-			m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], g_instruPitchBacklash[i_slaveArm.instrument.m_instruTypeIdx]);
+			m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], i_slaveArm.instrument.instruTypeInfo.m_instruPitchBachlash);
 		ELSE
-			m_jntBacklash [i] := LIMIT(-g_instruPitchBacklash[i_slaveArm.instrument.m_instruTypeIdx], m_jntBacklash[i], 0);	
+			m_jntBacklash [i] := LIMIT(-i_slaveArm.instrument.instruTypeInfo.m_instruPitchBachlash, m_jntBacklash[i], 0);	
 		END_IF
 	ELSE
 		m_jntBacklash [i]:=0;
 	END_IF
 	
-END_FOR
-
-]]></ST>
+END_FOR]]></ST>
       </Implementation>
     </Method>
     <Method Name="init" Id="{ad68ad31-14f3-42f4-bf27-26d385743fba}">
@@ -198,8 +196,7 @@ FOR i:=1 TO 4 DO
 	
 	m_instruLastCmdJntPos[i]:=m_instruCmdJntPos[i];
 END_FOR
-m_instruYawCtrl.init(g_slaveArmCtrlCycleTime,m_yawKp[1],m_yawKd[1],m_yawKi[1],m_yawKiLimit*currentRatioMotor2Jnt, m_yawCtrlLimit*currentRatioMotor2Jnt);
-]]></ST>
+m_instruYawCtrl.init(g_slaveArmCtrlCycleTime,m_yawKp[1],m_yawKd[1],m_yawKi[1],m_yawKiLimit*currentRatioMotor2Jnt, m_yawCtrlLimit*currentRatioMotor2Jnt);]]></ST>
       </Implementation>
     </Method>
     <Method Name="run" Id="{7565c7b3-97d9-43dd-bc18-57a80d3fc9eb}">
@@ -276,7 +273,6 @@ IF m_graspForceLevel >0  THEN
 	m_instruJntCtrlTrq[2]:=LIMIT(-m_maxGripForce/10.0,m_instruJntCtrlTrq[2], m_maxGripCtrlForce);
 END_IF
 
-
 o_cmdJntTrq := m_instruJntCtrlTrq;]]></ST>
       </Implementation>
     </Method>
@@ -285,15 +281,14 @@ o_cmdJntTrq := m_instruJntCtrlTrq;]]></ST>
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.calcBacklash">
-      <LineId Id="293" Count="70" />
-      <LineId Id="60" Count="0" />
+      <LineId Id="379" Count="69" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.init">
-      <LineId Id="190" Count="17" />
+      <LineId Id="216" Count="16" />
       <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.run">
-      <LineId Id="1044" Count="41" />
+      <LineId Id="1116" Count="40" />
       <LineId Id="70" Count="0" />
     </LineIds>
   </POU>

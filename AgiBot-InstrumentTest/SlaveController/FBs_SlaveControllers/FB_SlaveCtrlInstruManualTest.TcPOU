@@ -62,7 +62,7 @@ IF GVL_InstruTestUIVars.g_moveToSetPosFlag THEN
 	m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
 	m_targetGripForceLevel := LIMIT(0, GVL_InstruTestUIVars.g_targetGripForceLevel, 100);
 ELSIF GVL_InstruTestUIVars.g_gripperOpenFlag THEN
-	m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+	m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
 	m_targetGripForceLevel :=0;
 ELSIF GVL_InstruTestUIVars.g_gripperCloseFlag THEN
 	m_targetGripAng := 0;

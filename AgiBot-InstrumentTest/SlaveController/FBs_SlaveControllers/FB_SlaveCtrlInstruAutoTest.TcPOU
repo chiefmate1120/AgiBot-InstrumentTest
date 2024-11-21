@@ -216,17 +216,17 @@ END_VAR]]></Declaration>
 		m_targetGripAng := 0;
 		m_targetGripForceLevel :=0;
 	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=0;		
 	2:
 		m_targetGripAng := -45* g_deg2rad;
 		m_targetGripForceLevel :=100;
 	3:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=100;
 
 	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=0;
 END_CASE
 
@@ -250,16 +250,16 @@ CASE m_autoTestStep OF
 		m_targetGripAng := 0;
 		m_targetGripForceLevel :=0;
 	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+		m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
 		m_targetGripForceLevel :=0;
 	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=0;
 	3:
 		m_targetGripAng := -pi/2;
 		m_targetGripForceLevel :=100;
 	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=100;
 	5:
 		m_targetGripAng := 0;
@@ -325,16 +325,16 @@ END_VAR]]></Declaration>
 		m_targetGripAng := 0;
 		m_targetGripForceLevel :=0;
 	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
+		m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
 		m_targetGripForceLevel :=0;
 	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=0;
 	3:
 		m_targetGripAng := -45 * g_deg2rad;
 		m_targetGripForceLevel :=100;
 	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
+		m_targetGripAng := g_minSlaveGripAngle;
 		m_targetGripForceLevel :=100;
 END_CASE
 
