@@ -1,10 +1,34 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
-  <POU Name="FB_SlaveCtrlInstruManualTest" Id="{dbf632a1-f924-4c4a-9c08-3e3912584188}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_SlaveCtrlInstruVerify_bak" Id="{5c36b560-315f-4c2f-ac62-83b50e620b94}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
-FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruManualTest EXTENDS FB_SlaveArmCtrlBase
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruVerify_bak EXTENDS FB_SlaveArmCtrlBase
+VAR CONSTANT
+	m_instruVerifyTrajNum :INT :=12;
+END_VAR
 VAR
-																
+	// rising edge generator for instrument information reading
+	m_nextStepRTrig:R_TRIG;
+	m_lastStepRTrig:R_TRIG;
+											
+	// variable for instument veify
+	m_verifyTestStep :INT :=0;
+	m_reachVerifyPos : BOOL := FALSE;
+	// instrument move motion via points[roll, pitch, yaw]
+	m_instruVerifyPos:ARRAY [1..m_instruVerifyTrajNum, 1..4] OF LREAL:= 
+	[	0,  -pi/2 + pi/3,	0,	0,
+		0,  -pi/2 - pi/3,	0,	0,
+		0,  -pi/2,	0,	0,
+		0,  -pi/2 ,	pi/3,	0,
+		0,  -pi/2,	-pi/3,	0,
+		pi,  -pi/2 ,	0,	0,
+		0,  -pi/2 ,	0,	0,
+		0,  -pi/2 ,	0,	pi,
+		0,  -pi/2 ,	0,	0,
+		0,  -pi/2 ,	0,	-pi/3,
+		0,	-pi/2,	0, 	0];
+				
+
 	// final target DH joint position and grip angle
 	m_targetDHJntPos:Vec3d;
 	m_targetGripAng:LREAL;
@@ -32,15 +56,13 @@ VAR
 	
 	// instrument tyep
 	m_instruType : E_InstrumentType;
-	bStart: BOOL;
-	iStep: INT;
 
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="calcCmdJntPos" Id="{9ac6c1d4-8249-4e40-93a3-6d5814eb3008}">
+    <Method Name="calcCmdJntPos" Id="{c02f0a89-3ec2-429c-b384-248b1b579211}">
       <Declaration><![CDATA[METHOD PROTECTED calcCmdJntPos : BOOL
 VAR_IN_OUT CONSTANT
 	i_endoscopePose : ST_Frame;
@@ -52,91 +74,13 @@ END_VAR
 VAR 
 	i:INT :=0;
 	errThres :LREAL;
-	m_targetDHJntPosLast: Vec3d;
-	m_curCmdDHJntPos: Vec3d;
-	m_compensationAngleDH: Vec3d;
-	m_targetGripAngLast: LREAL;
-	m_curCmdAng: LREAL;
 
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[// determine target DH joint position and gripper motion
-IF GVL_InstruTestUIVars.g_moveToSetPosFlag THEN
-	m_targetDHJntPos[1] := GVL_InstruTestUIVars.g_targetRollAng*g_deg2rad;
-	m_targetDHJntPos[2] := (GVL_InstruTestUIVars.g_targetPitchAng-90)*g_deg2rad;
-	m_targetDHJntPos[3] := GVL_InstruTestUIVars.g_targetYawAng*g_deg2rad;
-	m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
-	m_targetGripForceLevel := LIMIT(0, GVL_InstruTestUIVars.g_targetGripForceLevel, 100);
-ELSIF GVL_InstruTestUIVars.g_gripperOpenFlag THEN
-	m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
-	m_targetGripForceLevel :=0;
-ELSIF GVL_InstruTestUIVars.g_gripperCloseFlag THEN
-	m_targetGripAng := 0;
-	m_targetGripForceLevel :=0;
-ELSIF GVL_InstruTestUIVars.g_maxGripForceFlag THEN
-	m_targetGripAng := -45;
-	m_targetGripForceLevel :=0;
-END_IF
-(*
-FOR i:=1 TO 3 BY 1 DO
-	m_compensationAngleDH[i]:=0;
-	IF GVL_InstruTestUIVars.g_account.actualPermission=3 THEN
-		IF GVL_InstruTestUIVars.g_enableBackendCompensation THEN
-			m_compensationAngleDH:=GVL_InstruTestUIVars.g_compensationAngleBackendDH;
-		END_IF
-		IF GVL_InstruTestUIVars.g_enableRDCompensation THEN
-			GVL_InstruTestUIVars.g_enableBackendCompensation:=FALSE;
-			m_compensationAngleDH:=GVL_InstruTestUIVars.g_compensationAngleDH;
-		END_IF
-	END_IF
-	IF ABS( m_targetDHJntPosLast[i]-m_targetDHJntPos[i])>0.0001  THEN
-	  IF  m_targetDHJntPosLast[i]-m_targetDHJntPos[i]>0.0001   THEN
-		  m_curCmdDHJntPos[i]:=m_targetDHJntPos[i]-m_compensationAngleDH[i]*g_deg2rad;
-	  ELSE
-		  m_curCmdDHJntPos[i]:=m_targetDHJntPos[i];
-	  END_IF                       
-	END_IF
-	m_targetDHJntPosLast:=m_targetDHJntPos;
-END_FOR
-IF ABS( m_targetGripAngLast-m_targetGripAng)>0.0001  THEN
-  IF  m_targetGripAngLast-m_targetGripAng<0.0001   THEN
-	  m_curCmdAng:=m_targetGripAng+m_compensationAngleDH[3]*g_deg2rad;
-  ELSE
-	  m_curCmdAng:=m_targetGripAng;;
-  END_IF                       
-END_IF
-m_targetGripAngLast:=m_targetGripAng;
+        <ST><![CDATA[// determine final target DH joint position
+instruVerifyTest(i_slaveArm);
 
-*)
-IF GVL_InstruTestUIVars.m_cycleStart THEN 
-	bStart:=TRUE;
-	GVL_InstruTestUIVars.m_cycleStart:=FALSE;
-END_IF
-IF GVL_InstruTestUIVars.m_cycleStop THEN 
-	bStart:=FALSE;
-	GVL_InstruTestUIVars.m_cycleStop:=FALSE;
-END_IF
-IF bStart THEN
-	CASE iStep OF 
-		0:
-			m_targetGripAng := GVL_InstruTestUIVars.g_maxGripAng;
-			m_targetGripForceLevel :=0;
-			iStep:=5;
-		5:
-		    IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-				iStep:=10;
-			END_IF
-		10:
-			m_targetGripAng := GVL_InstruTestUIVars.g_minGripAngle;
-			m_targetGripForceLevel :=0;
-			iStep:=15;
-		15:
-		    IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-				iStep:=0;
-			END_IF
-	END_CASE
-END_IF
 // run OTG
 FOR i:=1 TO 3  DO
 	m_DHJntOTG[i].run(m_targetDHJntPos[i],0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[i],o_cmdPos=> m_cmdDHJntPos[i+3]);
@@ -152,7 +96,7 @@ vecSelfMultiNum(m_cmdJntVel, g_slaveArmCtrlFreq);
 m_lastCmdJntPos:=m_cmdJntPos;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="calcCmdJntTrq" Id="{672b1be1-2807-47dd-8f1d-525fb978a27b}">
+    <Method Name="calcCmdJntTrq" Id="{6485d26a-363b-4146-94b3-4ce26cce455f}">
       <Declaration><![CDATA[// override this function in each exact controller
 METHOD PROTECTED calcCmdJntTrq : BOOL
 VAR_IN_OUT CONSTANT
@@ -190,7 +134,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="init" Id="{406632cf-8059-46ab-b0c2-acbe734ef5ab}">
+    <Method Name="init" Id="{e6c7fc49-a7ee-46ed-8bbb-07e6638fd69f}">
       <Declaration><![CDATA[METHOD PUBLIC init : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm	:FB_SlaveArm;
@@ -215,6 +159,7 @@ m_jntOPMode[6] := DriverOPMode_Trq;
 m_jntOPMode[7] := DriverOPMode_Trq;
 m_jntOPMode[8] := DriverOPMode_Trq;
 
+m_verifyTestStep := 0;
 m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
 m_cmdDHJntVel :=g_zeroVec6d;
 m_targetGripAng := i_slaveArm.curGripAngle;
@@ -225,20 +170,6 @@ m_targetDHJntPos[3] := i_slaveArm.curDHJntPos[6];
 // init instrument controller
 m_instruController.init(i_slaveArm);
 m_usKnifeController.init(i_slaveArm);
-iStep:=0;
-bStart:=FALSE;
-FOR i:=1 TO 3  DO
-	m_maxJntVel[i]:=5;
-	m_maxJntAcc[i]:=30;
-	IF GVL_InstruTestUIVars.g_account.actualPermission=3 THEN
-		m_maxJntVel[1]:=GVL_InstruTestUIVars.g_rotationAngularVel;
-		m_maxJntVel[2]:=GVL_InstruTestUIVars.g_pitchAngularVel;
-		m_maxJntVel[3]:=GVL_InstruTestUIVars.g_deviationAngularVel;
-		m_maxJntAcc[1]:=GVL_InstruTestUIVars.g_rotationAngularAcc;
-		m_maxJntAcc[2]:=GVL_InstruTestUIVars.g_pitchAngularAcc;
-		m_maxJntAcc[3]:=GVL_InstruTestUIVars.g_deviationAngularAcc;
-	END_IF
-END_FOR
 
 FOR i:=1 TO 3  DO
 	m_DHJntOTG[i].init(m_cmdDHJntPos[i+3], 0, m_maxJntVel[i], m_maxJntAcc[i], g_slaveArmCtrlCycleTime);
@@ -252,9 +183,9 @@ copyCmds(r_slaveArmCtrlCmd);
 ]]></ST>
       </Implementation>
     </Method>
-    <Property Name="InstruBacklash" Id="{b8a24ea9-b582-4c33-9d96-935e62686f4d}">
+    <Property Name="InstruBacklash" Id="{9820f408-1b59-41ce-a0a0-035b297b0869}">
       <Declaration><![CDATA[PROPERTY InstruBacklash : Vec5d]]></Declaration>
-      <Get Name="Get" Id="{b3292599-741b-4cc2-b2a4-345b2cfdea2c}">
+      <Get Name="Get" Id="{c0f44f7c-b60e-447a-bb80-6aea7ee07520}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -267,40 +198,42 @@ END_IF]]></ST>
         </Implementation>
       </Get>
     </Property>
-    <LineIds Name="FB_SlaveCtrlInstruManualTest">
+    <Method Name="instruVerifyTest" Id="{d16e87c5-3252-438b-9458-4acbad9aeb7e}">
+      <Declaration><![CDATA[METHOD instruVerifyTest : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+VAR
+	i:INT;
+	nextStepFlag :BOOL;
+	lastStepFlag :BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_targetGripForceLevel :=0;
+m_verifyTestStep := LIMIT(0,m_verifyTestStep, m_instruVerifyTrajNum-1);
+
+FOR i:=1 TO 3 DO
+	 m_targetDHJntPos[i] := m_instruVerifyPos[m_verifyTestStep+1, i];
+END_FOR
+ m_targetGripAng := LIMIT(0, m_instruVerifyPos[m_verifyTestStep+1,4], i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle);
+
+m_nextStepRTrig(CLK:= GVL_InstruTestUIVars.g_instruVerifyNextStepFlag, Q=>nextStepFlag );
+m_lastStepRTrig(CLK:= GVL_InstruTestUIVars.g_instruVerifyLastStepFlag, Q=>lastStepFlag );
+IF  nextStepFlag THEN
+	m_verifyTestStep :=m_verifyTestStep + 1;
+ELSIF  lastStepFlag THEN
+	m_verifyTestStep :=m_verifyTestStep - 1;
+END_IF
+ ]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak">
       <LineId Id="9" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntPos">
-      <LineId Id="443" Count="0" />
-      <LineId Id="428" Count="14" />
-      <LineId Id="326" Count="0" />
-      <LineId Id="828" Count="0" />
-      <LineId Id="640" Count="0" />
-      <LineId Id="683" Count="0" />
-      <LineId Id="645" Count="0" />
-      <LineId Id="642" Count="2" />
-      <LineId Id="647" Count="0" />
-      <LineId Id="807" Count="0" />
-      <LineId Id="648" Count="0" />
-      <LineId Id="646" Count="0" />
-      <LineId Id="573" Count="0" />
-      <LineId Id="463" Count="7" />
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak.calcCmdJntPos">
+      <LineId Id="324" Count="0" />
+      <LineId Id="330" Count="0" />
       <LineId Id="398" Count="0" />
-      <LineId Id="685" Count="3" />
-      <LineId Id="692" Count="0" />
-      <LineId Id="695" Count="1" />
-      <LineId Id="684" Count="0" />
-      <LineId Id="827" Count="0" />
-      <LineId Id="826" Count="0" />
-      <LineId Id="848" Count="6" />
-      <LineId Id="847" Count="0" />
-      <LineId Id="855" Count="1" />
-      <LineId Id="858" Count="0" />
-      <LineId Id="860" Count="6" />
-      <LineId Id="868" Count="6" />
-      <LineId Id="867" Count="0" />
-      <LineId Id="859" Count="0" />
-      <LineId Id="857" Count="0" />
       <LineId Id="391" Count="3" />
       <LineId Id="261" Count="0" />
       <LineId Id="397" Count="0" />
@@ -311,7 +244,7 @@ END_IF]]></ST>
       <LineId Id="187" Count="1" />
       <LineId Id="131" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntTrq">
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak.calcCmdJntTrq">
       <LineId Id="121" Count="0" />
       <LineId Id="34" Count="1" />
       <LineId Id="135" Count="0" />
@@ -324,11 +257,12 @@ END_IF]]></ST>
       <LineId Id="142" Count="2" />
       <LineId Id="177" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruManualTest.init">
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak.init">
       <LineId Id="13" Count="0" />
       <LineId Id="101" Count="0" />
       <LineId Id="86" Count="6" />
       <LineId Id="19" Count="0" />
+      <LineId Id="188" Count="0" />
       <LineId Id="120" Count="0" />
       <LineId Id="84" Count="1" />
       <LineId Id="93" Count="0" />
@@ -336,20 +270,7 @@ END_IF]]></ST>
       <LineId Id="174" Count="0" />
       <LineId Id="81" Count="2" />
       <LineId Id="162" Count="0" />
-      <LineId Id="195" Count="0" />
-      <LineId Id="218" Count="0" />
-      <LineId Id="188" Count="0" />
-      <LineId Id="191" Count="0" />
-      <LineId Id="196" Count="0" />
-      <LineId Id="192" Count="0" />
-      <LineId Id="198" Count="0" />
-      <LineId Id="194" Count="0" />
-      <LineId Id="199" Count="0" />
-      <LineId Id="201" Count="1" />
-      <LineId Id="206" Count="0" />
-      <LineId Id="189" Count="0" />
       <LineId Id="148" Count="0" />
-      <LineId Id="197" Count="0" />
       <LineId Id="128" Count="0" />
       <LineId Id="149" Count="1" />
       <LineId Id="110" Count="0" />
@@ -360,9 +281,21 @@ END_IF]]></ST>
       <LineId Id="59" Count="0" />
       <LineId Id="12" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruManualTest.InstruBacklash.Get">
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak.InstruBacklash.Get">
       <LineId Id="3" Count="3" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruVerify_bak.instruVerifyTest">
+      <LineId Id="49" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="36" Count="4" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="58" Count="1" />
+      <LineId Id="44" Count="1" />
     </LineIds>
   </POU>
 </TcPlcObject>

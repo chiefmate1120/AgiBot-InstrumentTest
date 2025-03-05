@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <DUT Name="Account" Id="{025260d3-05c6-4d5a-88e6-13aabc67439f}">
+    <Declaration><![CDATA[TYPE Account :
+STRUCT
+	logOn:BOOL;
+	logOut:BOOL;
+	autoLogOut:BOOL;
+	register:BOOL;//注册
+	actualAccountNumber:STRING;
+	actualPassWord:STRING;
+	actualPermission:USINT;//权限 0 无登录 1 生产 2 质量 3 研发 4 管理
+	actualWorkNum:UDINT;
+	actualName:STRING;
+	registerAccountNumber:STRING;
+	registerPassWord:STRING;
+	registerPermission:USINT;
+	registerWorkNum:UDINT;
+	registerName:STRING;
+	prompt:STRING;//提示
+	memoryAccountNumber:ARRAY [0..50] OF STRING; //注册账号
+	memoryPassWord:ARRAY [0..50] OF STRING; //注册账密码
+	memoryPermission:ARRAY [0..50] OF USINT; //注册账权限
+	memoryWorkNum:ARRAY [0..50] OF UDINT;//注册账工号
+	memoryName:ARRAY [0..50] OF STRING; //注册账姓名
+	memoryTime:ARRAY [0..50] OF TIME; //注册时间
+END_STRUCT
+END_TYPE
+]]></Declaration>
+  </DUT>
+</TcPlcObject>

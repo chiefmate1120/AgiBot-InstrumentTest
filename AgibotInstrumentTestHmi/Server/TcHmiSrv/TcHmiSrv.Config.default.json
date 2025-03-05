@@ -28,6 +28,433 @@
     "DEFAULTTIMEZONE": "client",
     "DEFAULTUSERGROUP": "__SystemUsers",
     "DEFINITIONS": {
+        "PLC1.ARRAY_0..50_OF-STRING-80": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "maxItems": 51,
+            "minItems": 51,
+            "type": "array"
+        },
+        "PLC1.ARRAY_0..50_OF-TIME": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/TIME"
+            },
+            "maxItems": 51,
+            "minItems": 51,
+            "type": "array"
+        },
+        "PLC1.ARRAY_0..50_OF-UDINT": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/UDINT"
+            },
+            "maxItems": 51,
+            "minItems": 51,
+            "type": "array"
+        },
+        "PLC1.ARRAY_0..50_OF-USINT": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/USINT"
+            },
+            "maxItems": 51,
+            "minItems": 51,
+            "type": "array"
+        },
+        "PLC1.ARRAY_1..1_1..8_OF-DINT": {
+            "displayAsMatrix": 2,
+            "items": {
+                "allowMapping": false,
+                "items": {
+                    "$ref": "tchmi:general#/definitions/DINT"
+                },
+                "maxItems": 8,
+                "minItems": 8,
+                "startOffset": 1,
+                "type": "array"
+            },
+            "maxItems": 1,
+            "minItems": 1,
+            "startOffset": 1,
+            "type": "array"
+        },
+        "PLC1.ARRAY_1..8_OF-LREAL": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "maxItems": 8,
+            "minItems": 8,
+            "startOffset": 1,
+            "type": "array"
+        },
+        "PLC1.Account": {
+            "properties": {
+                "actualAccountNumber": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "actualName": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "actualPassWord": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "actualPermission": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/USINT"
+                        },
+                        {
+                            "comment": "È¨ÏÞ 0 ÎÞµÇÂ¼ 1 Éú²ú 2 ÖÊÁ¿ 3 ÑÐ·¢ 4 ¹ÜÀí",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "actualWorkNum": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "logOn": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "logOut": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "memoryAccountNumber": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-STRING-80"
+                        },
+                        {
+                            "comment": "×¢²áÕËºÅ",
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "memoryName": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-STRING-80"
+                        },
+                        {
+                            "comment": "×¢²áÕËÐÕÃû",
+                            "propertyOrder": 19
+                        }
+                    ]
+                },
+                "memoryPassWord": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-STRING-80"
+                        },
+                        {
+                            "comment": "×¢²áÕËÃÜÂë",
+                            "propertyOrder": 16
+                        }
+                    ]
+                },
+                "memoryPermission": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-USINT"
+                        },
+                        {
+                            "comment": "×¢²áÕËÈ¨ÏÞ",
+                            "propertyOrder": 17
+                        }
+                    ]
+                },
+                "memoryTime": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-TIME"
+                        },
+                        {
+                            "comment": "×¢²áÊ±¼ä",
+                            "propertyOrder": 20
+                        }
+                    ]
+                },
+                "memoryWorkNum": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..50_OF-UDINT"
+                        },
+                        {
+                            "comment": "×¢²áÕË¹¤ºÅ",
+                            "propertyOrder": 18
+                        }
+                    ]
+                },
+                "prompt": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "comment": "ÌáÊ¾",
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "register": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "×¢²á",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "registerAccountNumber": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "registerName": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "registerPassWord": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "registerPermission": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/USINT"
+                        },
+                        {
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "registerWorkNum": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 12
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.E_SlaveArmState": {
+            "attributes": {
+                "generate_implicit_init_function": ""
+            },
+            "enum": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                28
+            ],
+            "options": [
+                {
+                    "label": "SlaveArmState_Error",
+                    "value": 1
+                },
+                {
+                    "label": "SlaveArmState_Init",
+                    "value": 2
+                },
+                {
+                    "label": "SlaveArmState_SelfCheck",
+                    "value": 3
+                },
+                {
+                    "label": "SlaveArmState_Standby",
+                    "value": 4
+                },
+                {
+                    "label": "SlaveArmState_MountPanel",
+                    "value": 5
+                },
+                {
+                    "label": "SlaveArmState_PanelReady",
+                    "value": 6
+                },
+                {
+                    "label": "SlaveArmState_MountInstru",
+                    "value": 7
+                },
+                {
+                    "label": "SlaveArmState_InstruReady",
+                    "value": 8
+                },
+                {
+                    "label": "SlaveArmState_MasterSlave",
+                    "value": 9
+                },
+                {
+                    "label": "SlaveArmState_ScopeReady",
+                    "value": 10
+                },
+                {
+                    "label": "SlaveArmState_EndoScope",
+                    "value": 11
+                },
+                {
+                    "label": "SlaveArmState_Adjust",
+                    "value": 12
+                },
+                {
+                    "label": "SlaveArmState_Package",
+                    "value": 13
+                },
+                {
+                    "label": "SlaveArmState_Cart",
+                    "value": 14
+                },
+                {
+                    "label": "SlaveArmState_GravityCali",
+                    "value": 15
+                },
+                {
+                    "label": "SlaveArmState_Test",
+                    "value": 16
+                },
+                {
+                    "label": "SlaveArmState_InstruRetract",
+                    "value": 17
+                },
+                {
+                    "label": "SlaveArmState_InstruInvasion",
+                    "value": 18
+                },
+                {
+                    "label": "SlaveArmState_Disable",
+                    "value": 19
+                },
+                {
+                    "label": "SlaveArmState_InstruCali",
+                    "value": 20
+                },
+                {
+                    "label": "SlaveArmState_ScopeToggle",
+                    "value": 21
+                },
+                {
+                    "label": "SlaveArmState_Performance",
+                    "value": 22
+                },
+                {
+                    "label": "SlaveArmState_Stop",
+                    "value": 23
+                },
+                {
+                    "label": "SlaveArmState_InstruAutoTest",
+                    "value": 24
+                },
+                {
+                    "label": "SlaveArmState_InstruManualTest",
+                    "value": 25
+                },
+                {
+                    "label": "SlaveArmState_InstruVerify",
+                    "value": 26
+                },
+                {
+                    "label": "SlaveArmState_MotorGoHome",
+                    "value": 27
+                },
+                {
+                    "label": "SlaveArmState_PowerBoxCalibration",
+                    "value": 28
+                },
+                {
+                    "label": "SlaveArmState_totalNum",
+                    "value": 28
+                }
+            ],
+            "type": "integer"
+        },
         "PLC1.Vec3d": {
             "items": {
                 "$ref": "tchmi:general#/definitions/LREAL"
@@ -53,8 +480,8 @@
     "DISCOVERY": 2,
     "ENABLE_SERVER_UPDATE": true,
     "ENDPOINTS": [
-        "http://127.0.0.1:13000",
-        "http://127.0.0.1:3000"
+        "http://127.0.0.1:13004",
+        "http://127.0.0.1:3002"
     ],
     "ETAGENABLED": true,
     "EXTENSIONS": {
@@ -2518,6 +2945,175 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_RFID_SN": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_RFID_SN",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_account": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_account",
+            "SCHEMA": {
+                "$ref": "tchmi:server#/definitions/PLC1.Account"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_actualRatedCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_actualRatedCurrent",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "Êµ¼Ê¶î¶¨µçÁ÷"
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.ARRAY_1..8_OF-LREAL"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_autoTestCycles": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_autoTestCycles",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_autoTestPause": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_autoTestPause",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "×Ô¶¯²âÊÔÔÝÍ£"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_autoTestStart": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_autoTestStart",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_autoTestStop": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_autoTestStop",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_beHomed": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_beHomed",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¶¯Á¦ºÐÁãÎ»×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_clearInformation": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_clearInformation",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Çå³ýÕË»§ÕËºÅÐÅÏ¢"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_clearInstruNumOfUses": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_clearInstruNumOfUses",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Çå³ýÊ¹ÓÃ´ÎÊý"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_compensationAngleBackendDH": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_compensationAngleBackendDH",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "DH²¹³¥½Ç¶ÈÄÚ²¿"
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.Vec3d"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_compensationAngleDH": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_compensationAngleDH",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "DH²¹³¥½Ç¶È"
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.Vec3d"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_curGripAng": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -2695,6 +3291,127 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_curTestCycles": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_curTestCycles",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/INT"
+                    },
+                    {
+                        "comment": "µ±Ç°Ñ­»·´ÎÊý"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_deviationActualCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_deviationActualCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_deviationAngularAcc": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_deviationAngularAcc",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_deviationAngularVel": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_deviationAngularVel",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "Æ«°Ú/¿ªºÏ"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_deviationTargetCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_deviationTargetCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_enableBackendCompensation": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_enableBackendCompensation",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_enableRDCompensation": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_enableRDCompensation",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_enabled": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_enabled",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "µç»úÊ¹ÄÜ×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_funcCurrentDetection": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_funcCurrentDetection",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_goHome": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_goHome",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_gripperCloseFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -2712,6 +3429,50 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_gripperOpenFlag",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_inPos": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_inPos",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_incInstruNumOfUses": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_incInstruNumOfUses",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Ôö¼ÓÊ¹ÓÃ´ÎÊý"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_informationVerificationPassed": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_informationVerificationPassed",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "ÐÅÏ¢Ð£ÑéÍ¨¹ý"
+                    }
+                ]
             },
             "USEMAPPING": true
         },
@@ -2766,6 +3527,23 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_instruCaliState": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruCaliState",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Æ÷Ðµ±ê¶¨×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -2778,6 +3556,40 @@
                     },
                     {
                         "comment": "control variable for instrument manual test"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruNumberOfAllUses",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/UINT"
+                    },
+                    {
+                        "comment": "Æ÷Ðµ×ÜÊ¹ÓÃ´ÎÊý"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instruNumberOfUses": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruNumberOfUses",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/UINT"
+                    },
+                    {
+                        "comment": "Æ÷ÐµÊ¹ÓÃ´ÎÊý"
                     }
                 ]
             },
@@ -2890,6 +3702,94 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_instrumentAutoSnapping": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instrumentAutoSnapping",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Æ÷Ðµ×Ô¶¯¿¨½Ó"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instrumentSnapping": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instrumentSnapping",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Æ÷Ðµ¿¨½ÓÕÒµã"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instrumentSnappingStop": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instrumentSnappingStop",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Æ÷Ðµ¿¨½ÓÍ£Ö¹"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_lastStep": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_lastStep",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxGripAng": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxGripAng",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "µ±Ç°ÕÅ¿ª½Ç¶È"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxGripAngle": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxGripAngle",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_maxGripForceFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -2907,6 +3807,50 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxInstruAutoTestCycles",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/DINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_minGripAngle": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_minGripAngle",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_modifyRatedCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_modifyRatedCurrent",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "ÐÞ¸Ä¶î¶¨µçÁ÷"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_motorStops": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_motorStops",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "µç»úÍ£Ö¹"
+                    }
+                ]
             },
             "USEMAPPING": true
         },
@@ -2930,6 +3874,320 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_nextStep": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_nextStep",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_offLineRFID": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_offLineRFID",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_pitchActualCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_pitchActualCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_pitchAngularAcc": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_pitchAngularAcc",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_pitchAngularVel": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_pitchAngularVel",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "¸©Ñö"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_pitchTargetCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_pitchTargetCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_positionWritingChip": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_positionWritingChip",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Î»ÖÃÐ´ÈëÐ¾Æ¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibration": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_powerBoxCalibration",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationFlag": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_powerBoxCalibrationFlag",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationPos": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_powerBoxCalibrationPos",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "¶¯Á¦ºÐÁãÎ»"
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.ARRAY_1..1_1..8_OF-DINT"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationed": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_powerBoxCalibrationed",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¶¯Á¦ºÐÁãÎ»ÒÑÐ£×¼"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_powerOn": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_powerOn",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "µç»úÊ¹ÄÜ"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readENC2PosData": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readENC2PosData",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Î»ÖÃ´ÓÐ¾Æ¬¶ÁÈ¡"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readInstruInformation": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readInstruInformation",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡Æ÷ÐµÐÅÏ¢"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readInstruinformationFlag": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readInstruinformationFlag",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡Æ÷ÐµÐÅÏ¢×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readRFID": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readRFID",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readRFIDFlag": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readRFIDFlag",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡RFID×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readSNNum": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readSNNum",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/ULINT"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡µ½µÄSNÂë"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readedRFID": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readedRFID",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "g_informationVerificationPassed:BOOL;"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_rotationActualCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_rotationActualCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_rotationAngularAcc": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_rotationAngularAcc",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_rotationAngularVel": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_rotationAngularVel",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "Ðý×ª"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_rotationTargetCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_rotationTargetCurrent",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_searchZeroPosFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -2937,6 +4195,33 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_searchZeroPosFlag",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_snappingSeparator": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_snappingSeparator",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "¿¨½Ó¸ôÀë°å"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_stateMachine": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_stateMachine",
+            "SCHEMA": {
+                "$ref": "tchmi:server#/definitions/PLC1.E_SlaveArmState"
             },
             "USEMAPPING": true
         },
@@ -2984,6 +4269,23 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_targetRatedCurrent": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_targetRatedCurrent",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "Ä¿±ê¶î¶¨µçÁ÷"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_targetRollAng": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3018,6 +4320,144 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_testCycles": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testCycles",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testMode": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testMode",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testStep": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testStep",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testTimeHour": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testTimeHour",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/UINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testTimeMinute": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testTimeMinute",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/UINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testTimeSecond": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testTimeSecond",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/UINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_writeENC2PosData": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeENC2PosData",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "comment": "Î»ÖÃÊý¾ÝÐ´Èë"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_writeInstruPurpose": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeInstruPurpose",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Ð´ÈëÆ÷ÐµÓÃÍ¾"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_writeInstruSN": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeInstruSN",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "Ð´ÈëSNÂë"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_writePurposeNum": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writePurposeNum",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/UINT"
+                    },
+                    {
+                        "comment": "Ð´ÈëÆ÷ÐµµÄÓÃÍ¾"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_writeRFID": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeRFID",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_writeSNFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3028,6 +4468,23 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_writeSNNum": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeSNNum",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/ULINT"
+                    },
+                    {
+                        "comment": "Ð´ÈëÆ÷ÐµÖÐµÄSNÂë"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_writeZeroPosFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3035,6 +4492,93 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeZeroPosFlag",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_Instrument_pos_L1",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L2": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_Instrument_pos_L2",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L3": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_Instrument_pos_L3",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_RFIDTimes": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_RFIDTimes",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/DINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_cycleStart": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_cycleStart",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_cycleStop": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_cycleStop",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.m_postureTestStep": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::m_postureTestStep",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.writeInstruZeroPos": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::writeInstruZeroPos",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "comment": "µ±Ç°Ð´ÈëÆ÷ÐµÁãÎ»"
+                    },
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.Vec5d"
+                    }
+                ]
             },
             "USEMAPPING": true
         },
@@ -3957,6 +5501,18 @@
                 "LocalizeText": 3,
                 "Login": 3,
                 "Logout": 3,
+                "PLC1.GVL_InstruTestUIVars.g_RFID_SN": 3,
+                "PLC1.GVL_InstruTestUIVars.g_account": 3,
+                "PLC1.GVL_InstruTestUIVars.g_actualRatedCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_autoTestCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_autoTestPause": 3,
+                "PLC1.GVL_InstruTestUIVars.g_autoTestStart": 3,
+                "PLC1.GVL_InstruTestUIVars.g_autoTestStop": 3,
+                "PLC1.GVL_InstruTestUIVars.g_beHomed": 3,
+                "PLC1.GVL_InstruTestUIVars.g_clearInformation": 3,
+                "PLC1.GVL_InstruTestUIVars.g_clearInstruNumOfUses": 3,
+                "PLC1.GVL_InstruTestUIVars.g_compensationAngleBackendDH": 3,
+                "PLC1.GVL_InstruTestUIVars.g_compensationAngleDH": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curGripAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curInstruDHPos": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curInstruDHPos.0": 3,
@@ -3974,12 +5530,28 @@
                 "PLC1.GVL_InstruTestUIVars.g_curInstruJntPos.2": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curInstruJntPos.3": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curInstruJntPos.4": 3,
+                "PLC1.GVL_InstruTestUIVars.g_curTestCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_deviationActualCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_deviationAngularAcc": 3,
+                "PLC1.GVL_InstruTestUIVars.g_deviationAngularVel": 3,
+                "PLC1.GVL_InstruTestUIVars.g_deviationTargetCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_enableBackendCompensation": 3,
+                "PLC1.GVL_InstruTestUIVars.g_enableRDCompensation": 3,
+                "PLC1.GVL_InstruTestUIVars.g_enabled": 3,
+                "PLC1.GVL_InstruTestUIVars.g_funcCurrentDetection": 3,
+                "PLC1.GVL_InstruTestUIVars.g_goHome": 3,
                 "PLC1.GVL_InstruTestUIVars.g_gripperCloseFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_gripperOpenFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_inPos": 3,
+                "PLC1.GVL_InstruTestUIVars.g_incInstruNumOfUses": 3,
+                "PLC1.GVL_InstruTestUIVars.g_informationVerificationPassed": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruAutoTestFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruAutoTestMode": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruCaliFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruCaliState": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruNumberOfUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruSN": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruVerifyFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruVerifyLastStepFlag": 3,
@@ -3990,18 +5562,73 @@
                 "PLC1.GVL_InstruTestUIVars.g_instruZeroPos.2": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruZeroPos.3": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruZeroPos.4": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instrumentAutoSnapping": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instrumentSnapping": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instrumentSnappingStop": 3,
+                "PLC1.GVL_InstruTestUIVars.g_lastStep": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxGripAng": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxGripAngle": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxGripForceFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxInstruAutoTestCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_minGripAngle": 3,
+                "PLC1.GVL_InstruTestUIVars.g_modifyRatedCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_motorStops": 3,
                 "PLC1.GVL_InstruTestUIVars.g_moveToSetPosFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_newInstruSN": 3,
+                "PLC1.GVL_InstruTestUIVars.g_nextStep": 3,
+                "PLC1.GVL_InstruTestUIVars.g_offLineRFID": 3,
+                "PLC1.GVL_InstruTestUIVars.g_pitchActualCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_pitchAngularAcc": 3,
+                "PLC1.GVL_InstruTestUIVars.g_pitchAngularVel": 3,
+                "PLC1.GVL_InstruTestUIVars.g_pitchTargetCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_positionWritingChip": 3,
+                "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibration": 3,
+                "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationPos": 3,
+                "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationed": 3,
+                "PLC1.GVL_InstruTestUIVars.g_powerOn": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readENC2PosData": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readInstruInformation": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readInstruinformationFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readRFID": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readRFIDFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readSNNum": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readedRFID": 3,
+                "PLC1.GVL_InstruTestUIVars.g_rotationActualCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_rotationAngularAcc": 3,
+                "PLC1.GVL_InstruTestUIVars.g_rotationAngularVel": 3,
+                "PLC1.GVL_InstruTestUIVars.g_rotationTargetCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_searchZeroPosFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_snappingSeparator": 3,
+                "PLC1.GVL_InstruTestUIVars.g_stateMachine": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetGripAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetGripForceLevel": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetPitchAng": 3,
+                "PLC1.GVL_InstruTestUIVars.g_targetRatedCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetRollAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetYawAng": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testMode": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testStep": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testTimeHour": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testTimeMinute": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testTimeSecond": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeENC2PosData": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeInstruPurpose": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeInstruSN": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writePurposeNum": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeRFID": 3,
                 "PLC1.GVL_InstruTestUIVars.g_writeSNFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeSNNum": 3,
                 "PLC1.GVL_InstruTestUIVars.g_writeZeroPosFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1": 3,
+                "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L2": 3,
+                "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L3": 3,
+                "PLC1.GVL_InstruTestUIVars.m_RFIDTimes": 3,
+                "PLC1.GVL_InstruTestUIVars.m_cycleStart": 3,
+                "PLC1.GVL_InstruTestUIVars.m_cycleStop": 3,
+                "PLC1.GVL_InstruTestUIVars.m_postureTestStep": 3,
+                "PLC1.GVL_InstruTestUIVars.writeInstruZeroPos": 3,
                 "SetLocale": 3,
                 "SubscribeEvents": 3,
                 "TcHmiSqliteLogger.Diagnostics": 1,

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="FB_SlaveCtrlMountInstru" Id="{db93de24-03af-45f5-8edb-e02a943fe1f8}" SpecialFunc="None">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_SlaveCtrlMountInstru" Id="{3096b71f-f1f1-44ea-a4bb-101f0eed6837}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Mounting Instrument
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlMountInstru EXTENDS FB_SlaveArmCtrlBase
 VAR
@@ -36,7 +36,10 @@ VAR
 	m_instruZeroDeviation :Vec5d;
 	
 	//ultrasound knife Reduce the current rotation Angle  J3
-	m_ultraKnifeRotaAngleJ3 :LREAL := 3*g_deg2Rad;
+	m_ultraKnifeRotaAngleJ3 :LREAL := 30*g_deg2Rad;
+	
+	// ultrasound knife rotate angle zero position
+	m_ultraKnifeRotAngZeroPos :LREAL := 4.50567;
 	
 	// joint position error
 	m_jntPosErr :Vec5d;
@@ -44,13 +47,18 @@ VAR
 	// endoscope motion angle to original position
 	m_scopeJnt4CenterMotionAng :LREAL :=175*g_deg2Rad;
 	m_scopeJnt5CenterMotionAng :LREAL :=150*g_deg2Rad;
-
+	
+	//instrument clamp error Id
+	m_instruClampErrId : UINT;
+	m_instruClampTime : LREAL;
+	m_noCurrentTime : LREAL :=3;
+	m_notReturnToZero : LREAL :=5;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="calcCmdJntPos" Id="{106b8ce6-26fa-4bca-bfc9-20f8cdf00f0e}">
+    <Method Name="calcCmdJntPos" Id="{831fef5c-246e-448a-846b-d2d9d93a8814}">
       <Declaration><![CDATA[// override this function in each exact controller
 METHOD PROTECTED calcCmdJntPos : BOOL
 VAR_IN_OUT CONSTANT
@@ -64,7 +72,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// return directly if instrument/endoscope is not readed
-IF i_slaveArm.instrument.onChipData.m_Error THEN
+IF i_slaveArm.instrument.onChipData.m_Error OR m_instruClampErrId >0  THEN
 	return;
 END_IF
 
@@ -74,10 +82,11 @@ ELSIF i_slaveArm.instrument.onChipData.m_InstruReadSucceed AND (InstruType_Ultra
 	mountUltraKnife(i_slaveArm);
 ELSE
 	mountInstrument(i_slaveArm);
-END_IF]]></ST>
+END_IF
+m_instruClampErrId := instruClampStatus(i_slaveArm);]]></ST>
       </Implementation>
     </Method>
-    <Method Name="init" Id="{85ccbdcb-d27d-4162-a6ec-e8e93d30dbc6}">
+    <Method Name="init" Id="{4bdbde92-126d-4fb2-8bea-0ba77316e691}">
       <Declaration><![CDATA[METHOD PUBLIC init : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm	:FB_SlaveArm;
@@ -109,14 +118,62 @@ END_FOR
 m_instruMountStatus:=0;
 m_scopeMountStatus:=0;
 m_ultrasoundMountStatus:=0;
-
+m_instruClampErrId := 0;
+m_instruClampTime := 0;
 // update commands to arm
 copyCmds(r_slaveArmCtrlCmd);
 
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="mountEndoscope" Id="{924322f0-f77b-4627-9090-85580b93061c}">
+    <Property Name="instruClampErrId" Id="{f1028432-c4d8-4b7e-a34b-a7a30fe5b17a}">
+      <Declaration><![CDATA[PROPERTY instruClampErrId :  UINT]]></Declaration>
+      <Get Name="Get" Id="{4e5cc1ce-1710-4380-ad0f-4115ae9409f8}">
+        <Declaration><![CDATA[
+VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[instruClampErrId := m_instruClampErrId;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <Method Name="instruClampStatus" Id="{59da6779-a8b0-41c0-b6ac-feaa3bdf40f7}">
+      <Declaration><![CDATA[METHOD instruClampStatus : UINT
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//m_instruClampErrId=1 instrumen clamp the current does not reach the set value
+//m_instruClampErrId=2 instrumen clamp position does not return to zero
+m_instruClampTime := LIMIT(0,m_instruClampTime + g_slaveArmCtrlCycleTime,10);
+IF i_slaveArm.instrument.onChipData.m_InstruReadSucceed THEN
+	IF InstruType_endoscope = i_slaveArm.instrument.m_instruType THEN
+		IF (m_scopeMountStatus=0 OR m_scopeMountStatus=1) AND m_instruClampTime>=m_noCurrentTime  THEN
+			instruClampStatus := 1;
+		ELSIF m_scopeMountStatus=3 AND m_instruClampTime>=m_notReturnToZero  THEN
+			instruClampStatus := 2;
+		END_IF
+		
+	ELSIF (InstruType_UltrasoundKnifeS = i_slaveArm.instrument.m_instruType OR InstruType_UltrasoundKnifeU = i_slaveArm.instrument.m_instruType) THEN
+		IF (m_ultrasoundMountStatus=0) AND m_instruClampTime>=m_noCurrentTime  THEN
+			instruClampStatus := 1;
+		ELSIF (m_scopeMountStatus=3) AND m_instruClampTime>=m_notReturnToZero  THEN
+			instruClampStatus := 2;
+		END_IF
+			
+	ELSE
+		IF (m_instruMountStatus=0) AND m_instruClampTime>=m_noCurrentTime  THEN
+			instruClampStatus := 1;
+		ELSIF (m_instruMountStatus=3) AND m_instruClampTime>=m_notReturnToZero  THEN
+			instruClampStatus := 2;
+		END_IF
+	END_IF
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="mountEndoscope" Id="{53779760-6bff-4e1f-8634-140d32d026e7}">
       <Declaration><![CDATA[METHOD mountEndoscope : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm :FB_SlaveArm;
@@ -188,7 +245,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="mountInstrument" Id="{cbdcc411-d3ae-4c70-8c1a-fbdc24e77583}">
+    <Method Name="mountInstrument" Id="{ab642495-eb04-410e-a876-dcbfb8e42dd4}">
       <Declaration><![CDATA[METHOD mountInstrument : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm :FB_SlaveArm;
@@ -202,7 +259,7 @@ END_VAR]]></Declaration>
         <ST><![CDATA[curJntPos := i_slaveArm.curJntPos;
 
 // joint4 stay still if instrument has only on finger
-IF i_slaveArm.instrument.m_isSingleFinger THEN
+IF i_slaveArm.instrument.instruTypeInfo.m_isSingleFinger THEN
 	m_jointMounted[1]:=TRUE;
 END_IF
 
@@ -212,7 +269,7 @@ CASE m_instruMountStatus OF
 		//buckle panel with instrument
 		FOR i:=1 TO 4 DO
 			// check if buckled 
-			IF ABS(i_slaveArm.filtJntCurrent[i+3])> m_maxJntCurrent[i] THEN 
+			IF ABS(i_slaveArm.filtJntCurrent[i+3])> m_maxJntCurrent[i] AND ABS(i_slaveArm.curJntVel[i+3])<1.0*g_deg2Rad THEN 
 				m_jointMounted[i]:=TRUE;
 				m_targetMountPos[i+3]:=curJntPos[i+3];
 				m_jntOTG[i].init(m_targetMountPos[i+3], 0,m_instruMountVel, m_instruMountAcc, g_slaveArmCtrlCycleTime);
@@ -270,17 +327,17 @@ CASE m_instruMountStatus OF
 		m_instruMountStatus :=4;
 		FOR i:=1 TO 4 DO 
 			m_jntPosErr[i]:=m_targetMountPos[i+3]-curJntPos[i+3];
-			IF ABS(m_jntPosErr[i]) >GVL_SlaveControlParameters.g_jntCtrlAngTolLow OR 
+			IF ABS(m_jntPosErr[i]) >GVL_SlaveControlParameters.g_jntCtrlAngTolLow*10 OR 
 					ABS( i_slaveArm.linkSingle[i+3] - i_slaveArm.instrument.onChipData.m_InstruPos[i]) >5*g_deg2rad THEN
 				m_instruMountStatus :=3;
 				EXIT;
 			END_IF
 		END_FOR
-		
+	
+	4:
 		// record current joint position as offset for instrument
 		i_slaveArm.instrument.initInstruJntPos(i_slaveArm.curJntPos);
 		
-	4:
 		m_isFinished :=  TRUE;
 
 END_CASE
@@ -294,7 +351,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="mountUltraKnife" Id="{6b01324c-5b90-4e88-a0ef-19a2c0251538}">
+    <Method Name="mountUltraKnife" Id="{6600fc64-5fb9-4b25-a95b-cf611684c71c}">
       <Declaration><![CDATA[METHOD mountUltraKnife : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm :FB_SlaveArm;
@@ -346,7 +403,7 @@ CASE m_ultrasoundMountStatus OF
 		//m_jntOPMode[8] := DriverOPMode_Trq;
 		// calculation deviates from the instrument zero position
 		m_instruZeroDeviation[3] :=  m_ultraKnifeRotaAngleJ3;
-		m_instruZeroDeviation[4] :=  i_slaveArm.linkSingle[7] - i_slaveArm.instrument.onChipData.m_InstruPos[4];
+		m_instruZeroDeviation[4] :=  i_slaveArm.linkSingle[7] - m_ultraKnifeRotAngZeroPos;
 		m_ultrasoundMountStatus :=2;
 		
 	2:// move back to zero position
@@ -365,16 +422,20 @@ CASE m_ultrasoundMountStatus OF
 		m_ultrasoundMountStatus :=3;
 
 	3:
+		// joint8 in passive mode
+		m_jntOPMode[8] := DriverOPMode_Trq;
+		
 		m_isFinished:=TRUE;
 		FOR i:=3 TO 4 DO 
 			m_jntPosErr[i]:=m_targetMountPos[i+3]-curJntPos[i+3];
-			IF ABS(m_jntPosErr[i]) >GVL_SlaveControlParameters.g_jntCtrlAngTolHigh  THEN
-				// record current joint position as offset for instrument
-				i_slaveArm.instrument.initInstruJntPos(i_slaveArm.curJntPos);
+			IF ABS(m_jntPosErr[i]) >GVL_SlaveControlParameters.g_jntCtrlAngTolLow  THEN
 				m_isFinished := FALSE;
 				EXIT;
 			END_IF
 		END_FOR	
+		
+		// record current joint position as offset for instrument
+		i_slaveArm.instrument.initInstruJntPos(i_slaveArm.curJntPos);
 
 END_CASE
 
@@ -389,33 +450,43 @@ END_FOR]]></ST>
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.calcCmdJntPos">
-      <LineId Id="506" Count="10" />
+      <LineId Id="527" Count="11" />
       <LineId Id="478" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.init">
-      <LineId Id="206" Count="22" />
+      <LineId Id="239" Count="23" />
       <LineId Id="92" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlMountInstru.instruClampErrId.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlMountInstru.instruClampStatus">
+      <LineId Id="3" Count="24" />
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountEndoscope">
       <LineId Id="14" Count="36" />
       <LineId Id="62" Count="5" />
       <LineId Id="71" Count="1" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="94" Count="0" />
+      <LineId Id="94" Count="1" />
       <LineId Id="73" Count="0" />
       <LineId Id="75" Count="0" />
       <LineId Id="77" Count="8" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountInstrument">
-      <LineId Id="351" Count="91" />
+      <LineId Id="307" Count="20" />
+      <LineId Id="329" Count="55" />
+      <LineId Id="390" Count="1" />
+      <LineId Id="423" Count="0" />
+      <LineId Id="421" Count="0" />
+      <LineId Id="424" Count="0" />
+      <LineId Id="392" Count="0" />
+      <LineId Id="394" Count="8" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountUltraKnife">
-      <LineId Id="3" Count="62" />
-      <LineId Id="87" Count="0" />
-      <LineId Id="86" Count="0" />
-      <LineId Id="66" Count="10" />
+      <LineId Id="184" Count="79" />
       <LineId Id="2" Count="0" />
     </LineIds>
   </POU>

@@ -1,24 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
-  <POU Name="FB_SlaveCtrlInstruAutoTest" Id="{d70115e7-7668-49fd-9f57-bdf3458ba446}" SpecialFunc="None">
+  <POU Name="FB_SlaveCtrlInstruAutoTest" Id="{c6a5bc39-42bd-40f5-8b75-8e4286e0c418}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruAutoTest EXTENDS FB_SlaveArmCtrlBase
-VAR CONSTANT
-	m_instruOpenGripMoveTrajNum :INT :=18;
-	m_instruGripMoveTrajNum :INT :=8;
-	m_instruYawRange :LREAL := 75 * g_deg2Rad;
-END_VAR
 VAR
-	// test mode. 
-	//0: auto test - finger grip and release
-	//1: auto test - finger open and mvoe
-	//2: auto test - finger grip and move
-	m_instruTestMode :INT := 0;
-	m_lastInstruTestMode :INT := 0;
-	
-	// variables for auto test
-	m_autoTestCycles :INT :=0;
-	m_autoTestStep :INT :=0;
+											
+	m_testStep :INT :=0;
+				
 
 	// final target DH joint position and grip angle
 	m_targetDHJntPos:Vec3d;
@@ -39,58 +27,232 @@ VAR
 	m_instruCmdJntPos,m_instruCmdJntVel : Vec5d;
 	m_instruCmdJntTrq :Vec5d;
 	
+	// instrument type
+	m_instruType : E_InstrumentType;
+	
 	// OTG
 	m_DHJntOTG:ARRAY[1..3] OF FB_secOrdTrajFilter;
 	m_gripAngleOTG : FB_secOrdTrajFilter;
-	m_maxJntVel:Vec3d:=[3(2.0)];
-	m_maxJntAcc:Vec3d:=[3(4.0)];
-	
-	// instrument open and grip move motion via points[roll, pitch, yaw]
-	m_openGripStep :INT :=0;
-	m_gripOpenStep :INT :=0;
-	m_instruOpenGrioMovePos:ARRAY [1..m_instruOpenGripMoveTrajNum, 1..3] OF LREAL:=
-	// move with gripper close
-	[0,		-pi/2,		0,	
-	0,		-pi/2,		pi/3,	
-	0,		-pi/2,		-pi/3,
-	0,		-pi/2+m_instruYawRange,		0,
-	0,		-pi/2+m_instruYawRange,		pi/3,
-	0,		-pi/2+m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		0,
-	0,		-pi/2-m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		pi/3,
-	// move with gripper open
-	pi,		-pi/2,		0,	
-	pi,		-pi/2,		pi/3,	
-	pi,		-pi/2,		-pi/3,
-	pi,		-pi/2+m_instruYawRange,		0,
-	pi,		-pi/2+m_instruYawRange,		pi/3,
-	pi,		-pi/2+m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		0,
-	pi,		-pi/2-m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		pi/3];
-	
-	// instrument move motion via points[roll, pitch, yaw]
-	m_instruGripMovePos:ARRAY [1..m_instruGripMoveTrajNum, 1..3] OF LREAL:=
-	// move with gripper close
-	[0,		-pi/2+m_instruYawRange,		pi/3,
-	0,		-pi/2+m_instruYawRange,		-pi/3,
-	0,		-pi/2-m_instruYawRange,		pi/3,
-	0,		-pi/2-m_instruYawRange,		-pi/3,
-	pi,		-pi/2+m_instruYawRange,		pi/3,
-	pi,		-pi/2+m_instruYawRange,		-pi/3,
-	pi,		-pi/2-m_instruYawRange,		pi/3,
-	pi,		-pi/2-m_instruYawRange,		-pi/3];
-	
-	// instrument tyep
-	m_instruType : E_InstrumentType;
-																				
+	m_maxJntVel:Vec3d := [3(8.0)];
+	m_maxJntAcc:Vec3d := [3(50.0)];
+	m_testCycles: INT := 0;
+	m_instruTestMode: INT := 0;
+	iStep: INT;
+	m_instruPos: ARRAY [1..60, 1..5] OF LREAL;
+	m_openCloseTest: ARRAY [1..60, 1..5] OF LREAL:=
+	[0,		0-90,		0,				0,		0,	
+	0,		0-90,		0,	     		15,		0,	
+	0,		0-90,		0,				30,	    0,	
+	0,		0-90,		0,				15,		0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,	    0,
+	0,		0-90,		0,				30,	    0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_minGripAngle,	    0,
+	0,		0-90,		0,				0,	    0,
+	0,		0-90,		0,				0,	    0,
+	0,		0-90,		0,				0,	    0,
+	0,		0-90,		0,				0,	    0
+	];
+	iStep1: INT;
+	iStep2: INT;
+	m_targetGripAngLast: LREAL;
+	m_armIdx:INT;
+	m_openGripMoveTest: ARRAY [1..60, 1..5] OF LREAL:=
+	[0,		0-90,		0,				0,		                                        0,	
+	0,		0-90,		0,	     		GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		0-90,		0,				-90,		 									0,	
+	0,		0-90,		60,				-90,											0,	
+	0,		0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		0-90,		60,				-90,											0,
+	0,		0-90,		-60,			-90,											0,
+	0,		0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		0-90,		-60,			-90,											0,	
+	0,		0-90,		0,				-90,											0,	
+	0,		90-90,		0,				-90,											0,
+	0,		90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		90-90,		0,				-90,											0,
+	0,		-90-90,	0,				-90,											0,
+	0,		-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	0,				-90,											0,
+	0,		0-90,		0,				-90,											0,
+	0,		90-90,		60,				-90,											0,
+	0,		90-90,		60,	     		GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		90-90,		60,				-90,		 									0,	
+	0,		90-90,		-60,			-90,											0,	
+	0,		90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		90-90,		-60,			-90,											0,
+	0,		-90-90,	-60,			-90,											0,
+	0,		-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	-60,			-90,											0,	
+	0,		-90-90,	60,				-90,											0,	
+	0,		-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	60,				-90,											0,
+	0,		0-90,		0,				-90,											0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		60,				-90,											0,
+	180,	0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		-60,			-90,											0,
+	180,	0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		0,				-90,											0,
+	180,	90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	0,				-90,											0,
+	180,	-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		60,				-90,											0,
+	180,	90-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		-60,			-90,											0,
+	180,	90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	-60,			-90,											0,
+	180,	-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	60,				-90,											0,
+	180,	-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		0-90,		0,				0,												0,
+	0,		0-90,		0,				0,												0,
+	0,		0-90,		0,				0,												0
+	];
+	bstepMove: BOOL;
+	fbTonAutoStep: TON;
+	fbTime: FB_Timer;
+	m_currentNotReached:BOOL;
+	fbTonCurrentNotReached:TON;
+	bStart: BOOL;
+	m_openAngleInitCompensation:LREAL;
+	m_tiredTest: ARRAY [1..60, 1..5] OF LREAL:=
+	[0,		0-90,		0,				0,		                                        0,	
+	0,		0-90,		0,	     		GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		0-90,		0,				-90,		 									0,	
+	0,		0-90,		60,				-90,											0,	
+	0,		0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		0-90,		60,				-90,											0,
+	0,		0-90,		-60,			-90,											0,
+	0,		0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		0-90,		-60,			-90,											0,	
+	0,		0-90,		0,				-90,											0,	
+	0,		90-90,		0,				-90,											0,
+	0,		90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		90-90,		0,				-90,											0,
+	0,		-90-90,	0,				-90,											0,
+	0,		-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	0,				-90,											0,
+	0,		0-90,		0,				-90,											0,
+	0,		90-90,		60,				-90,											0,
+	0,		90-90,		60,	     		GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		90-90,		60,				-90,		 									0,	
+	0,		90-90,		-60,			-90,											0,	
+	0,		90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		90-90,		-60,			-90,											0,
+	0,		-90-90,	-60,			-90,											0,
+	0,		-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	-60,			-90,											0,	
+	0,		-90-90,	60,				-90,											0,	
+	0,		-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		-90-90,	60,				-90,											0,
+	0,		0-90,		0,				-90,											0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		60,				-90,											0,
+	180,	0-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		-60,			-90,											0,
+	180,	0-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		0,				-90,											0,
+	180,	90-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	0,				-90,											0,
+	180,	-90-90,	0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		60,				-90,											0,
+	180,	90-90,		60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	90-90,		-60,			-90,											0,
+	180,	90-90,		-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	-60,			-90,											0,
+	180,	-90-90,	-60,			GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	-90-90,	60,				-90,											0,
+	180,	-90-90,	60,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	0,		0-90,		0,				0,												0,
+	0,		0-90,		0,				0,		 										0
+	];
+	m_GraspingForcepsTest: ARRAY [1..60, 1..5] OF LREAL:=
+	[0,		0-90,		0,				0,		                                    0,	
+	0,		0-90,		0,	     		GVL_InstruTestUIVars.g_maxGripAngle,		0,	
+	0,		0-90,		0,				0,		 									0,	
+	0,		0-90,		-60,			0,											0,	
+	0,		0-90,		60,				0,											0,	
+	0,		0-90,		0,				0,											0,
+	0,		-60-90,	0,				0,											0,
+	0,		60-90,		0,				0,											0,
+	0,		0-90,		0,				0,											0,	
+	180,	0-90,		0,				0,											0,	
+	180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,
+	180,	0-90,		0,				0,											0,	
+	180,	0-90,		-60,			0,											0,	
+	180,	0-90,		60,			    0,											0,	
+	180,	0-90,		0,				0,											0,	
+	180,	-60-90,	0,				0,											0,	
+	180,	60-90,		0,				0,											0,	
+	  0,	0-90,		0,				0,											0,	
+	-180,	0-90,		0,				0,											0,	 
+	-180,	0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,		0,	   
+	-180,	0-90,		0,				0,											0,	 
+	-180,	0-90,		-60,			0,											0,	   
+	-180,	0-90,		60,				0,											0,	
+	-180,	0-90,		0,				0,											0,	 
+    -180,	-60-90,	0,				0,											0,	 
+	-180,	60-90,		0,				0,											0,
+	0,		0-90,		0,				0,											0,
+	0,		0-90,		0,				0,											0,
+	0,		0-90,		0,				0,		 										0,
+	0,		0-90,		0,				0,		 										0
+	];
+	m_holdTheNeedleTest: ARRAY [1..60, 1..5] OF LREAL:=
+	[0,		0-90,		0,				0,		                                        0,	
+	0,		0-90,		0,	     		GVL_InstruTestUIVars.g_maxGripAngle,			0,	
+	0,		0-90,		0,				-60,		 									0,	
+	0,		0-90,		-60,			-60,											0,	
+	0,		0-90,		60,				-60,											0,
+	0,		0-90,		0,				-60,		 									0,	
+	0,		-60-90,	0,				-60,		 									0,	
+	0,		60-90,		0,				-60,		 									0,
+	0,		0-90,		0,				-60,		 									0,
+	180,	0-90,		0,				-60,		 									0,
+	180,	0-90,		-60,			-60,		 									0,
+	180,	0-90,		60,				-60,		 									0,
+	180,	0-90,		0,				-60,		 									0,
+	180,	-60-90,	0,				-60,		 									0,
+	180,	60-90,		0,				-60,		 									0,
+	180,	0-90,		0,				-60,		 									0,
+	-180,	0-90,		0,				-60,		 									0,
+	-180,	0-90,		-60,			-60,		 									0,
+	-180,	0-90,		60,				-60,		 									0,
+	-180,	0-90,		0,				-60,		 									0,
+	-180,	-60-90,	0,				-60,		 									0,
+	-180,	60-90,		0,				-60,		 									0,
+	-180,	0-90,		0,				-60,		 									0,
+	0,		0-90,		0,				0,		 										0,
+	0,		0-90,		0,				0,		 										0,
+	0,		0-90,		0,				0,		 										0,
+	0,		0-90,		0,				0,		 										0
+	];
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
-    <Method Name="calcCmdJntPos" Id="{fabdb455-5225-4307-a367-b36816d27b6f}">
+    <Method Name="calcCmdJntPos" Id="{15d4c773-9cf7-4ecc-b07e-f075688ff968}">
       <Declaration><![CDATA[METHOD PROTECTED calcCmdJntPos : BOOL
 VAR_IN_OUT CONSTANT
 	i_endoscopePose : ST_Frame;
@@ -101,28 +263,51 @@ END_VAR
 
 VAR 
 	i:INT :=0;
-	errThres :LREAL;
 
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[
-IF GVL_InstruTestUIVars.g_maxInstruAutoTestCycles > 0 AND m_autoTestCycles > GVL_InstruTestUIVars.g_maxInstruAutoTestCycles THEN
-	RETURN;
+        <ST><![CDATA[GVL_InstruTestUIVars.g_curTestCycles:=m_testCycles;
+IF GVL_InstruTestUIVars.g_autoTestStart THEN 
+	bStart:=TRUE;
+	GVL_InstruTestUIVars.g_autoTestStart:=FALSE;
 END_IF
-
-// determine final target DH joint position
-CASE m_instruTestMode OF
-	0:
-		fingerOpenCloseTest(i_slaveArm);
-	1:
-		fingerOpenGripMoveTest(i_slaveArm);
-	2:
-		fingerGripMoveTest(i_slaveArm);
-	ELSE
-		RETURN;
-END_CASE
-
+IF GVL_InstruTestUIVars.g_autoTestStop THEN 
+	bStart:=FALSE;
+	GVL_InstruTestUIVars.g_autoTestStop:=FALSE;
+END_IF
+IF bStart AND NOT GVL_InstruTestUIVars.g_autoTestPause THEN 
+	instruTestMode(i_slaveArm);
+END_IF
+(*
+IF ABS( m_targetGripAngLast-m_targetGripAng)>0.0001  THEN
+  IF  m_targetGripAngLast-m_targetGripAng<0.0001   THEN
+	  m_targetGripAng:=m_targetGripAng+m_openAngleInitCompensation*g_deg2rad;
+  ELSE
+	  m_targetGripAng:=m_targetGripAng;
+  END_IF                       
+END_IF
+m_targetGripAngLast:=m_targetGripAng;
+*)
+//CurrentDetection
+IF GVL_InstruTestUIVars.g_funcCurrentDetection THEN	
+	IF ABS (i_slaveArm.filtJntCurrent[1] -GVL_InstruTestUIVars.g_actualRatedCurrent[4])>5 AND 
+	   ABS (i_slaveArm.filtJntCurrent[2] -GVL_InstruTestUIVars.g_actualRatedCurrent[4])>5 THEN
+		m_currentNotReached:=FALSE;
+	ELSE 
+		m_currentNotReached:=TRUE;
+	END_IF	
+	fbTonCurrentNotReached(IN:= m_currentNotReached, PT:= T#60S, Q=> , ET=> );
+	
+	IF fbTonCurrentNotReached.Q THEN
+		m_isFinished := TRUE;
+		m_currentNotReached:=FALSE;
+	END_IF
+END_IF
+//TIME
+fbTime.timer(bStart:=TRUE,uiTimeHour=>GVL_InstruTestUIVars.g_testTimeHour,
+					uiTimeMinute=>GVL_InstruTestUIVars.g_testTimeMinute,
+					uiTimeSecond=>GVL_InstruTestUIVars.g_testTimeSecond);
 // run OTG
 FOR i:=1 TO 3  DO
 	m_DHJntOTG[i].run(m_targetDHJntPos[i],0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[i],o_cmdPos=> m_cmdDHJntPos[i+3]);
@@ -135,13 +320,10 @@ i_slaveArm.instrument.instruIK(m_cmdDHJntPos,m_cmdGripAng, o_jntPos=>m_cmdJntPos
 // command velocity
 vecSub(m_cmdJntPos, m_lastCmdJntPos, m_cmdJntVel);
 vecSelfMultiNum(m_cmdJntVel, g_slaveArmCtrlFreq);
-m_lastCmdJntPos:=m_cmdJntPos;
-
-m_lastInstruTestMode := m_instruTestMode;
-]]></ST>
+m_lastCmdJntPos:=m_cmdJntPos;]]></ST>
       </Implementation>
     </Method>
-    <Method Name="calcCmdJntTrq" Id="{89cc8590-b0ea-4a29-944b-9b994680a8df}">
+    <Method Name="calcCmdJntTrq" Id="{76e1ba1c-db60-4056-a7dd-094639cd5bfd}">
       <Declaration><![CDATA[// override this function in each exact controller
 METHOD PROTECTED calcCmdJntTrq : BOOL
 VAR_IN_OUT CONSTANT
@@ -179,174 +361,7 @@ END_FOR
 ]]></ST>
       </Implementation>
     </Method>
-    <Method Name="fingerGripMoveTest" Id="{b23b170a-3eed-478e-a97c-17d1ca24b714}">
-      <Declaration><![CDATA[METHOD fingerGripMoveTest : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR
-VAR
-	i:INT;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[m_targetGripForceLevel :=100;
-m_autoTestStep := LIMIT(0,m_autoTestStep, m_instruGripMoveTrajNum-1);
-FOR i:=1 TO 3 DO
-	 m_targetDHJntPos[i] := m_instruGripMovePos[m_autoTestStep+1, i];
-END_FOR
-	 
-IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
-		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
-	m_autoTestStep :=m_autoTestStep + 1;
-END_IF
- 
-IF m_autoTestStep >= m_instruGripMoveTrajNum THEN
-	m_autoTestCycles := m_autoTestCycles + 1;
-	m_autoTestStep := 0;
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerGripOpenOnce" Id="{eecdcd4b-6163-4fb0-ac83-a217b04d8eb3}">
-      <Declaration><![CDATA[METHOD fingerGripOpenOnce : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE m_gripOpenStep OF
-	0:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;		
-	2:
-		m_targetGripAng := -45* g_deg2rad;
-		m_targetGripForceLevel :=100;
-	3:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
-		m_targetGripForceLevel :=0;
-END_CASE
-
-IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-	 m_gripOpenStep :=m_gripOpenStep + 1;
-END_IF
-
-fingerGripOpenOnce := m_gripOpenStep > 4;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerOpenCloseTest" Id="{7cc8daed-3bf9-42ca-9d17-f827b074e621}">
-      <Declaration><![CDATA[METHOD fingerOpenCloseTest : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[m_autoTestStep := LIMIT(0,m_autoTestStep, 5);
-CASE m_autoTestStep OF
-	0:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
-		m_targetGripForceLevel :=0;
-	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;
-	3:
-		m_targetGripAng := -pi/2;
-		m_targetGripForceLevel :=100;
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-	5:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-END_CASE
-
-IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-	 m_autoTestStep :=m_autoTestStep + 1;
-END_IF
-
-IF m_autoTestStep > 5 THEN
-	m_autoTestCycles := m_autoTestCycles + 1;
-	m_autoTestStep := 0;
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerOpenGripMoveTest" Id="{9c6e0ab8-ec0f-4e57-8c89-55d8aad6317c}">
-      <Declaration><![CDATA[METHOD fingerOpenGripMoveTest : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR
-VAR
-	i:INT;
-	fingerMotionFlag : BOOL;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[m_autoTestStep := LIMIT(0,m_autoTestStep, m_instruOpenGripMoveTrajNum-1);
-FOR i:=1 TO 3 DO
-	 m_targetDHJntPos[i] := m_instruOpenGrioMovePos[m_autoTestStep+1, i];
-END_FOR
-	 
-IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
-		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
-	
-	IF m_autoTestStep < m_instruOpenGripMoveTrajNum/2 THEN
-		fingerMotionFlag:=fingerOpenGripOnce(i_slaveArm);
-	ELSE
-		fingerMotionFlag:=fingerGripOpenOnce(i_slaveArm);
-	END_IF
-	
-	IF fingerMotionFlag THEN
-		m_autoTestStep :=m_autoTestStep + 1;
-		m_openGripStep :=0;
-		m_gripOpenStep :=0;
-	END_IF
-	
-END_IF
- 
-IF m_autoTestStep >= m_instruOpenGripMoveTrajNum THEN
-	m_autoTestCycles := m_autoTestCycles + 1;
-	m_autoTestStep := 0;
-END_IF]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="fingerOpenGripOnce" Id="{b00fafe9-f130-44f7-ad16-8ec8acf445cf}">
-      <Declaration><![CDATA[METHOD fingerOpenGripOnce : BOOL
-VAR_IN_OUT CONSTANT
-	i_slaveArm :FB_SlaveArm;
-END_VAR]]></Declaration>
-      <Implementation>
-        <ST><![CDATA[CASE m_openGripStep OF
-	0:
-		m_targetGripAng := 0;
-		m_targetGripForceLevel :=0;
-	1:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_maxGripAngle;
-		m_targetGripForceLevel :=0;
-	2:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=0;
-	3:
-		m_targetGripAng := -45 * g_deg2rad;
-		m_targetGripForceLevel :=100;
-	4:
-		m_targetGripAng := i_slaveArm.instrument.kinematicParameters.m_minGripAngle;
-		m_targetGripForceLevel :=100;
-END_CASE
-
-IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
-	 m_openGripStep :=m_openGripStep + 1;
-END_IF
-
-fingerOpenGripOnce := m_openGripStep > 4;
-]]></ST>
-      </Implementation>
-    </Method>
-    <Method Name="init" Id="{1224d61d-417a-4654-acf9-99ef0220f449}">
+    <Method Name="init" Id="{8975c5ab-2817-4d36-b9d6-a56b68f9ddff}">
       <Declaration><![CDATA[METHOD PUBLIC init : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm	:FB_SlaveArm;
@@ -370,12 +385,24 @@ m_jntOPMode[5] := DriverOPMode_Trq;
 m_jntOPMode[6] := DriverOPMode_Trq;
 m_jntOPMode[7] := DriverOPMode_Trq;
 m_jntOPMode[8] := DriverOPMode_Trq;
-
-m_instruTestMode := GVL_InstruTestUIVars.g_instruAutoTestMode;
-m_autoTestStep:=0 ;
-m_autoTestCycles := 0;
-m_openGripStep :=0;
-m_gripOpenStep :=0;
+m_armIdx:=i_slaveArm.armIdx;
+fbTime.init();
+GVL_InstruTestUIVars.g_autoTestStart:=FALSE;
+GVL_InstruTestUIVars.g_autoTestStop:=FALSE;
+bStart:=FALSE;
+IF GVL_InstruTestUIVars.g_testCycles=0 THEN
+	GVL_InstruTestUIVars.g_testCycles:=1;
+END_IF
+//IF i_slaveArm.instrument.onChipData.m_InstruReadSucceed AND (InstruType_UltrasoundKnifeS = i_slaveArm.instrument.m_instruType 
+  // OR InstruType_UltrasoundKnifeU = i_slaveArm.instrument.m_instruType) THEN
+ //   m_openAngleInitCompensation:=0;
+	m_instruTestMode := GVL_InstruTestUIVars.g_testMode;
+//ELSE
+//	m_openAngleInitCompensation:=testModeUI.g_openAngleInitCompensation;
+//	m_instruTestMode := GVL_InstruTestUIVars.g_testMode+10;
+//END_IF
+m_testStep := 0;
+m_testCycles := 1;
 m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
 m_cmdDHJntVel :=g_zeroVec6d;
 m_targetGripAng := i_slaveArm.curGripAngle;
@@ -392,17 +419,17 @@ FOR i:=1 TO 3  DO
 	m_DHJntOTG[i].init(m_cmdDHJntPos[i+3], 0, m_maxJntVel[i], m_maxJntAcc[i], g_slaveArmCtrlCycleTime);
 END_FOR
 
-m_gripAngleOTG.init(m_targetGripAng, 0, m_maxJntVel[3], m_maxJntAcc[3], g_slaveArmCtrlCycleTime);
+m_gripAngleOTG.init(m_targetGripAng, 0, m_maxJntVel[1], m_maxJntAcc[1], g_slaveArmCtrlCycleTime);
 // update commands to arm
 copyCmds(r_slaveArmCtrlCmd);
 
 
-]]></ST>
+iStep:=5;]]></ST>
       </Implementation>
     </Method>
-    <Property Name="InstruBacklash" Id="{36c2eae9-d34a-4d78-a1ca-ae4b84eb11b6}">
+    <Property Name="InstruBacklash" Id="{681f73c0-4c30-4658-a120-f73e145197f2}">
       <Declaration><![CDATA[PROPERTY InstruBacklash : Vec5d]]></Declaration>
-      <Get Name="Get" Id="{a50be6d4-ea37-4d42-9226-d0fdbcd75516}">
+      <Get Name="Get" Id="{3a85254f-930a-493c-9a40-6e7f9d94c962}">
         <Declaration><![CDATA[VAR
 END_VAR
 ]]></Declaration>
@@ -415,31 +442,132 @@ END_IF]]></ST>
         </Implementation>
       </Get>
     </Property>
+    <Method Name="instruTestMode" Id="{3b2bf015-ae09-4fed-93fe-0fadbf87904e}">
+      <Declaration><![CDATA[METHOD instruTestMode : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+VAR
+	i:INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE m_instruTestMode OF
+	1:
+		m_testStep := LIMIT(0,m_testStep, 9);
+		m_instruPos:=m_openCloseTest;
+		iStep1:=8;
+		iStep2:=7;
+	2:
+		m_testStep := LIMIT(0,m_testStep, 60);
+		m_instruPos:=m_openGripMoveTest;
+		iStep1:=59;
+		iStep2:=58;
+	3:
+		m_testStep := LIMIT(0,m_testStep, 60);
+		m_instruPos:=m_tiredTest;
+		iStep1:=59;
+		iStep2:=58;
+	4:
+		m_testStep := LIMIT(0,m_testStep, 29);
+		m_instruPos:=m_GraspingForcepsTest;
+		iStep1:=28;
+		iStep2:=27;
+	5:
+		m_testStep := LIMIT(0,m_testStep, 26);
+		m_instruPos:=m_holdTheNeedleTest;
+		iStep1:=25;
+		iStep2:=24;
+	ELSE
+		RETURN;
+END_CASE
+bstepMove:=TRUE;
+fbTonAutoStep(IN:=iStep=15 , PT:= T#0.5S, Q=> , ET=> );
+GVL_InstruTestUIVars.g_testStep:=m_testStep+1;
+CASE iStep OF
+	0:;
+	5:  
+		FOR i:=1 TO 3 BY 1 DO
+			m_targetDHJntPos[i] := m_instruPos[m_testStep+1, i]*g_deg2rad;
+		END_FOR
+		m_targetGripAng := m_instruPos[m_testStep+1, 4]*g_deg2rad;
+		m_targetGripForceLevel:=m_instruPos[m_testStep+1, 5];
+		bstepMove:=FALSE;
+		iStep:=10;
+	10: 
+		IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 	
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow 
+		AND bstepMove  THEN
+		    iStep:=15;
+	    END_IF
+	15: 
+	    IF fbTonAutoStep.Q THEN
+	    	iStep:=20;
+	    END_IF
+	20: 
+		m_testStep:=m_testStep+1;
+		iStep:=5;
+		IF m_testStep =iStep1 THEN
+			m_testCycles:=m_testCycles+1;
+			m_testStep := 0;
+		END_IF
+
+		IF m_testCycles>=GVL_InstruTestUIVars.g_testCycles+1 THEN
+			m_testCycles:=m_testCycles-1;
+			iStep:=25;
+		END_IF
+
+	25: 
+	    m_testStep:=iStep2+1;
+		FOR i:=1 TO 3 BY 1 DO
+			m_targetDHJntPos[i] := m_instruPos[m_testStep+1, i]*g_deg2rad;
+		END_FOR
+        m_targetGripAng := m_instruPos[m_testStep+1, 4]*g_deg2rad;
+        m_targetGripForceLevel:=m_instruPos[m_testStep+1, 5];
+		m_testStep:=iStep2+2;
+		iStep:=30;
+    30: IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
+		    iStep:=35;
+	    END_IF
+	35: 
+	    m_isFinished := TRUE;
+		iStep:=0;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest">
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.calcCmdJntPos">
-      <LineId Id="447" Count="2" />
-      <LineId Id="446" Count="0" />
-      <LineId Id="450" Count="0" />
-      <LineId Id="324" Count="0" />
-      <LineId Id="428" Count="0" />
-      <LineId Id="331" Count="6" />
-      <LineId Id="357" Count="0" />
-      <LineId Id="326" Count="0" />
-      <LineId Id="398" Count="0" />
-      <LineId Id="391" Count="3" />
-      <LineId Id="261" Count="0" />
-      <LineId Id="397" Count="0" />
-      <LineId Id="396" Count="0" />
-      <LineId Id="164" Count="0" />
-      <LineId Id="287" Count="0" />
-      <LineId Id="211" Count="0" />
-      <LineId Id="187" Count="1" />
+      <LineId Id="468" Count="0" />
+      <LineId Id="536" Count="1" />
+      <LineId Id="545" Count="0" />
+      <LineId Id="538" Count="0" />
+      <LineId Id="540" Count="1" />
+      <LineId Id="546" Count="0" />
+      <LineId Id="539" Count="0" />
+      <LineId Id="543" Count="1" />
+      <LineId Id="542" Count="0" />
+      <LineId Id="559" Count="0" />
+      <LineId Id="470" Count="7" />
+      <LineId Id="560" Count="0" />
+      <LineId Id="517" Count="0" />
+      <LineId Id="520" Count="1" />
+      <LineId Id="533" Count="0" />
+      <LineId Id="522" Count="6" />
+      <LineId Id="534" Count="0" />
+      <LineId Id="530" Count="0" />
+      <LineId Id="532" Count="0" />
+      <LineId Id="518" Count="0" />
+      <LineId Id="488" Count="0" />
+      <LineId Id="513" Count="1" />
+      <LineId Id="516" Count="0" />
+      <LineId Id="489" Count="11" />
       <LineId Id="131" Count="0" />
-      <LineId Id="343" Count="0" />
-      <LineId Id="341" Count="0" />
-      <LineId Id="432" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.calcCmdJntTrq">
       <LineId Id="121" Count="0" />
@@ -454,94 +582,65 @@ END_IF]]></ST>
       <LineId Id="142" Count="2" />
       <LineId Id="177" Count="0" />
     </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerGripMoveTest">
-      <LineId Id="9" Count="13" />
-      <LineId Id="5" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerGripOpenOnce">
-      <LineId Id="7" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="9" Count="2" />
-      <LineId Id="38" Count="1" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="17" Count="0" />
-      <LineId Id="41" Count="1" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="26" Count="5" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="44" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerOpenCloseTest">
-      <LineId Id="27" Count="0" />
-      <LineId Id="67" Count="1" />
-      <LineId Id="71" Count="1" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="73" Count="13" />
-      <LineId Id="69" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="40" Count="6" />
-      <LineId Id="13" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerOpenGripMoveTest">
-      <LineId Id="25" Count="0" />
-      <LineId Id="24" Count="0" />
-      <LineId Id="30" Count="1" />
-      <LineId Id="28" Count="0" />
-      <LineId Id="33" Count="1" />
-      <LineId Id="61" Count="2" />
-      <LineId Id="65" Count="1" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="68" Count="2" />
-      <LineId Id="72" Count="1" />
-      <LineId Id="71" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="35" Count="0" />
-      <LineId Id="29" Count="0" />
-      <LineId Id="52" Count="2" />
-      <LineId Id="37" Count="0" />
-    </LineIds>
-    <LineIds Name="FB_SlaveCtrlInstruAutoTest.fingerOpenGripOnce">
-      <LineId Id="7" Count="15" />
-      <LineId Id="26" Count="5" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="32" Count="0" />
-    </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.init">
-      <LineId Id="13" Count="0" />
-      <LineId Id="101" Count="0" />
-      <LineId Id="86" Count="6" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="190" Count="0" />
-      <LineId Id="188" Count="0" />
-      <LineId Id="120" Count="0" />
-      <LineId Id="189" Count="0" />
-      <LineId Id="202" Count="1" />
-      <LineId Id="84" Count="1" />
-      <LineId Id="93" Count="0" />
-      <LineId Id="175" Count="1" />
-      <LineId Id="174" Count="0" />
-      <LineId Id="81" Count="2" />
-      <LineId Id="162" Count="0" />
-      <LineId Id="215" Count="0" />
-      <LineId Id="148" Count="0" />
-      <LineId Id="128" Count="0" />
-      <LineId Id="149" Count="1" />
-      <LineId Id="110" Count="0" />
-      <LineId Id="136" Count="0" />
-      <LineId Id="111" Count="0" />
-      <LineId Id="109" Count="0" />
-      <LineId Id="80" Count="0" />
-      <LineId Id="59" Count="0" />
+      <LineId Id="269" Count="48" />
       <LineId Id="12" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruAutoTest.InstruBacklash.Get">
       <LineId Id="3" Count="3" />
       <LineId Id="2" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest.instruTestMode">
+      <LineId Id="166" Count="1" />
+      <LineId Id="175" Count="0" />
+      <LineId Id="168" Count="0" />
+      <LineId Id="185" Count="0" />
+      <LineId Id="184" Count="0" />
+      <LineId Id="169" Count="1" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="181" Count="1" />
+      <LineId Id="258" Count="3" />
+      <LineId Id="257" Count="0" />
+      <LineId Id="263" Count="3" />
+      <LineId Id="262" Count="0" />
+      <LineId Id="268" Count="3" />
+      <LineId Id="267" Count="0" />
+      <LineId Id="171" Count="1" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="229" Count="1" />
+      <LineId Id="96" Count="0" />
+      <LineId Id="101" Count="2" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="210" Count="0" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="105" Count="1" />
+      <LineId Id="231" Count="0" />
+      <LineId Id="107" Count="0" />
+      <LineId Id="224" Count="0" />
+      <LineId Id="233" Count="2" />
+      <LineId Id="225" Count="2" />
+      <LineId Id="223" Count="0" />
+      <LineId Id="237" Count="2" />
+      <LineId Id="236" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="250" Count="0" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="122" Count="1" />
+      <LineId Id="186" Count="0" />
+      <LineId Id="124" Count="0" />
+      <LineId Id="131" Count="1" />
+      <LineId Id="187" Count="0" />
+      <LineId Id="133" Count="4" />
+      <LineId Id="241" Count="1" />
+      <LineId Id="240" Count="0" />
+      <LineId Id="139" Count="2" />
+      <LineId Id="177" Count="1" />
+      <LineId Id="243" Count="1" />
+      <LineId Id="179" Count="1" />
+      <LineId Id="146" Count="1" />
+      <LineId Id="151" Count="0" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="97" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>

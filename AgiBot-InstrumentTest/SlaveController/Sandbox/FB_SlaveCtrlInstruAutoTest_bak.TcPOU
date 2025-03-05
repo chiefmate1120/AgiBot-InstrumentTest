@@ -1,0 +1,551 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_SlaveCtrlInstruAutoTest_bak" Id="{d70115e7-7668-49fd-9f57-bdf3458ba446}" SpecialFunc="None">
+    <Declaration><![CDATA[// Brief: Slave Arm test
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruAutoTest_bak EXTENDS FB_SlaveArmCtrlBase
+VAR CONSTANT
+	m_instruOpenGripMoveTrajNum :INT :=18;
+	m_instruGripMoveTrajNum :INT :=8;
+	m_instruYawRange :LREAL := 75 * g_deg2Rad;
+END_VAR
+VAR
+	// test mode. 
+	//0: auto test - finger grip and release
+	//1: auto test - finger open and mvoe
+	//2: auto test - finger grip and move
+	m_instruTestMode :INT := 0;
+	m_lastInstruTestMode :INT := 0;
+	
+	// variables for auto test
+	m_autoTestCycles :INT :=0;
+	m_autoTestStep :INT :=0;
+
+	// final target DH joint position and grip angle
+	m_targetDHJntPos:Vec3d;
+	m_targetGripAng:LREAL;
+	m_targetGripForceLevel :LREAL :=0;
+	
+	// interploated command joint position and grip angle 
+	m_cmdDHJntPos :Vec6d;
+	m_cmdDHJntVel :Vec6d;
+	m_cmdGripAng:LREAL;
+
+	// last joint position 
+	m_lastCmdJntPos :Vec8d ;
+	
+	// instrument controller
+	m_instruController : FB_BasicInstruControl;
+	m_usKnifeController : FB_UltrosonicKnifeControl;
+	m_instruCmdJntPos,m_instruCmdJntVel : Vec5d;
+	m_instruCmdJntTrq :Vec5d;
+	
+	// OTG
+	m_DHJntOTG:ARRAY[1..3] OF FB_secOrdTrajFilter;
+	m_gripAngleOTG : FB_secOrdTrajFilter;
+	m_maxJntVel:Vec3d:=[3(2.0)];
+	m_maxJntAcc:Vec3d:=[3(4.0)];
+	
+	// instrument open and grip move motion via points[roll, pitch, yaw]
+	m_openGripStep :INT :=0;
+	m_gripOpenStep :INT :=0;
+	m_instruOpenGrioMovePos:ARRAY [1..m_instruOpenGripMoveTrajNum, 1..3] OF LREAL:=
+	// move with gripper close
+	[0,		-pi/2,		0,	
+	0,		-pi/2,		pi/3,	
+	0,		-pi/2,		-pi/3,
+	0,		-pi/2+m_instruYawRange,		0,
+	0,		-pi/2+m_instruYawRange,		pi/3,
+	0,		-pi/2+m_instruYawRange,		-pi/3,
+	0,		-pi/2-m_instruYawRange,		0,
+	0,		-pi/2-m_instruYawRange,		-pi/3,
+	0,		-pi/2-m_instruYawRange,		pi/3,
+	// move with gripper open
+	pi,		-pi/2,		0,	
+	pi,		-pi/2,		pi/3,	
+	pi,		-pi/2,		-pi/3,
+	pi,		-pi/2+m_instruYawRange,		0,
+	pi,		-pi/2+m_instruYawRange,		pi/3,
+	pi,		-pi/2+m_instruYawRange,		-pi/3,
+	pi,		-pi/2-m_instruYawRange,		0,
+	pi,		-pi/2-m_instruYawRange,		-pi/3,
+	pi,		-pi/2-m_instruYawRange,		pi/3];
+	
+	// instrument move motion via points[roll, pitch, yaw]
+	m_instruGripMovePos:ARRAY [1..m_instruGripMoveTrajNum, 1..3] OF LREAL:=
+	// move with gripper close
+	[0,		-pi/2+m_instruYawRange,		pi/3,
+	0,		-pi/2+m_instruYawRange,		-pi/3,
+	0,		-pi/2-m_instruYawRange,		pi/3,
+	0,		-pi/2-m_instruYawRange,		-pi/3,
+	pi,		-pi/2+m_instruYawRange,		pi/3,
+	pi,		-pi/2+m_instruYawRange,		-pi/3,
+	pi,		-pi/2-m_instruYawRange,		pi/3,
+	pi,		-pi/2-m_instruYawRange,		-pi/3];
+	
+	// instrument tyep
+	m_instruType : E_InstrumentType;
+																				
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="calcCmdJntPos" Id="{fabdb455-5225-4307-a367-b36816d27b6f}">
+      <Declaration><![CDATA[METHOD PROTECTED calcCmdJntPos : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	i:INT :=0;
+	errThres :LREAL;
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+IF GVL_InstruTestUIVars.g_maxInstruAutoTestCycles > 0 AND m_autoTestCycles > GVL_InstruTestUIVars.g_maxInstruAutoTestCycles THEN
+	RETURN;
+END_IF
+
+// determine final target DH joint position
+CASE m_instruTestMode OF
+	0:
+		fingerOpenCloseTest(i_slaveArm);
+	1:
+		fingerOpenGripMoveTest(i_slaveArm);
+	2:
+		fingerGripMoveTest(i_slaveArm);
+	ELSE
+		RETURN;
+END_CASE
+
+// run OTG
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].run(m_targetDHJntPos[i],0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[i],o_cmdPos=> m_cmdDHJntPos[i+3]);
+END_FOR
+m_gripAngleOTG.run(m_targetGripAng,0.0, o_cmdAcc=>,o_cmdVel=>,o_cmdPos=>m_cmdGripAng);
+
+// calculate target motor joint position from DH joint position
+i_slaveArm.instrument.instruIK(m_cmdDHJntPos,m_cmdGripAng, o_jntPos=>m_cmdJntPos);
+
+// command velocity
+vecSub(m_cmdJntPos, m_lastCmdJntPos, m_cmdJntVel);
+vecSelfMultiNum(m_cmdJntVel, g_slaveArmCtrlFreq);
+m_lastCmdJntPos:=m_cmdJntPos;
+
+m_lastInstruTestMode := m_instruTestMode;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="calcCmdJntTrq" Id="{89cc8590-b0ea-4a29-944b-9b994680a8df}">
+      <Declaration><![CDATA[// override this function in each exact controller
+METHOD PROTECTED calcCmdJntTrq : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	nullspaceMat :Mat7d;
+	ctrlTrq : Vec7d;
+	i : int ;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// set joint torque to zero in default
+m_cmdJntTrq := g_zeroVec8d;
+
+// instrument joint control
+FOR i:=1 TO 5 DO 
+	m_instruCmdJntPos[i]:=m_cmdJntPos[i+3];
+	m_instruCmdJntVel[i]:=m_cmdJntVel[i+3];
+END_FOR
+
+IF i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeS OR i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeU THEN
+	m_usKnifeController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+ELSE
+	m_instruController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_cmdDHJntPos[6], m_cmdDHJntVel[6], m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+END_IF
+
+FOR i:=1 TO 5 DO
+	m_cmdJntTrq[i+3]:=m_instruCmdJntTrq[i];
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="fingerGripMoveTest" Id="{b23b170a-3eed-478e-a97c-17d1ca24b714}">
+      <Declaration><![CDATA[METHOD fingerGripMoveTest : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+VAR
+	i:INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+m_targetGripForceLevel :=100;
+m_autoTestStep := LIMIT(0,m_autoTestStep, m_instruGripMoveTrajNum-1);
+FOR i:=1 TO 3 DO
+	 m_targetDHJntPos[i] := m_instruGripMovePos[m_autoTestStep+1, i];
+END_FOR
+	 
+IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
+	m_autoTestStep :=m_autoTestStep + 1;
+END_IF
+ 
+IF m_autoTestStep >= m_instruGripMoveTrajNum THEN
+	m_autoTestCycles := m_autoTestCycles + 1;
+	m_autoTestStep := 0;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="fingerGripOpenOnce" Id="{eecdcd4b-6163-4fb0-ac83-a217b04d8eb3}">
+      <Declaration><![CDATA[METHOD fingerGripOpenOnce : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE m_gripOpenStep OF
+	0:
+		m_targetGripAng := 0;
+		m_targetGripForceLevel :=0;
+	1:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=0;		
+	2:
+		m_targetGripAng := -45* g_deg2rad;
+		m_targetGripForceLevel :=100;
+	3:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=100;
+
+	4:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=0;
+END_CASE
+
+IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
+	 m_gripOpenStep :=m_gripOpenStep + 1;
+END_IF
+
+fingerGripOpenOnce := m_gripOpenStep > 4;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="fingerOpenCloseTest" Id="{7cc8daed-3bf9-42ca-9d17-f827b074e621}">
+      <Declaration><![CDATA[METHOD fingerOpenCloseTest : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_autoTestStep := LIMIT(0,m_autoTestStep, 5);
+CASE m_autoTestStep OF
+	0:
+		m_targetGripAng := 0;
+		m_targetGripForceLevel :=0;
+	1:
+		m_targetGripAng := GVL_InstruTestUIVars.g_maxGripAng * g_deg2Rad;//i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
+		m_targetGripForceLevel :=0;
+	2:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=0;
+	3:
+		m_targetGripAng := -pi/2;
+		m_targetGripForceLevel :=100;
+	4:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=100;
+	5:
+		m_targetGripAng := 0;
+		m_targetGripForceLevel :=0;
+END_CASE
+
+IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
+	 m_autoTestStep :=m_autoTestStep + 1;
+END_IF
+
+IF m_autoTestStep > 5 THEN
+	m_autoTestCycles := m_autoTestCycles + 1;
+	m_autoTestStep := 0;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="fingerOpenGripMoveTest" Id="{9c6e0ab8-ec0f-4e57-8c89-55d8aad6317c}">
+      <Declaration><![CDATA[METHOD fingerOpenGripMoveTest : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+VAR
+	i:INT;
+	fingerMotionFlag : BOOL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_autoTestStep := LIMIT(0,m_autoTestStep, m_instruOpenGripMoveTrajNum-1);
+FOR i:=1 TO 3 DO
+	 m_targetDHJntPos[i] := m_instruOpenGrioMovePos[m_autoTestStep+1, i];
+END_FOR
+	 
+IF ABS(m_cmdDHJntPos[4]-m_targetDHJntPos[1])< g_jntCtrlAngTolLow AND ABS(m_cmdDHJntPos[5]-m_targetDHJntPos[2])< g_jntCtrlAngTolLow 
+		AND ABS(m_cmdDHJntPos[6]-m_targetDHJntPos[3])< g_jntCtrlAngTolLow  THEN
+	
+	IF m_autoTestStep < m_instruOpenGripMoveTrajNum/2 THEN
+		fingerMotionFlag:=fingerOpenGripOnce(i_slaveArm);
+	ELSE
+		fingerMotionFlag:=fingerGripOpenOnce(i_slaveArm);
+	END_IF
+	
+	IF fingerMotionFlag THEN
+		m_autoTestStep :=m_autoTestStep + 1;
+		m_openGripStep :=0;
+		m_gripOpenStep :=0;
+	END_IF
+	
+END_IF
+ 
+IF m_autoTestStep >= m_instruOpenGripMoveTrajNum THEN
+	m_autoTestCycles := m_autoTestCycles + 1;
+	m_autoTestStep := 0;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="fingerOpenGripOnce" Id="{b00fafe9-f130-44f7-ad16-8ec8acf445cf}">
+      <Declaration><![CDATA[METHOD fingerOpenGripOnce : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm :FB_SlaveArm;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[CASE m_openGripStep OF
+	0:
+		m_targetGripAng := 0;
+		m_targetGripForceLevel :=0;
+	1:
+		m_targetGripAng := GVL_InstruTestUIVars.g_maxGripAng * g_deg2Rad;//i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
+		m_targetGripForceLevel :=0;
+	2:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=0;
+	3:
+		m_targetGripAng := -45 * g_deg2rad;
+		m_targetGripForceLevel :=100;
+	4:
+		m_targetGripAng := g_minSlaveGripAngle;
+		m_targetGripForceLevel :=100;
+END_CASE
+
+IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
+	 m_openGripStep :=m_openGripStep + 1;
+END_IF
+
+fingerOpenGripOnce := m_openGripStep > 4;
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{1224d61d-417a-4654-acf9-99ef0220f449}">
+      <Declaration><![CDATA[METHOD PUBLIC init : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm	:FB_SlaveArm;
+END_VAR
+VAR_IN_OUT 
+	r_slaveArmCtrlCmd :ST_SlaveArmCtrlCmds;
+END_VAR
+
+VAR
+	i:int;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+m_lastCmdJntPos:=m_cmdJntPos;
+m_jntOPMode[1] := DriverOPMode_PosTrq;
+m_jntOPMode[2] := DriverOPMode_PosTrq;
+m_jntOPMode[3] := DriverOPMode_PosTrq;
+m_jntOPMode[4] := DriverOPMode_Trq;
+m_jntOPMode[5] := DriverOPMode_Trq;
+m_jntOPMode[6] := DriverOPMode_Trq;
+m_jntOPMode[7] := DriverOPMode_Trq;
+m_jntOPMode[8] := DriverOPMode_Trq;
+
+m_instruTestMode := GVL_InstruTestUIVars.g_instruAutoTestMode;
+m_autoTestStep:=0 ;
+m_autoTestCycles := 0;
+m_openGripStep :=0;
+m_gripOpenStep :=0;
+m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
+m_cmdDHJntVel :=g_zeroVec6d;
+m_targetGripAng := i_slaveArm.curGripAngle;
+m_targetDHJntPos[1] := i_slaveArm.curDHJntPos[4];
+m_targetDHJntPos[2] := i_slaveArm.curDHJntPos[5];
+m_targetDHJntPos[3] := i_slaveArm.curDHJntPos[6];
+
+// init instrument controller
+m_instruController.init(i_slaveArm);
+m_usKnifeController.init(i_slaveArm);
+m_instruType := i_slaveArm.instrument.instruType;
+
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].init(m_cmdDHJntPos[i+3], 0, m_maxJntVel[i], m_maxJntAcc[i], g_slaveArmCtrlCycleTime);
+END_FOR
+
+m_gripAngleOTG.init(m_targetGripAng, 0, m_maxJntVel[3], m_maxJntAcc[3], g_slaveArmCtrlCycleTime);
+// update commands to arm
+copyCmds(r_slaveArmCtrlCmd);
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="InstruBacklash" Id="{36c2eae9-d34a-4d78-a1ca-ae4b84eb11b6}">
+      <Declaration><![CDATA[PROPERTY InstruBacklash : Vec5d]]></Declaration>
+      <Get Name="Get" Id="{a50be6d4-ea37-4d42-9226-d0fdbcd75516}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF m_instruType = InstruType_UltrasoundKnifeS OR m_instruType = InstruType_UltrasoundKnifeU THEN
+	instruBacklash := g_zeroVec5d;
+ELSE
+	instruBacklash := m_instruController.m_jntBacklash;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.calcCmdJntPos">
+      <LineId Id="447" Count="2" />
+      <LineId Id="446" Count="0" />
+      <LineId Id="450" Count="0" />
+      <LineId Id="324" Count="0" />
+      <LineId Id="428" Count="0" />
+      <LineId Id="331" Count="6" />
+      <LineId Id="357" Count="0" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="398" Count="0" />
+      <LineId Id="391" Count="3" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="187" Count="1" />
+      <LineId Id="131" Count="0" />
+      <LineId Id="343" Count="0" />
+      <LineId Id="341" Count="0" />
+      <LineId Id="432" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.calcCmdJntTrq">
+      <LineId Id="121" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="137" Count="1" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="195" Count="4" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="200" Count="0" />
+      <LineId Id="142" Count="2" />
+      <LineId Id="177" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.fingerGripMoveTest">
+      <LineId Id="30" Count="0" />
+      <LineId Id="9" Count="13" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="29" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.fingerGripOpenOnce">
+      <LineId Id="7" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="9" Count="2" />
+      <LineId Id="38" Count="1" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="41" Count="1" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="43" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="26" Count="5" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="44" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.fingerOpenCloseTest">
+      <LineId Id="27" Count="0" />
+      <LineId Id="67" Count="1" />
+      <LineId Id="71" Count="1" />
+      <LineId Id="70" Count="0" />
+      <LineId Id="73" Count="13" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="40" Count="6" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.fingerOpenGripMoveTest">
+      <LineId Id="25" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="28" Count="0" />
+      <LineId Id="33" Count="1" />
+      <LineId Id="61" Count="2" />
+      <LineId Id="65" Count="1" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="68" Count="2" />
+      <LineId Id="72" Count="1" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="35" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="52" Count="2" />
+      <LineId Id="37" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.fingerOpenGripOnce">
+      <LineId Id="7" Count="15" />
+      <LineId Id="26" Count="5" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="32" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.init">
+      <LineId Id="13" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="86" Count="6" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="190" Count="0" />
+      <LineId Id="188" Count="0" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="189" Count="0" />
+      <LineId Id="202" Count="1" />
+      <LineId Id="84" Count="1" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="175" Count="1" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="81" Count="2" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="149" Count="1" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruAutoTest_bak.InstruBacklash.Get">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

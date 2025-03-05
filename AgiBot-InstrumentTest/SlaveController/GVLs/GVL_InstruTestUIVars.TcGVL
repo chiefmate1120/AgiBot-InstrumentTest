@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <GVL Name="GVL_InstruTestUIVars" Id="{06880bc2-8293-4e74-a4a5-5e57bb316da1}">
     <Declaration><![CDATA[{attribute 'qualified_only'}
 VAR_GLOBAL
@@ -15,12 +15,12 @@ VAR_GLOBAL
 	g_instruAutoTestFlag :BOOL :=FALSE; // 器械自动测试按键，按下不反弹
 	g_instruAutoTestMode :INT :=0; //  自动测试模式 0: 器械开合 1: 器械开合加运动 ; 2: 器械加紧运动
 	g_maxInstruAutoTestCycles :DINT :=0; // 最大测试次数
-	
+	g_autoTestCycles :INT :=0;
 	// control variable for instrument manual test
 	g_instruManualTestFlag :BOOL :=FALSE; // 器械手动测试按键，按下不反弹
 	g_moveToSetPosFlag :BOOL :=FALSE; // 运动到指令位置 ，按下反弹
 	g_targetRollAng :LREAL :=0; //器械回转角度
-	g_targetPitchAng :LREAL :=-90;//器械俯仰角度
+	g_targetPitchAng :LREAL :=0;//器械俯仰角度
 	g_targetYawAng :LREAL :=0;//器械偏摆角度
 	g_targetGripAng :LREAL :=0;//器械张开角度
 	g_targetGripForceLevel:INT :=0; // 器械夹持力百分比
@@ -39,8 +39,163 @@ VAR_GLOBAL
 	g_curInstruDHPos :Vec3d; // DH 角度
 	g_curGripAng:LREAL; // 当前张开角度
 	g_instruZeroPos :Vec5d; // 当前零位
-	g_instruSN :ULINT; // 当前序列号
-
+	g_instruSN :STRING; // 当前序列号
+	g_maxGripAng:LREAL:=45; // 当前张开角度
+	// 读取器械信息
+	g_readInstruInformation: BOOL;
+	// 信息校验通过
+	g_informationVerificationPassed: BOOL;
+	// 电机使能
+	g_powerOn: BOOL;
+	// 电机使能状态
+	g_enabled: BOOL;
+	// 卡接隔离板
+	g_snappingSeparator: BOOL;
+	// 电机停止
+	g_motorStops: BOOL;
+	// 器械卡接找点
+	g_instrumentSnapping: BOOL;
+	// 器械自动卡接
+	g_instrumentAutoSnapping: BOOL;
+	// 器械卡接停止
+	g_instrumentSnappingStop: BOOL;
+	// 位置写入芯片
+	g_positionWritingChip: BOOL;
+	// 位置数据写入
+	g_writeENC2PosData: LREAL;
+	// 读取器械信息状态
+	g_readInstruinformationFlag: BOOL;
+	// 读取到的SN码
+	g_readSNNum: ULINT;
+	// 器械使用次数
+	g_instruNumberOfUses: UINT;
+	// 器械总使用次数
+	g_instruNumberOfAllUses: UINT;
+	// 增加使用次数
+	g_incInstruNumOfUses: BOOL;
+	// 清除使用次数
+	g_clearInstruNumOfUses: BOOL;
+	// 位置从芯片读取
+	g_readENC2PosData: BOOL;
+	// 写入器械中的SN码
+	g_writeSNNum: ULINT;
+	// 写入SN码
+	g_writeInstruSN: BOOL;
+	// 写入器械用途
+	g_writeInstruPurpose: BOOL;
+	// 写入器械的用途
+	g_writePurposeNum: UINT;
+	// 修改额定电流
+	g_modifyRatedCurrent: BOOL;
+	// 目标额定电流
+	g_targetRatedCurrent: LREAL;
+	// 实际额定电流
+	g_actualRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(250)];
+	// 动力盒标定状态
+	g_powerBoxCalibrationFlag: BOOL := TRUE;
+	// 动力盒标定
+	g_powerBoxCalibration: BOOL;
+	// 动力盒回零位
+	g_goHome: BOOL;
+END_VAR
+VAR_GLOBAL RETAIN PERSISTENT
+	// 动力盒零位已校准
+	g_powerBoxCalibrationed: BOOL;
+	// 动力盒零位
+	g_powerBoxCalibrationPos: ARRAY [1..g_sArmNum, 1..g_sJntNum] OF DINT;
+	// 账户
+	g_account: Account := (memoryAccountNumber := ['admin', 50('')], memoryPassWord := ['yfAGIBOT2025', 50('')], memoryPermission := [1, 50(0)], memoryWorkNum := [1, 50(0)], memoryName := ['admin', 50('')]);
+END_VAR
+VAR_GLOBAL
+	// 动力盒零位状态
+	g_beHomed: BOOL;
+	// 后台启用角度补偿
+	g_enableBackendCompensation: BOOL;
+	// 研发启用角度补偿
+	g_enableRDCompensation: BOOL;
+	// DH补偿角度
+	g_compensationAngleDH: Vec3d;
+	// DH补偿角度内部
+	g_compensationAngleBackendDH: Vec3d;
+	// 俯仰
+	g_pitchAngularVel: LREAL;
+	// 偏摆/开合
+	g_deviationAngularVel: LREAL;
+	// 旋转
+	g_rotationAngularVel: LREAL;
+	// 俯仰加速度
+	g_pitchAngularAcc: LREAL;
+	// 偏摆/开合加速度
+	g_deviationAngularAcc: LREAL;
+	// 旋转加速度
+	g_rotationAngularAcc: LREAL;
+	// 俯仰目标电流
+	g_pitchTargetCurrent: LREAL;
+	// 偏摆/开合目标电流
+	g_deviationTargetCurrent: LREAL;
+	// 旋转目标电流
+	g_rotationTargetCurrent: LREAL;
+	// 俯仰当前电流
+	g_pitchActualCurrent: LREAL;
+	// 偏摆/开合当前电流
+	g_deviationActualCurrent: LREAL;
+	// 旋转当前电流
+	g_rotationActualCurrent: LREAL;
+	// 当前状态集
+	g_stateMachine: E_SlaveArmState;
+	// 循环设定次数
+	g_testCycles: INT;
+	// 自动测试开始
+	g_autoTestStart: BOOL;
+	// 自动测试结束
+	g_autoTestStop: BOOL;
+	// 电流是否到达功能
+	g_funcCurrentDetection: BOOL;
+	// 测试时间时
+	g_testTimeHour: UINT;
+	// 测试时间分
+	g_testTimeMinute: UINT;
+	// 测试时间秒
+	g_testTimeSecond: UINT;
+	// 测试模式
+	g_testMode: INT;
+	// 最大开合角
+	g_maxGripAngle: LREAL := 45;
+	// 自动测试步骤
+	g_testStep: INT;
+	// 最小开合角
+	g_minGripAngle: LREAL:=-45;
+	// 在位置
+	g_inPos: BOOL;
+	// 下一步
+	g_nextStep: BOOL;
+	// 上一步
+	g_lastStep: BOOL;
+	// 当前循环次数
+	g_curTestCycles: INT;
+	// 自动测试暂停
+	g_autoTestPause: BOOL;
+	// 读取RFID状态
+	g_readRFIDFlag: BOOL;
+	// 器械标定状态
+	g_instruCaliState: BOOL;
+	
+	writeInstruZeroPos :Vec5d; // 当前写入器械零位
+	g_clearInformation:BOOL;//清除账户账号信息
+	
+	g_offLineRFID:BOOL;
+//	g_informationVerificationPassed:BOOL;
+	g_readedRFID:BOOL;
+	g_readRFID:BOOL;
+	g_writeRFID:BOOL;
+	g_RFID_SN:STRING;
+	m_RFIDTimes:DINT;
+	m_Instrument_pos_L1:LREAL;
+	m_Instrument_pos_L2:LREAL;
+	m_Instrument_pos_L3:LREAL;
+	m_postureTestStep:INT;
+	m_cycleStart: BOOL;
+	m_cycleStop: BOOL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

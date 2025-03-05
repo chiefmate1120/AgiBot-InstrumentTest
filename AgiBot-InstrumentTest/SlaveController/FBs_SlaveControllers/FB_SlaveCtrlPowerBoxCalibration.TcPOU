@@ -1,0 +1,159 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_SlaveCtrlPowerBoxCalibration" Id="{ad0799e3-2f9f-4a9a-a75f-62bf4379dda6}" SpecialFunc="None">
+    <Declaration><![CDATA[// Brief: Mounting Panel
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlPowerBoxCalibration EXTENDS FB_SlaveArmCtrlBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	// powerBoxCalibration status
+	m_powerBoxCalibrationStatus :INT := 0;
+	
+	// flag if joint is mounted
+	m_jointMounted :ARRAY[1..5] OF BOOL := [5(FALSE)];
+	
+	// mount motion planning
+	m_jntOTG :ARRAY[1..5] OF FB_secOrdTrajFilter;
+	m_panelMountVel :LREAL := 2*pi;
+	m_panelMountAcc :LREAL := 4*pi;
+	
+	// joint current threshold which indicate motor is buckled with panel
+	m_maxJntCurrent :INT := 150;
+	
+	// command mount motion
+	m_powerBoxCalibrationStepPos :LREAL := 45.0 * g_deg2Rad;
+	m_targetPowerBoxCalibrationPos :Vec5d;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="calcCmdJntPos" Id="{8027fd0d-d28b-44b8-ab9a-aff3c50d827e}">
+      <Declaration><![CDATA[// override this function in each exact controller
+METHOD PROTECTED calcCmdJntPos : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	i :INT;
+	curJntPos :Vec8d;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[
+curJntPos := i_slaveArm.curJntPos;
+
+CASE m_powerBoxCalibrationStatus OF
+	// To lock joint with panel
+	0:
+		FOR i:=1 TO 5 DO
+			// check joint buckled with panel
+			IF ABS(i_slaveArm.filtJntCurrent[i+3])> m_maxJntCurrent THEN 
+				m_jointMounted[i]:=TRUE;
+				m_targetPowerBoxCalibrationPos[i]:=curJntPos[i+3];
+				m_jntOTG[i].init(m_targetPowerBoxCalibrationPos[i], 0,m_panelMountVel, m_panelMountAcc, g_slaveArmCtrlCycleTime);
+			END_IF
+			
+			// set command joint position step
+			IF FALSE = m_jointMounted[i] THEN
+				m_targetPowerBoxCalibrationPos[i]:=curJntPos[i+3]+m_powerBoxCalibrationStepPos;
+			END_IF
+		END_FOR
+		
+		IF m_jointMounted[1]AND m_jointMounted[2]AND m_jointMounted[3] AND m_jointMounted[4] AND m_jointMounted[5]THEN
+			m_powerBoxCalibrationStatus:=1;
+		END_IF
+	1:
+		m_isFinished:=TRUE;
+END_CASE
+
+// traj plan
+FOR i:=1 TO 5 DO
+	m_jntOTG[i].run(m_targetPowerBoxCalibrationPos[i],0.0, o_cmdAcc=>m_cmdJntAcc[3+i],o_cmdVel=>m_cmdJntVel[3+i],o_cmdPos=>m_cmdJntPos[i+3]);
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{47347204-6310-4d94-9f8c-e6e169f8c936}">
+      <Declaration><![CDATA[METHOD PUBLIC init : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm	:FB_SlaveArm;
+END_VAR
+VAR_IN_OUT 
+	r_slaveArmCtrlCmd :ST_SlaveArmCtrlCmds;
+END_VAR
+VAR
+	i : INT;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);//T
+m_jntOPMode[4] := DriverOPMode_PosTrq;
+m_jntOPMode[5] := DriverOPMode_PosTrq;
+m_jntOPMode[6] := DriverOPMode_PosTrq;
+m_jntOPMode[7] := DriverOPMode_PosTrq;
+m_jntOPMode[8] := DriverOPMode_PosTrq;
+
+m_powerBoxCalibrationStatus:=0;
+FOR i:=1 TO 5 DO
+	m_targetPowerBoxCalibrationPos[i]:=m_cmdJntPos[i+3];
+	m_jntOTG[i].init(m_targetPowerBoxCalibrationPos[i], 0,m_panelMountVel, m_panelMountAcc, g_slaveArmCtrlCycleTime);
+	m_jointMounted[i]:=FALSE;
+END_FOR
+
+// update commands to arm
+copyCmds(r_slaveArmCtrlCmd);
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SlaveCtrlPowerBoxCalibration">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlPowerBoxCalibration.calcCmdJntPos">
+      <LineId Id="228" Count="2" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="160" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="161" Count="1" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="261" Count="0" />
+      <LineId Id="163" Count="1" />
+      <LineId Id="210" Count="1" />
+      <LineId Id="170" Count="1" />
+      <LineId Id="158" Count="0" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="276" Count="0" />
+      <LineId Id="174" Count="1" />
+      <LineId Id="277" Count="1" />
+      <LineId Id="156" Count="0" />
+      <LineId Id="118" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="150" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlPowerBoxCalibration.init">
+      <LineId Id="57" Count="0" />
+      <LineId Id="99" Count="2" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="114" Count="0" />
+      <LineId Id="102" Count="0" />
+      <LineId Id="69" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="75" Count="0" />
+      <LineId Id="87" Count="0" />
+      <LineId Id="72" Count="0" />
+      <LineId Id="71" Count="0" />
+      <LineId Id="127" Count="1" />
+      <LineId Id="126" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

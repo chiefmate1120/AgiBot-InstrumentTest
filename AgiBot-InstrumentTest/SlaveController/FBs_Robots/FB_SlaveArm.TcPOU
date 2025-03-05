@@ -1,11 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveArm" Id="{623926f8-06e2-46b6-bb1f-baa6bc16e9cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveArm
-VAR_INPUT
-END_VAR
-VAR_OUTPUT
-END_VAR
 VAR
 	// arm index, from 1 to 4
 	m_armIdx: INT;
@@ -102,6 +98,78 @@ VAR
 	//Joint port number
 	m_jointAddrJ8:UINT;	
 	m_jointAddrPbox:UINT;	
+	m_autoLogoutTon: TON;
+	g_autoLogOutTRIG: R_TRIG;
+	fbRegisterTon:TON;
+	fbAccountTon:TON;
+	m_logStep: INT;
+	m_actualNum: INT;
+	m_registerNum: INT;
+	m_register: INT;
+	g_targetRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(250)];
+
+	
+	fbSocketConnect      :FB_SocketConnect;
+	fbSocketSend         :FB_SocketSend;;;
+	fbSocketReceive      :FB_SocketReceive;
+	bExecute:BOOL := TRUE;
+	hSocket:T_hSocket;
+	arrSendData: ARRAY [0..240] OF BYTE ;
+	arrReadData: ARRAY [0..240] OF BYTE ;//read
+	arrRFIDData: ARRAY [0..240] OF BYTE ;
+	bSend   :BOOL;
+	bReceive:BOOL;
+	iStepRFID: INT;
+	uiRFIDReadSN: ULINT;
+	iStepRFIDOnLine: INT;
+	fbTonRFID: TON;
+	fbTonRFIDOnLine: TON;
+	fbTonRFIDOnLineStep: TON;	
+	g_offLineRFID:BOOL;
+	m_offLineRFID:BOOL;
+	
+	fbTonCLK1:TON;
+	fbTonCLK2:TON;
+	
+	uiRFIDRead:ULINT;
+	wCRCReadSum:ULINT;
+	g_readedRFID:BOOL;
+	fbTonReadData:TON;
+	
+	
+	wCRC16:WORD;
+	g_moveMode:INT;
+	g_energyType:INT;
+	uiRFIDWrite:UINT;
+	g_writedRFID:BOOL;
+	
+	g_RFIDinstruSN:ULINT;
+	
+	SNMid:INT;
+	g_informationVerificationPassed:BOOL;
+	g_instruSN:ULINT;
+	m_writeRFIDTimes:DINT;
+	m_writeInstrument_pos_L1:LREAL;
+	m_writeInstrument_pos_L2:LREAL;
+	m_writeInstrument_pos_L3:LREAL;
+	m_readRFIDTimes:DINT;
+	m_readInstrument_pos_L1:LREAL;
+	m_readInstrument_pos_L2:LREAL;
+	m_readInstrument_pos_L3:LREAL;
+	
+	fbTonRFIDReaded:TON;
+	stateMachineMid: E_SlaveArmState;
+
+	g_lastInstruJntPos: Vec5d;
+	fbTon: TON;
+	fbTon_Logout: TON;
+	startFlag:BOOL;
+	m_writeSdoStart: BOOL;
+	m_writeSdoTimeStart: BOOL;
+	m_writeSdoFinished: BOOL;
+	m_SNWritten: BOOL;
+	m_SNWriteStart: BOOL;
+	
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -162,9 +230,9 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q3:=i_DHJntPos[3];
 c1:=COS(i_DHJntPos[1]);
@@ -228,11 +296,12 @@ r_jaco[6,6]:=c5*s1*s2 - s5*(c1*s4 - c2*c4*s1);
     </Method>
     <Method Name="checkIO" Id="{613633aa-f5bc-4224-95e6-e974a90f8e6a}">
       <Declaration><![CDATA[METHOD PROTECTED checkIO : BOOL
-VAR_INPUT
-END_VAR
 
 VAR
-	startFlag:BOOL;
+
+	i: INT;
+	
+	
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -245,19 +314,21 @@ m_trocarOnFlag := m_trocarDetect.run(m_adjustIO);
 
 // check panel and instrument
 m_panelOnFlag := m_panelDetect.run(m_panelInstrumentOnIO);
-m_instruOnFlag := m_instruDetect.run(m_panelInstrumentOnIO);
+m_instruOnFlag :=m_instruDetect.run(m_panelInstrumentOnIO);
 m_instruNearFlag := m_instruNearDetect.run(m_panelInstrumentOnIO);
 
 //read instrument information
 IF FALSE = m_instruOnFlag THEN
 	m_instrument.reset();
 END_IF
+
+
 m_ReadLDP(CLK:= m_instruOnFlag, Q=>startFlag );
 // try to read again if instrument ID is undefined
-startFlag := startFlag OR m_instrument.onChipData.m_ErrorID = 1;
+startFlag := startFlag OR m_instrument.onChipData.m_ErrorID = 1 OR GVL_InstruTestUIVars.g_readInstruinformation;
 m_instrument.readParameters(startFlag);
 
-
+GVL_InstruTestUIVars.g_readInstruinformationFlag:=m_instrument.onChipData.m_InstruReadSucceed;
 // check endoscope type and posture 
 IF m_endoscopeTypeSwitch.check((m_panelInstrumentOnIO AND 16#20)=32) THEN
 	IF m_instrument.curScopeType = EndoScopeType_30 THEN
@@ -273,7 +344,568 @@ IF m_endoscopePostureSwitch.check((m_panelInstrumentOnIO AND 16#10)=16) AND m_in
 		m_instrument.nextScopePosture := EndoScopePosture_HeadDown;
 	END_IF
 END_IF
-]]></ST>
+
+IF GVL_InstruTestUIVars.g_incInstruNumOfUses THEN
+	m_writeSdoTimeStart := TRUE;
+ELSE
+	IF m_writeSdoTimeStart THEN
+		IF   NOT m_writeSdoFinished THEN
+			m_writeSdoFinished :=instrument.addNumOfUseToChip();
+
+		ELSE
+			m_writeSdoTimeStart :=FALSE;
+			m_writeSdoFinished:=FALSE;
+		END_IF
+	END_IF
+END_IF
+
+IF GVL_InstruTestUIVars.g_clearInstruNumOfUses THEN
+	m_writeSdoStart := TRUE;
+ELSE
+	IF m_writeSdoStart THEN
+		IF   NOT m_writeSdoFinished THEN
+			m_writeSdoFinished :=instrument.clearNumOfUseToChip();
+
+		ELSE
+			m_writeSdoStart :=FALSE;
+			m_writeSdoFinished:=FALSE;
+		END_IF
+	END_IF
+END_IF
+
+// write SN to CoE
+IF GVL_InstruTestUIVars.g_writeSNFlag THEN
+	m_SNWriteStart := TRUE;
+ELSE
+	IF m_SNWriteStart THEN
+		IF   NOT m_SNWritten THEN
+			m_SNWritten := instrument.writeSNToChip(STRING_TO_ULINT(GVL_InstruTestUIVars.g_newInstruSN));
+		ELSE
+			m_SNWriteStart :=FALSE;
+			m_SNWritten:=FALSE;
+		END_IF
+	END_IF
+END_IF
+GVL_InstruTestUIVars.g_incInstruNumOfUses:=FALSE;
+GVL_InstruTestUIVars.g_clearInstruNumOfUses:=FALSE;
+GVL_InstruTestUIVars.g_writeSNFlag:=FALSE;
+
+GVL_InstruTestUIVars.g_instruNumberOfUses:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruusageCounts);
+GVL_InstruTestUIVars.g_instruNumberOfAllUses:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruUsageCounts);
+
+GVL_InstruTestUIVars.g_instruSN:=ULINT_TO_STRING(m_instrument.onChipData.m_InstruseriesNum);
+IF (LEN(GVL_InstruTestUIVars.g_instruSN)=10)THEN
+	GVL_InstruTestUIVars.g_instruSN:=concat('00',GVL_InstruTestUIVars.g_instruSN);
+ELSIF  (LEN(GVL_InstruTestUIVars.g_instruSN)=11)THEN
+	GVL_InstruTestUIVars.g_instruSN:=concat('0',GVL_InstruTestUIVars.g_instruSN);
+ELSE
+	GVL_InstruTestUIVars.g_instruSN:=GVL_InstruTestUIVars.g_instruSN;
+END_IF
+//***************************修改电流极限**************************//
+GVL_InstruTestUIVars.g_actualRatedCurrent:=g_targetRatedCurrent;
+IF GVL_InstruTestUIVars.g_modifyRatedCurrent THEN
+	GVL_InstruTestUIVars.g_modifyRatedCurrent:=FALSE;
+	FOR i:=1 TO 8 BY 1 DO 
+		GVL_InstruTestUIVars.g_actualRatedCurrent[i]:=GVL_InstruTestUIVars.g_targetRatedCurrent;
+		g_targetRatedCurrent[i]:=GVL_InstruTestUIVars.g_targetRatedCurrent;
+	END_FOR
+END_IF
+IF GVL_InstruTestUIVars.g_account.actualPermission=3 AND GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruManualTest  THEN
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=GVL_InstruTestUIVars.g_rotationTargetCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=GVL_InstruTestUIVars.g_pitchTargetCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=GVL_InstruTestUIVars.g_deviationActualCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=GVL_InstruTestUIVars.g_deviationActualCurrent;
+END_IF
+IF GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruAutoTest  THEN
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=250;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=250;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=250;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=250;
+END_IF
+//Account
+GVL_InstruTestUIVars.g_account.memoryAccountNumber[0] :='admin';
+GVL_InstruTestUIVars.g_account.memoryPassWord[0] :='yfAGIBOT2025';
+GVL_InstruTestUIVars.g_account.memoryPermission[0] :=1;
+GVL_InstruTestUIVars.g_account.memoryName[0] :='admin';
+GVL_InstruTestUIVars.g_account.memoryWorkNum[0] :=101;
+
+fbAccountTon(IN:=m_logStep=5 OR m_registerNum=5,PT:=T#0.5S);
+CASE m_logStep OF 
+	0: 
+	  IF GVL_InstruTestUIVars.g_account.logOn THEN 
+		   m_logStep:=5;
+		  GVL_InstruTestUIVars.g_account.logOn:=FALSE;
+	  END_IF
+	5:
+	FOR i:= 0 TO 50 BY 1 DO
+		IF GVL_InstruTestUIVars.g_account.actualAccountNumber = GVL_InstruTestUIVars.g_account.memoryAccountNumber[i] AND GVL_InstruTestUIVars.g_account.actualAccountNumber <> ''THEN
+			m_actualNum:=i;
+			m_logStep:=10;
+		ELSE
+			IF fbAccountTon.Q THEN
+				GVL_InstruTestUIVars.g_account.prompt:='Account Err';
+				m_logStep:=0;
+			END_IF
+		END_IF
+	END_FOR
+	10:
+	IF GVL_InstruTestUIVars.g_account.actualPassWord = GVL_InstruTestUIVars.g_account.memoryPassWord[m_actualNum] AND GVL_InstruTestUIVars.g_account.actualAccountNumber <> ''THEN
+		m_logStep:=15;
+	ELSE
+		GVL_InstruTestUIVars.g_account.prompt:='PassWord Err';
+		m_logStep:=0;
+	END_IF
+	15:
+	GVL_InstruTestUIVars.g_account.actualPermission := GVL_InstruTestUIVars.g_account.memoryPermission[m_actualNum];
+	GVL_InstruTestUIVars.g_account.actualWorkNum := GVL_InstruTestUIVars.g_account.memoryWorkNum[m_actualNum];
+	GVL_InstruTestUIVars.g_account.actualName := GVL_InstruTestUIVars.g_account.memoryName[m_actualNum];
+	GVL_InstruTestUIVars.g_account.autoLogOut:=FALSE;
+	GVL_InstruTestUIVars.g_account.prompt:='Login Succeeded';
+	m_logStep:=0;
+END_CASE
+
+FOR i:=1 TO 5 DO 
+	IF stateMachineMid<>GVL_InstruTestUIVars.g_stateMachine OR ABS(GVL_InstruTestUIVars.g_curInstruJntPos[i]-g_lastInstruJntPos[i])>0.01 THEN
+		GVL_InstruTestUIVars.g_account.autoLogOut:=FALSE;
+	ELSE
+		IF NOT GVL_InstruTestUIVars.g_account.autoLogOut THEN 
+			IF fbTon_Logout.Q THEN
+				GVL_InstruTestUIVars.g_account.autoLogOut:=TRUE;
+			END_IF
+		END_IF
+	END_IF
+END_FOR
+	fbTon(IN:= NOT fbTon.Q, PT:=T#10MS );
+	IF fbTon.Q THEN
+		g_lastInstruJntPos:= GVL_InstruTestUIVars.g_curInstruJntPos;
+	END_IF
+stateMachineMid:=GVL_InstruTestUIVars.g_stateMachine;
+fbTon_Logout(IN:=NOT GVL_InstruTestUIVars.g_account.autoLogOut,PT:=T#0.1S);
+
+
+m_autoLogoutTon(IN:=GVL_InstruTestUIVars.g_account.autoLogOut,PT:=T#1H);
+g_autoLogOutTRIG(CLK:=m_autoLogoutTon.Q);
+IF GVL_InstruTestUIVars.g_account.logOut OR g_autoLogOutTRIG.Q THEN
+	GVL_InstruTestUIVars.g_account.actualPermission :=0;
+	GVL_InstruTestUIVars.g_account.actualAccountNumber :='';
+	GVL_InstruTestUIVars.g_account.actualPassWord :='';
+	GVL_InstruTestUIVars.g_account.actualWorkNum :=0;
+	GVL_InstruTestUIVars.g_account.actualName :='';
+	GVL_InstruTestUIVars.g_account.logOut:=FALSE;
+	GVL_InstruTestUIVars.g_account.prompt:='';
+END_IF
+IF GVL_InstruTestUIVars.g_clearInformation THEN
+	GVL_InstruTestUIVars.g_account.actualAccountNumber :='';
+	GVL_InstruTestUIVars.g_account.actualPassWord :='';
+	GVL_InstruTestUIVars.g_account.actualWorkNum :=0;
+	GVL_InstruTestUIVars.g_account.actualName :='';
+	GVL_InstruTestUIVars.g_account.prompt:='';
+	GVL_InstruTestUIVars.g_account.registerAccountNumber :='';
+	GVL_InstruTestUIVars.g_account.registerPassWord :='';
+	GVL_InstruTestUIVars.g_account.registerWorkNum :=0;
+	GVL_InstruTestUIVars.g_account.registerName :='';
+	GVL_InstruTestUIVars.g_account.prompt:='';
+	GVL_InstruTestUIVars.g_clearInformation:=FALSE;
+END_IF
+fbRegisterTon(IN:=m_registerNum=30,PT:=T#0.1S);
+IF GVL_InstruTestUIVars.g_account.registerPermission<>2 AND GVL_InstruTestUIVars.g_account.registerPermission<>3 AND
+	GVL_InstruTestUIVars.g_account.registerPermission<>4 THEN
+//	GVL_InstruTestUIVars.g_account.registerPermission:=4;
+END_IF
+CASE m_registerNum OF 
+	0:
+	  IF GVL_InstruTestUIVars.g_account.register THEN 
+		  GVL_InstruTestUIVars.g_account.register:=FALSE;
+		  GVL_InstruTestUIVars.g_account.prompt:='';
+		  m_registerNum:=5;
+	  END_IF
+	5:
+	FOR i:= 0 TO 50 BY 1 DO
+      IF  GVL_InstruTestUIVars.g_account.registerAccountNumber <> GVL_InstruTestUIVars.g_account.memoryAccountNumber[i] AND GVL_InstruTestUIVars.g_account.registerAccountNumber <> ''THEN
+		  m_registerNum:=10;
+	  ELSE
+		  IF fbAccountTon.Q THEN
+			  GVL_InstruTestUIVars.g_account.prompt:='Account Repeat';
+			  m_registerNum:=0;
+		  END_IF
+	  END_IF
+	END_FOR
+	10:
+	IF GVL_InstruTestUIVars.g_account.registerPassWord<> '' THEN
+		m_registerNum:=15;
+	ELSE
+		GVL_InstruTestUIVars.g_account.prompt:='No PassWord';
+		m_registerNum:=0;
+	END_IF
+	15:
+	IF GVL_InstruTestUIVars.g_account.registerWorkNum<> 0 THEN
+		m_registerNum:=20;
+	ELSE
+		GVL_InstruTestUIVars.g_account.prompt:='No WorkNum';
+		m_registerNum:=0;
+	END_IF
+	20:
+	IF GVL_InstruTestUIVars.g_account.registerName<> '' THEN
+		m_registerNum:=25;
+	ELSE
+		GVL_InstruTestUIVars.g_account.prompt:='No Name';
+		m_registerNum:=0;
+	END_IF
+	25:
+	IF GVL_InstruTestUIVars.g_account.registerPermission<> 0 THEN
+		m_registerNum:=30;
+	ELSE
+		GVL_InstruTestUIVars.g_account.prompt:='No Permission';
+		m_registerNum:=0;
+	END_IF
+	30:
+	FOR i:= 50 TO 0 BY -1 DO
+      IF  '' = GVL_InstruTestUIVars.g_account.memoryAccountNumber[i] THEN
+		 m_register:=i;
+		 m_registerNum:=35;
+	  ELSE
+		  IF fbRegisterTon.Q THEN
+			 GVL_InstruTestUIVars.g_account.prompt:='No Room';
+			 m_registerNum:=0;	
+		END_IF
+	  END_IF
+ 	END_FOR
+	35:
+	GVL_InstruTestUIVars.g_account.memoryAccountNumber[m_register]:=GVL_InstruTestUIVars.g_account.registerAccountNumber;
+	GVL_InstruTestUIVars.g_account.memoryPassWord[m_register]:=GVL_InstruTestUIVars.g_account.registerPassWord;
+	GVL_InstruTestUIVars.g_account.memoryWorkNum[m_register]:=GVL_InstruTestUIVars.g_account.registerWorkNum;
+	GVL_InstruTestUIVars.g_account.memoryName[m_register]:=GVL_InstruTestUIVars.g_account.registerName;
+	GVL_InstruTestUIVars.g_account.memoryPermission[m_register]:=GVL_InstruTestUIVars.g_account.registerPermission;
+	//m_account.memoryTime[m_register]:=;
+	GVL_InstruTestUIVars.g_account.prompt:='Register Succeeded';
+	m_registerNum:=0;
+END_CASE
+
+
+
+fbSocketConnect(
+	sSrvNetId:= , 
+	sRemoteHost:='192.168.1.202' , 
+	nRemotePort:= 4196, 
+	bExecute:= bExecute, 
+	tTimeout:=T#3S , 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> , 
+	hSocket=>hSocket );
+	
+	fbSocketSend(
+	sSrvNetId:= , 
+	hSocket:= hSocket, 
+	cbLen:= SIZEOF(arrSendData), 
+	pSrc:= ADR(arrSendData), 
+	bExecute:= bSend, 
+	tTimeout:= T#3S, 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> );
+	
+	
+	fbSocketReceive(
+	sSrvNetId:= , 
+	hSocket:=hSocket , 
+	cbLen:= SIZEOF(arrReadData), 
+	pDest:= ADR(arrReadData), 
+	bExecute:= bReceive, 
+	tTimeout:= T#3S, 
+	bBusy=> , 
+	bError=> , 
+	nErrId=> , 
+	nRecBytes=> );
+	
+	bSend:=FALSE;
+	fbTonCLK1(IN:=NOT fbTonCLK2.Q,PT:=T#1S);
+	fbTonCLK2(IN:=fbTonCLK1.Q,PT:=T#1S);
+	bReceive:=fbTonCLK1.Q;
+//RFID
+IF GVL_InstruTestUIVars.g_readRFID AND iStepRFID=0 THEN
+	GVL_InstruTestUIVars.g_readRFID:=FALSE;
+	g_readedRFID:=FALSE;
+	uiRFIDReadSN:=0;
+	iStepRFID:=3;
+	iStepRFIDOnLine:=0;
+END_IF
+IF GVL_InstruTestUIVars.g_writeRFID AND iStepRFID=0 THEN
+	GVL_InstruTestUIVars.g_writeRFID:=FALSE;
+	iStepRFID:=53;
+	iStepRFIDOnLine:=0;
+END_IF
+
+fbTonRFID(IN:=iStepRFID=10 OR iStepRFID=60, PT:=T#5S , Q=> , ET=> );
+fbTonRFIDOnLine(IN:=m_offLineRFID , PT:=T#2S , Q=> , ET=> );
+fbTonRFIDOnLineStep(IN:=iStepRFIDOnLine=10 , PT:=T#1S , Q=> , ET=> );
+fbTonReadData(IN:=iStepRFID=15 OR iStepRFID=65 , PT:=T#0.5S , Q=> , ET=> );
+IF fbTonRFIDOnLine.Q THEN
+    g_offLineRFID:=FALSE;;
+END_IF
+
+CASE iStepRFID OF
+	0:
+(*		CASE iStepRFIDOnLine OF   //On  Off line
+			0:
+			  arrReadData:=arrRFIDData;
+			  arrSendData:=arrRFIDData;
+			  iStepRFIDOnLine:=5;
+			5:   
+			  arrSendData[1]:=16#FF;
+			  arrSendData[2]:=16#08;  arrSendData[3]:=16#11;
+			  arrSendData[4]:=16#00;  arrSendData[5]:=16#01;
+			  arrSendData[6]:=16#00;  arrSendData[7]:=16#00;
+			  arrSendData[8]:=16#01;  arrSendData[9]:=16#EF;
+			  arrSendData[10]:=16#7F;  arrSendData[11]:=16#32;
+			  bSend:=TRUE; 
+			  iStepRFIDOnLine:=10;
+			10:
+			  IF arrReadData[0]<>0  THEN
+				  g_offLineRFID:=TRUE;
+				  m_offLineRFID:=FALSE;
+			  ELSE
+                  m_offLineRFID:=TRUE;
+			  END_IF
+			  IF fbTonRFIDOnLineStep.Q THEN
+			  	  iStepRFIDOnLine:=0;
+			  END_IF
+		END_CASE
+		
+	*)	
+    3:                           //Read
+	  arrReadData:=arrRFIDData;
+	  arrSendData:=arrRFIDData;
+	  iStepRFID:=5;
+	5:
+	  arrSendData[0]:=16#FF;
+	  arrSendData[1]:=16#08;  arrSendData[2]:=16#11;
+	  arrSendData[3]:=16#00;  arrSendData[4]:=16#01;
+	  arrSendData[5]:=16#00;  arrSendData[6]:=16#00;
+	  arrSendData[7]:=16#01;  arrSendData[8]:=16#6E;
+	  arrSendData[9]:=16#1F;  arrSendData[10]:=16#F2;
+	  arrSendData[11]:=16#00; 
+	  bSend:=TRUE; 
+	  iStepRFID:=10;
+	10:
+	   IF arrReadData[0]<>0  THEN
+		   iStepRFID:=15;
+	   END_IF
+	   IF fbTonRFID.Q THEN
+		   iStepRFID:=0;
+	       iStepRFIDOnLine:=0;
+	   END_IF
+	15: 
+	IF fbTonReadData.Q THEN
+//	   IF arrReadData[5]=0 THEN
+	   	   iStepRFID:=20;
+//	   END_IF
+//	   IF arrReadData[5]<>0THEN
+//	   	   iStepRFID:=30;
+//	   END_IF
+	END_IF
+    20:
+	   uiRFIDRead:=0;
+	   FOR i:=8 TO 108 BY 1 DO
+		    uiRFIDRead:=BYTE_TO_UINT(arrReadData[i])+uiRFIDRead;
+	   END_FOR
+  	   iStepRFID:=25;
+	 25:
+//	   AryByteTo(In:=arrReadData[111] , Size:= 2, Order:=_eBYTE_ORDER._HIGH_LOW , OutVal:=wCRCReadSum );
+	   wCRCReadSum:=SHL(BYTE_TO_ULINT(arrReadData[109]),8)OR BYTE_TO_ULINT(arrReadData[110]);
+	   IF wCRCReadSum=uiRFIDRead THEN
+	    	g_readedRFID:=TRUE;
+			uiRFIDReadSN:=0;
+	   FOR i:=1 TO 8 BY 1 DO
+		  uiRFIDReadSN:=SHL(BYTE_TO_ULINT(arrReadData[58+i]),64-i*8)+uiRFIDReadSN;
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  m_readRFIDTimes:=SHL(BYTE_TO_DINT(arrReadData[68+i]),32-i*8)+m_readRFIDTimes;
+	  END_FOR
+	  m_readInstrument_pos_L1:=0;
+	  m_readInstrument_pos_L2:=0;
+	  m_readInstrument_pos_L3:=0;
+	   FOR i:=1 TO 4 BY 1 DO
+		  m_readInstrument_pos_L1:=DINT_TO_LREAL(SHL(BYTE_TO_DINT(arrReadData[28+i]),32-i*8))/1000+m_readInstrument_pos_L1;
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  m_readInstrument_pos_L2:=DINT_TO_LREAL(SHL(BYTE_TO_DINT(arrReadData[38+i]),32-i*8))/1000+m_readInstrument_pos_L2;
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  m_readInstrument_pos_L3:=DINT_TO_LREAL(SHL(BYTE_TO_DINT(arrReadData[48+i]),32-i*8))/1000+m_readInstrument_pos_L3;
+	  END_FOR
+	  
+//			AryByteTo(In:=arrReadData[61] , Size:= 12, Order:=_eBYTE_ORDER._HIGH_LOW , OutVal:=uiRFIDReadSN );
+//			m_instruPurpose:=BYTE_TO_INT(arrReadData[74]);
+//			AryByteTo(In:=arrReadData[47] , Size:= 2, Order:=_eBYTE_ORDER._HIGH_LOW , OutVal:=m_maxClosingCurrent );
+//			AryByteTo(In:=arrReadData[76] , Size:= 4, Order:=_eBYTE_ORDER._HIGH_LOW , OutVal:=m_readRFIDPos );
+	    	iStepRFID:=0;
+			iStepRFIDOnLine:=0;
+	   ELSE
+	        iStepRFID:=30;
+	   END_IF
+	 30:
+	    g_readedRFID:=FALSE;
+	    iStepRFID:=0;
+		iStepRFIDOnLine:=0;
+ 	 53:	                   //Write
+	  arrReadData:=arrRFIDData;
+	  arrSendData:=arrRFIDData;
+	  iStepRFID:=55;
+     55:  
+	  arrSendData[0]:=16#FF;
+	  arrSendData[1]:=16#76;  arrSendData[2]:=16#12;
+	  arrSendData[3]:=16#00;  arrSendData[4]:=16#01;
+	  arrSendData[5]:=16#00;  arrSendData[6]:=16#00;
+	  arrSendData[7]:=16#00;  arrSendData[8]:=16#6E;  //Length  //110 BYTE
+	  
+	//  g_RFIDinstruSN:=g_newInstruSN;
+	  //Data
+	  arrSendData[11]:=(INT_TO_BYTE(g_moveMode) AND 16#0F) +(INT_TO_BYTE(SHL(g_energyType,4)) AND 16#F0);
+	   FOR i:=1 TO 8 BY 1 DO
+		  arrSendData[61+i]:=ULINT_TO_BYTE(SHR(g_RFIDinstruSN,64-i*8) );
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  arrSendData[71+i]:=DINT_TO_BYTE(SHR(m_writeRFIDTimes,32-i*8) );
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  arrSendData[31+i]:=DINT_TO_BYTE(SHR(LREAL_TO_DINT(m_writeInstrument_pos_L1*1000),32-i*8) );
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  arrSendData[41+i]:=DINT_TO_BYTE(SHR(LREAL_TO_DINT(m_writeInstrument_pos_L2*1000),32-i*8) );
+	  END_FOR
+	   FOR i:=1 TO 4 BY 1 DO
+		  arrSendData[51+i]:=DINT_TO_BYTE(SHR(LREAL_TO_DINT(m_writeInstrument_pos_L3*1000),32-i*8) );
+	  END_FOR
+	  
+	   uiRFIDWrite:=0;  
+	  FOR i:=11 TO 111 BY 1 DO                            //Sum 
+		   uiRFIDWrite:=BYTE_TO_UINT(arrSendData[i])+uiRFIDWrite;
+	  END_FOR
+	  
+	  arrSendData[112]:=UINT_TO_BYTE(SHR(uiRFIDWrite,8) );
+	  arrSendData[113]:=UINT_TO_BYTE(uiRFIDWrite AND 16#00FF);
+                   
+	  wCRC16:=MEM.CRC16_Modbus(pMemoryBlock:= ADR(arrSendData ), uiLength:=119 );  //CRC
+	  arrSendData[119]:=UINT_TO_BYTE(SHR(wCRC16,8) );
+	  arrSendData[120]:=UINT_TO_BYTE(wCRC16 AND 16#00FF);
+	  bSend:=TRUE; 
+	  iStepRFID:=60;
+	60:
+	   IF arrReadData[0]<>0  THEN
+           iStepRFID:=65;
+	   END_IF
+	   IF fbTonRFID.Q THEN
+	   	   iStepRFID:=0;
+		   iStepRFIDOnLine:=0;
+	   END_IF
+	65: 
+	IF fbTonReadData.Q THEN
+	   IF arrReadData[5]=0 THEN
+	  	   iStepRFID:=75;
+	   END_IF
+	   IF arrReadData[5]<>0THEN
+	   	   iStepRFID:=80;
+	   END_IF
+	END_IF
+	 75:
+	   g_writedRFID:=TRUE;
+	   iStepRFID:=0;
+	   iStepRFIDOnLine:=0;
+	 80:
+	   g_writedRFID:=FALSE;
+	   iStepRFID:=0;
+	   iStepRFIDOnLine:=0;
+	  
+END_CASE
+	 
+SNMid :=LREAL_TO_INT( FLOOR(ULINT_TO_LREAL(uiRFIDReadSN)/1000000000));
+g_informationVerificationPassed:=FALSE;
+IF g_readedRFID AND g_instruSN=uiRFIDReadSN  AND  (SNMid=042 OR SNMid=043 OR TRUE )AND 
+	ABS(GVL_InstruTestUIVars.g_instruZeroPos[1]-m_readInstrument_pos_L1)<0.01 AND
+	ABS(GVL_InstruTestUIVars.g_instruZeroPos[2]-m_readInstrument_pos_L2)<0.01 AND
+	ABS(GVL_InstruTestUIVars.g_instruZeroPos[3]-m_readInstrument_pos_L3)<0.01 THEN
+	
+	g_informationVerificationPassed:=TRUE;
+END_IF;
+
+
+IF g_informationVerificationPassed THEN
+(*	g_instruPurposeUI:=m_instruPurpose;
+	GVL_InstruTestUIVars.g_instruName:=1;
+	GVL_InstruTestUIVars.g_numberOfUsableTimesUI:=1;
+	GVL_InstruTestUIVars.g_usedTimesUI:=0;
+	GVL_InstruTestUIVars.g_maxClosingCurrentUI:=m_maxClosingCurrent;
+	IF SNMid=042 THEN
+	    GVL_InstruTestUIVars.g_driveRodLengthUI:=464.6;
+	    GVL_InstruTestUIVars.g_instruNameEnglish:=1;
+		GVL_InstruTestUIVars.g_instruType:=1;
+	ELSIF SNMid=043 THEN 
+	    GVL_InstruTestUIVars.g_driveRodLengthUI:=552.3;
+	    GVL_InstruTestUIVars.g_instruNameEnglish:=2;
+		GVL_InstruTestUIVars.g_instruType:=2;
+	END_IF
+	GVL_InstruTestUIVars.g_maxWorkAngleUI:=45;
+	GVL_InstruTestUIVars.g_reductionRatioK1UI:=25;
+	GVL_InstruTestUIVars.g_reductionRatioK2UI:=13;
+	GVL_InstruTestUIVars.g_reductionRatioK3UI:=18.5;
+	GVL_InstruTestUIVars.g_moveModeUI:=5;
+	GVL_InstruTestUIVars.g_energyTypeUI:=4;
+	GVL_InstruTestUIVars.g_instruVersionUI:=01;
+	GVL_InstruTestUIVars.g_formVersionUI:=01;
+	GVL_InstruTestUIVars.g_readOpenAngleLinkPos:=DINT_TO_LREAL(m_readPos)/1000;
+ELSE 
+    GVL_InstruTestUIVars.g_instruPurposeUI:=0;
+	GVL_InstruTestUIVars.g_instruName:=0;
+	GVL_InstruTestUIVars.g_instruSN:=0;
+	GVL_InstruTestUIVars.g_instruType:=0;
+	GVL_InstruTestUIVars.g_numberOfUsableTimesUI:=0;
+	GVL_InstruTestUIVars.g_usedTimesUI:=0;
+	GVL_InstruTestUIVars.g_maxClosingCurrentUI:=0;
+	GVL_InstruTestUIVars.g_driveRodLengthUI:=0;
+	GVL_InstruTestUIVars.g_maxWorkAngleUI:=0;
+	GVL_InstruTestUIVars.g_reductionRatioK1UI:=0;
+	GVL_InstruTestUIVars.g_reductionRatioK2UI:=0;
+	GVL_InstruTestUIVars.g_reductionRatioK3UI:=0;
+	GVL_InstruTestUIVars.g_moveModeUI:=0;
+	GVL_InstruTestUIVars.g_energyTypeUI:=0;
+	GVL_InstruTestUIVars.g_instruVersionUI:=0;
+	GVL_InstruTestUIVars.g_formVersionUI:=0;
+	GVL_InstruTestUIVars.g_instruNameEnglish:=0;
+	GVL_InstruTestUIVars.g_readOpenAngleLinkPos:=0;
+	*)
+END_IF
+IF m_instrument.onChipData.m_InstruReadSucceed THEN
+	GVL_InstruTestUIVars.g_readSNNum:=m_instrument.onChipData.m_InstruseriesNum;
+END_IF
+
+GVL_InstruTestUIVars.g_offLineRFID:=g_offLineRFID;
+GVL_InstruTestUIVars.g_informationVerificationPassed:=g_informationVerificationPassed;
+GVL_InstruTestUIVars.g_readedRFID:=g_readedRFID;
+GVL_InstruTestUIVars.g_RFID_SN:=ULINT_TO_STRING(uiRFIDReadSN);
+IF (LEN(GVL_InstruTestUIVars.g_RFID_SN)=10)THEN
+	GVL_InstruTestUIVars.g_RFID_SN:=concat('00',GVL_InstruTestUIVars.g_RFID_SN);
+ELSIF  (LEN(GVL_InstruTestUIVars.g_RFID_SN)=11)THEN
+	GVL_InstruTestUIVars.g_RFID_SN:=concat('0',GVL_InstruTestUIVars.g_RFID_SN);
+ELSE
+	GVL_InstruTestUIVars.g_RFID_SN:=GVL_InstruTestUIVars.g_RFID_SN;
+END_IF
+g_instruSN:= GVL_InstruTestUIVars.g_readSNNum;
+g_RFIDinstruSN:=GVL_InstruTestUIVars.g_readSNNum;
+m_writeRFIDTimes:=GVL_InstruTestUIVars.g_instruNumberOfUses;
+m_writeInstrument_pos_L1:=GVL_InstruTestUIVars.g_instruZeroPos[1];
+m_writeInstrument_pos_L2:=GVL_InstruTestUIVars.g_instruZeroPos[2];
+m_writeInstrument_pos_L3:=GVL_InstruTestUIVars.g_instruZeroPos[3];
+GVL_InstruTestUIVars.m_RFIDTimes:=m_readRFIDTimes;
+GVL_InstruTestUIVars.m_Instrument_pos_L1:=m_readInstrument_pos_L1;
+GVL_InstruTestUIVars.m_Instrument_pos_L2:=m_readInstrument_pos_L2;
+GVL_InstruTestUIVars.m_Instrument_pos_L3:=m_readInstrument_pos_L3;
+(*
+fbTonRFIDReaded(IN:=(GVL_InstruTestUIVars.IsolationPlate_Instrument_Install_Start AND 16#2)<>16#2,PT:=T#3S);
+IF fbTonRFIDReaded.Q THEN
+g_readedRFID:=FALSE;
+END_IF
+*)]]></ST>
       </Implementation>
     </Method>
     <Method Name="checkLight" Id="{f01081ee-1e3d-4082-9296-257b5773b0af}">
@@ -532,9 +1164,9 @@ END_VAR
       <Implementation>
         <ST><![CDATA[
 d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q3:=i_DHJntPos[3];
 c1:=COS(i_DHJntPos[1]);
@@ -698,8 +1330,8 @@ END_VAR
 	RETURN;
 END_IF
 
-instruReady := m_curJntPos[3] < (m_instrument.kinematicParameters.m_rodLength+m_instrument.kinematicParameters.m_headLength
-									+ m_instrument.kinematicParameters.m_fingerLength - GVL_SlaveArmKinematic.g_minInstruRCDis+checkBuffer);
+instruReady := m_curJntPos[3] < (m_instrument.instruTypeInfo.m_rodLength+m_instrument.instruTypeInfo.m_headLength
+									+ m_instrument.instruTypeInfo.m_fingerLength - GVL_SlaveArmKinematic.g_minInstruRCDis+checkBuffer);
 ]]></ST>
       </Implementation>
     </Method>
@@ -799,9 +1431,9 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[d1:=GVL_SlaveArmKinematic.g_d1;
-L:=m_instrument.kinematicParameters.m_rodLength;
-a:=m_instrument.kinematicParameters.m_headLength;
-b:=m_instrument.kinematicParameters.m_fingerLength;
+L:=m_instrument.instruTypeInfo.m_rodLength;
+a:=m_instrument.instruTypeInfo.m_headLength;
+b:=m_instrument.instruTypeInfo.m_fingerLength;
 
 q2 := i_DHJntPos[2];
 IF q2 < m_Jnt2PosThres THEN
@@ -924,8 +1556,8 @@ VAR_INPUT
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[m_instruInvasionDepth := m_curJntPos[3]-m_instrument.kinematicParameters.m_rodLength-m_instrument.kinematicParameters.m_headLength
-						- m_instrument.kinematicParameters.m_fingerLength;]]></ST>
+        <ST><![CDATA[m_instruInvasionDepth := m_curJntPos[3]-m_instrument.instruTypeInfo.m_rodLength-m_instrument.instruTypeInfo.m_headLength
+						- m_instrument.instruTypeInfo.m_fingerLength;]]></ST>
       </Implementation>
     </Method>
     <Property Name="simCartPose" Id="{6426ffc4-f74f-4984-ac32-a9f9d8b8c8ca}" FolderPath="property\">
@@ -1021,6 +1653,7 @@ enable(i_armCtrlCmd.m_jntEnableFlag);
 m_codeTime(START:=TRUE, RESET:=TRUE);
 // position/torque control
 FOR i:=1 TO g_sJntNum DO 
+	m_joints[i].setMaxCurrent(GVL_InstruTestUIVars.g_actualRatedCurrent[i]);
 	IF i_armCtrlCmd.m_jntOPMode[i]=DriverOPMode_PosTrq THEN
 		// position controller and gravity feedforward
 		m_cmdJntTrq[i]:=m_jntPIDCtrl[i].run(m_cmdJntPos[i],m_curJntPos[i],m_cmdJntVel[i],m_curJntVel[i]);
@@ -1166,6 +1799,8 @@ END_FOR
       <LineId Id="41" Count="0" />
       <LineId Id="40" Count="0" />
       <LineId Id="42" Count="0" />
+      <LineId Id="1254" Count="0" />
+      <LineId Id="1240" Count="0" />
       <LineId Id="38" Count="0" />
       <LineId Id="85" Count="0" />
       <LineId Id="84" Count="0" />
@@ -1180,7 +1815,137 @@ END_FOR
       <LineId Id="76" Count="0" />
       <LineId Id="98" Count="5" />
       <LineId Id="74" Count="0" />
+      <LineId Id="142" Count="5" />
+      <LineId Id="149" Count="0" />
+      <LineId Id="153" Count="5" />
       <LineId Id="45" Count="0" />
+      <LineId Id="195" Count="2" />
+      <LineId Id="199" Count="9" />
+      <LineId Id="194" Count="0" />
+      <LineId Id="218" Count="12" />
+      <LineId Id="217" Count="0" />
+      <LineId Id="210" Count="0" />
+      <LineId Id="209" Count="0" />
+      <LineId Id="273" Count="0" />
+      <LineId Id="212" Count="0" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="214" Count="0" />
+      <LineId Id="216" Count="0" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="1300" Count="5" />
+      <LineId Id="274" Count="1" />
+      <LineId Id="578" Count="0" />
+      <LineId Id="276" Count="1" />
+      <LineId Id="574" Count="0" />
+      <LineId Id="279" Count="0" />
+      <LineId Id="640" Count="0" />
+      <LineId Id="575" Count="0" />
+      <LineId Id="213" Count="0" />
+      <LineId Id="318" Count="0" />
+      <LineId Id="576" Count="0" />
+      <LineId Id="656" Count="2" />
+      <LineId Id="577" Count="0" />
+      <LineId Id="764" Count="4" />
+      <LineId Id="763" Count="0" />
+      <LineId Id="317" Count="0" />
+      <LineId Id="789" Count="1" />
+      <LineId Id="793" Count="0" />
+      <LineId Id="791" Count="1" />
+      <LineId Id="795" Count="0" />
+      <LineId Id="794" Count="0" />
+      <LineId Id="319" Count="0" />
+      <LineId Id="346" Count="0" />
+      <LineId Id="349" Count="0" />
+      <LineId Id="788" Count="0" />
+      <LineId Id="350" Count="1" />
+      <LineId Id="348" Count="0" />
+      <LineId Id="354" Count="1" />
+      <LineId Id="357" Count="0" />
+      <LineId Id="387" Count="1" />
+      <LineId Id="796" Count="0" />
+      <LineId Id="389" Count="1" />
+      <LineId Id="797" Count="0" />
+      <LineId Id="392" Count="0" />
+      <LineId Id="356" Count="0" />
+      <LineId Id="353" Count="0" />
+      <LineId Id="393" Count="1" />
+      <LineId Id="397" Count="1" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="395" Count="0" />
+      <LineId Id="399" Count="1" />
+      <LineId Id="408" Count="1" />
+      <LineId Id="746" Count="0" />
+      <LineId Id="402" Count="0" />
+      <LineId Id="401" Count="0" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="1258" Count="0" />
+      <LineId Id="1260" Count="14" />
+      <LineId Id="1259" Count="0" />
+      <LineId Id="1256" Count="1" />
+      <LineId Id="1255" Count="0" />
+      <LineId Id="676" Count="0" />
+      <LineId Id="743" Count="0" />
+      <LineId Id="403" Count="1" />
+      <LineId Id="798" Count="3" />
+      <LineId Id="406" Count="0" />
+      <LineId Id="802" Count="0" />
+      <LineId Id="405" Count="0" />
+      <LineId Id="818" Count="4" />
+      <LineId Id="804" Count="0" />
+      <LineId Id="828" Count="3" />
+      <LineId Id="827" Count="0" />
+      <LineId Id="826" Count="0" />
+      <LineId Id="825" Count="0" />
+      <LineId Id="835" Count="0" />
+      <LineId Id="1321" Count="1" />
+      <LineId Id="1324" Count="0" />
+      <LineId Id="1323" Count="0" />
+      <LineId Id="407" Count="0" />
+      <LineId Id="445" Count="0" />
+      <LineId Id="442" Count="1" />
+      <LineId Id="803" Count="0" />
+      <LineId Id="444" Count="0" />
+      <LineId Id="410" Count="0" />
+      <LineId Id="446" Count="0" />
+      <LineId Id="448" Count="0" />
+      <LineId Id="447" Count="0" />
+      <LineId Id="449" Count="0" />
+      <LineId Id="452" Count="0" />
+      <LineId Id="832" Count="0" />
+      <LineId Id="453" Count="0" />
+      <LineId Id="833" Count="1" />
+      <LineId Id="450" Count="1" />
+      <LineId Id="455" Count="2" />
+      <LineId Id="460" Count="1" />
+      <LineId Id="459" Count="0" />
+      <LineId Id="458" Count="0" />
+      <LineId Id="463" Count="0" />
+      <LineId Id="465" Count="4" />
+      <LineId Id="464" Count="0" />
+      <LineId Id="471" Count="5" />
+      <LineId Id="470" Count="0" />
+      <LineId Id="478" Count="5" />
+      <LineId Id="477" Count="0" />
+      <LineId Id="484" Count="0" />
+      <LineId Id="486" Count="1" />
+      <LineId Id="485" Count="0" />
+      <LineId Id="545" Count="1" />
+      <LineId Id="836" Count="0" />
+      <LineId Id="548" Count="0" />
+      <LineId Id="547" Count="0" />
+      <LineId Id="837" Count="0" />
+      <LineId Id="549" Count="10" />
+      <LineId Id="411" Count="0" />
+      <LineId Id="839" Count="141" />
+      <LineId Id="1286" Count="2" />
+      <LineId Id="981" Count="35" />
+      <LineId Id="1045" Count="113" />
+      <LineId Id="1283" Count="2" />
+      <LineId Id="1159" Count="4" />
+      <LineId Id="1307" Count="5" />
+      <LineId Id="1306" Count="0" />
+      <LineId Id="1164" Count="14" />
+      <LineId Id="838" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.checkLight">
       <LineId Id="38" Count="0" />
@@ -1386,34 +2151,7 @@ END_FOR
       <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.updateCmds">
-      <LineId Id="40" Count="0" />
-      <LineId Id="105" Count="3" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="75" Count="1" />
-      <LineId Id="74" Count="0" />
-      <LineId Id="52" Count="0" />
-      <LineId Id="43" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="85" Count="0" />
-      <LineId Id="53" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="5" Count="0" />
-      <LineId Id="12" Count="0" />
-      <LineId Id="19" Count="0" />
-      <LineId Id="13" Count="0" />
-      <LineId Id="18" Count="0" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="16" Count="0" />
-      <LineId Id="23" Count="0" />
-      <LineId Id="117" Count="0" />
-      <LineId Id="22" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="21" Count="0" />
-      <LineId Id="20" Count="0" />
-      <LineId Id="96" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="14" Count="0" />
-      <LineId Id="9" Count="1" />
+      <LineId Id="135" Count="33" />
       <LineId Id="86" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.updateDyna">

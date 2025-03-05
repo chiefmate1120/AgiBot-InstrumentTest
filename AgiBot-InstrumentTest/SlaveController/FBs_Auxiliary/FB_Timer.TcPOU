@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_Timer" Id="{2554a4c0-5698-48c5-b7c9-8d2fdf4902b6}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_Timer
+VAR
+	fb_tonTimer:TON;
+	tTime: TIME;
+	tTimeMid: TIME;
+	uiTime:UINT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[
+
+]]></ST>
+    </Implementation>
+    <Method Name="init" Id="{3da09fc7-d006-4917-ab67-a69425b55ec6}">
+      <Declaration><![CDATA[METHOD init : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[tTimeMid:=T#0S;
+fb_tonTimer(IN :=0);
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="timer" Id="{e7de819b-88b0-457f-aef0-60c24077759c}">
+      <Declaration><![CDATA[METHOD timer : BOOL
+VAR_INPUT
+	bStart: BOOL;
+END_VAR
+VAR_OUTPUT
+	uiTimeHour: UINT;
+	uiTimeMinute: UINT;
+	uiTimeSecond: UINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[fb_tonTimer(IN:=bStart, PT:=T#999H , );
+IF NOT fb_tonTimer.IN THEN
+	tTimeMid:=tTime;
+END_IF	
+
+tTime:=fb_tonTimer.ET+tTimeMid;
+uiTime:=DT_TO_UINT(TIME_TO_DT(tTime));
+uiTimeHour:= uiTime/3600;
+uiTimeMinute:= uiTime/60-uiTimeHour*60;
+uiTimeSecond:= uiTime-uiTimeHour*3600-uiTimeMinute*60;
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_Timer">
+      <LineId Id="9" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="13" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Timer.init">
+      <LineId Id="13" Count="0" />
+      <LineId Id="16" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Timer.timer">
+      <LineId Id="13" Count="3" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="23" Count="3" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

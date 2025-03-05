@@ -12,7 +12,7 @@
     <HmiTitle>Please enter your Title...</HmiTitle>
     <HmiVerboseLevel>2</HmiVerboseLevel>
     <HmiVersion>1.0.0.0</HmiVersion>
-    <HmiCommunicationServerPort>3000</HmiCommunicationServerPort>
+    <HmiCommunicationServerPort>3002</HmiCommunicationServerPort>
     <HmiLogTcHmiServerMessages>false</HmiLogTcHmiServerMessages>
     <HmiLogDesignerModeComMessages>false</HmiLogDesignerModeComMessages>
     <HmiServerVersion>Latest</HmiServerVersion>
@@ -27,8 +27,8 @@
     <HmiViewportUserScaleable>Default</HmiViewportUserScaleable>
     <HmiPostProcessing>True</HmiPostProcessing>
     <Name>AgibotInstrumentTestHmi</Name>
-    <HmiCommunicationRouterPort>10100</HmiCommunicationRouterPort>
-    <HmiCommunicationServerAuthPort>13000</HmiCommunicationServerAuthPort>
+    <HmiCommunicationRouterPort>10108</HmiCommunicationRouterPort>
+    <HmiCommunicationServerAuthPort>13004</HmiCommunicationServerAuthPort>
     <HmiInitial>1.12.760.44</HmiInitial>
     <HmiRecent>1.12.760.44</HmiRecent>
     <HmiServerNodeAdvancedView>False</HmiServerNodeAdvancedView>
@@ -110,7 +110,7 @@
   <Target Name="Clean" DependsOnTargets="$(CleanDependsOn)" />
   <Target Name="ReBuild" DependsOnTargets="Clean; Build" />
   <ItemGroup>
-    <Folder Include="Content\NewContent" />
+    <Folder Include="Content\Account" />
     <Folder Include="Fonts\" />
     <Folder Include="Images" />
     <Folder Include="Images\Manifest" />
@@ -131,70 +131,22 @@
     <Content Include=".eslintrc.json">
       <Visible>false</Visible>
     </Content>
-    <Content Include="Content\Content1.content">
+    <Content Include="Content\Account\register.content">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\InstrumentMoveTesting.content">
+    <Content Include="Content\Account\Logon.content">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\InstrumentTesting - Copy.content">
+    <Content Include="Content\ContentAdmin.content">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\InstrumentTesting - P.content">
+    <Content Include="Content\ContentTechnician.content">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\InstrumentTesting.content">
+    <Content Include="Content\ContentP.content">
       <SubType>Content</SubType>
     </Content>
-    <Content Include="Content\Instrument_SineMotion.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorControl - Copy.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorControl - P.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorControl.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorMoveTest - Copy.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorMoveTest -Qua.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorMoveTest.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\MotorPosition.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\NewContent\NewTestSoft.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\NewContent\InstrumentStandardization.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\NewContent\InstrumentTest.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\NewContent\InsturmentClamping.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\OpenAngleMaxMin.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Production - REA.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Production.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Quality.content">
-      <SubType>Content</SubType>
-    </Content>
-    <Content Include="Content\Rea.content">
+    <Content Include="Content\ContentRD.content">
       <SubType>Content</SubType>
     </Content>
     <Content Include="Server\TcHmiLua\TcHmiLua.Config.default.json">

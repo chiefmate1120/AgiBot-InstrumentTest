@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveJoint" Id="{13c09c14-ad6e-446d-ae84-5ae40081815a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveJoint EXTENDS FB_JointBase
 VAR_INPUT
@@ -90,6 +90,16 @@ m_motorOutputs.m_cmdCurrent:=0;
 m_motorOutputs.m_cmdMotorEncoder:=m_motorInputs.m_motorEncoder;]]></ST>
       </Implementation>
     </Method>
+    <Method Name="setMaxCurrent" Id="{cd2745aa-2b75-4b7e-a955-0d84dfdd5b87}">
+      <Declaration><![CDATA[METHOD setMaxCurrent : BOOL
+VAR_INPUT
+	i_maxCurrent :LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_maxCurrent := i_maxCurrent;]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="updateCmds" Id="{7d521106-f9be-4875-aa3c-95da24ffbb4d}">
       <Declaration><![CDATA[METHOD PUBLIC updateCmds : BOOL
 VAR_INPUT
@@ -164,30 +174,14 @@ END_IF
       <LineId Id="9" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveJoint.init">
-      <LineId Id="187" Count="0" />
-      <LineId Id="186" Count="0" />
-      <LineId Id="155" Count="0" />
-      <LineId Id="166" Count="0" />
-      <LineId Id="156" Count="0" />
-      <LineId Id="89" Count="7" />
-      <LineId Id="98" Count="3" />
-      <LineId Id="176" Count="0" />
-      <LineId Id="102" Count="15" />
-      <LineId Id="122" Count="6" />
-      <LineId Id="197" Count="0" />
-      <LineId Id="130" Count="1" />
-      <LineId Id="152" Count="1" />
-      <LineId Id="133" Count="1" />
-      <LineId Id="154" Count="0" />
-      <LineId Id="148" Count="3" />
-      <LineId Id="137" Count="5" />
+      <LineId Id="227" Count="58" />
       <LineId Id="39" Count="0" />
     </LineIds>
+    <LineIds Name="FB_SlaveJoint.setMaxCurrent">
+      <LineId Id="5" Count="0" />
+    </LineIds>
     <LineIds Name="FB_SlaveJoint.updateCmds">
-      <LineId Id="53" Count="0" />
-      <LineId Id="64" Count="0" />
-      <LineId Id="63" Count="0" />
-      <LineId Id="65" Count="0" />
+      <LineId Id="83" Count="3" />
       <LineId Id="62" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveJoint.writeSDOData">

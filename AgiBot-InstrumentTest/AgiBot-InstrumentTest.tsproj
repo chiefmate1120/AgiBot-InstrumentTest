@@ -92,6 +92,182 @@
 			</SubItem>
 		</DataType>
 		<DataType>
+			<Name GUID="{A854D744-CBB7-47F0-E9A9-F93497CDCFD6}" IecBaseType="true" AutoDeleteType="true">ARRAY [1..1,1..8] OF DINT</Name>
+			<BitSize>256</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000009}">DINT</BaseType>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>1</Elements>
+			</ArrayInfo>
+			<ArrayInfo>
+				<LBound>1</LBound>
+				<Elements>8</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
+			<Name GUID="{FFE6EB9D-4294-798A-CDDF-4F1C5212F8FD}" AutoDeleteType="true">Account</Name>
+			<BitSize>107488</BitSize>
+			<SubItem>
+				<Name>logOn</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>0</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>logOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>8</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>autoLogOut</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>16</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>register</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>24</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>actualAccountNumber</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>32</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>actualPassWord</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>680</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>actualPermission</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚ÂÃ†â€™ÃƒÂ©Ã¢â€žÂ¢Ã‚Â 0 ÃƒÂ¦Ã¢â‚¬â€Ã‚Â ÃƒÂ§Ã¢â€žÂ¢Ã‚Â»ÃƒÂ¥Ã‚Â½Ã¢â‚¬Â¢ 1 ÃƒÂ§Ã¢â‚¬ÂÃ…Â¸ÃƒÂ¤Ã‚ÂºÃ‚Â§ 2 ÃƒÂ¨Ã‚Â´Ã‚Â¨ÃƒÂ©Ã¢â‚¬Â¡Ã‚Â 3 ÃƒÂ§Ã‚Â Ã¢â‚¬ÂÃƒÂ¥Ã‚ÂÃ¢â‚¬Ëœ 4 ÃƒÂ§Ã‚Â®Ã‚Â¡ÃƒÂ§Ã‚ÂÃ¢â‚¬Â ]]></Comment>
+				<BitSize>8</BitSize>
+				<BitOffs>1328</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>actualWorkNum</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>1344</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>actualName</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>1376</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>registerAccountNumber</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>2024</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>registerPassWord</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>2672</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>registerPermission</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<BitSize>8</BitSize>
+				<BitOffs>3320</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>registerWorkNum</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
+				<BitSize>32</BitSize>
+				<BitOffs>3328</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>registerName</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<BitSize>648</BitSize>
+				<BitOffs>3360</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>prompt</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚ÂÃ‚ÂÃƒÂ§Ã‚Â¤Ã‚Âº]]></Comment>
+				<BitSize>648</BitSize>
+				<BitOffs>4008</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryAccountNumber</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚ÂÃ‚Â·]]></Comment>
+				<BitSize>33048</BitSize>
+				<BitOffs>4656</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryPassWord</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â¯Ã¢â‚¬Â ÃƒÂ§Ã‚Â Ã‚Â]]></Comment>
+				<BitSize>33048</BitSize>
+				<BitOffs>37704</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryPermission</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¦Ã‚ÂÃ†â€™ÃƒÂ©Ã¢â€žÂ¢Ã‚Â]]></Comment>
+				<BitSize>408</BitSize>
+				<BitOffs>70752</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryWorkNum</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000008}">UDINT</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â·Ã‚Â¥ÃƒÂ¥Ã‚ÂÃ‚Â·]]></Comment>
+				<BitSize>1632</BitSize>
+				<BitOffs>71168</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryName</Name>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â§Ã¢â‚¬Å“ÃƒÂ¥Ã‚ÂÃ‚Â]]></Comment>
+				<BitSize>33048</BitSize>
+				<BitOffs>72800</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryTime</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000048}">TIME</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¦Ã¢â‚¬â€Ã‚Â¶ÃƒÂ©Ã¢â‚¬â€Ã‚Â´]]></Comment>
+				<BitSize>1632</BitSize>
+				<BitOffs>105856</BitOffs>
+			</SubItem>
+		</DataType>
+		<DataType>
 			<Name GUID="{18071995-0000-0000-0000-002000000018}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..2] OF BYTE</Name>
 			<BitSize>24</BitSize>
 			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
@@ -259,7 +435,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{0C182974-8910-4DEE-A0B7-B414028AF699}" Name="SlaveController" PrjFilePath="SlaveController\SlaveController.plcproj" TmcFilePath="SlaveController\SlaveController.tmc" ReloadTmc="true" AmsPort="851" TargetArchiveSettings="#x0001" FileArchiveSettings="#x0000" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SlaveController\SlaveController.tmc" TmcHash="{BEAFF4F9-E0D3-AD7C-D748-D9A58E04C308}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SlaveController\SlaveController.tmc" TmcHash="{2D3E665B-7CA3-F73E-6773-818B706146E4}">
 					<Name>SlaveController Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -353,6 +529,33 @@
 							<Name>SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_lightIO</Name>
 							<Comment><![CDATA[arm light out to drive]]></Comment>
 							<Type>DINT</Type>
+						</Var>
+					</Vars>
+					<Vars VarGrpType="8" AreaNo="4">
+						<Name>TaskSlaveArmControl Retains</Name>
+						<Var>
+							<Name>GVL_InstruTestUIVars.g_powerBoxCalibrationed</Name>
+							<Comment><![CDATA[ 动力盒零位已校准]]></Comment>
+							<Type>BOOL</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>GVL_InstruTestUIVars.g_powerBoxCalibrationPos</Name>
+							<Comment><![CDATA[ 动力盒零位]]></Comment>
+							<Type GUID="{A854D744-CBB7-47F0-E9A9-F93497CDCFD6}">ARRAY [1..1,1..8] OF DINT</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>GVL_InstruTestUIVars.g_account</Name>
+							<Comment><![CDATA[ 账户]]></Comment>
+							<Type GUID="{FFE6EB9D-4294-798A-CDDF-4F1C5212F8FD}">Account</Type>
+							<InOut>7</InOut>
+						</Var>
+						<Var>
+							<Name>GVL_SlaveJointEncoderCaliData.g_caliLinkEncoder</Name>
+							<Comment><![CDATA[ absolute encoder value at calibrated positon]]></Comment>
+							<Type GUID="{A854D744-CBB7-47F0-E9A9-F93497CDCFD6}">ARRAY [1..1,1..8] OF DINT</Type>
+							<InOut>7</InOut>
 						</Var>
 					</Vars>
 					<UnrestoredVarLinks ImportTime="2023-12-15T10:38:09">
@@ -484,20 +687,20 @@
 			<PlcAuxTask Affinity="#x00000040"/>
 		</Plc>
 		<Io>
-			<Device Id="10" DevType="111" DevFlags="#x0003" AmsPort="28682" AmsNetId="192.168.2.195.11.1" RemoteName="Device 10 (EtherCAT)" InfoImageId="21">
-				<Name>Device 10 (EtherCAT)</Name>
+			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="192.168.2.195.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="3">
+				<Name>Device 3 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
-						<DeviceDesc>???a? (TwinCAT-Intel PCI Ethernet Adapter (</DeviceDesc>
+						<DeviceDesc>? (TwinCAT-Intel PCI Ethernet Adapter (Gigabit</DeviceDesc>
 						<DeviceName>\DEVICE\{F37EED28-5D5A-44EE-9CB5-1B9F59B895AE}</DeviceName>
 						<DeviceData>68eda467852b</DeviceData>
 					</Pnp>
 				</AddressInfo>
-				<Image Id="20" AddrType="9" ImageType="3">
+				<Image Id="2" AddrType="9" ImageType="3">
 					<Name>Image</Name>
 				</Image>
-				<Box Id="4" BoxType="9099" BoxFlags="#x00000020">
-					<Name>Box 4 (AX58200_MotorControl)</Name>
+				<Box Id="1" BoxType="9099" BoxFlags="#x00000020">
+					<Name>Box 1 (AX58200_MotorControl)</Name>
 					<ImageId>1000</ImageId>
 					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000301" RevisionNo="#x00211001" InfoDataAddr="true" InfoDataSoeDS401="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_3axis" Desc="AX58200_MotorControl" PortABoxInfo="#x00ffffff">
 						<SyncMan>001080002600010001000000240080008000001026010000</SyncMan>
@@ -648,10 +851,10 @@
 						<CoeProfile ProfileNo="131474"/>
 					</EtherCAT>
 				</Box>
-				<Box Id="5" BoxType="9099" BoxFlags="#x00000020">
-					<Name>Box 5 (AX58200_MotorControl)</Name>
+				<Box Id="2" BoxType="9099" BoxFlags="#x00000020">
+					<Name>Box 2 (AX58200_MotorControl)</Name>
 					<ImageId>1000</ImageId>
-					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000301" RevisionNo="#x00211001" InfoDataAddr="true" InfoDataSoeDS401="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_3axis" Desc="AX58200_MotorControl" PortABoxInfo="#x01000004">
+					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000301" RevisionNo="#x00211001" InfoDataAddr="true" InfoDataSoeDS401="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_3axis" Desc="AX58200_MotorControl" PortABoxInfo="#x01000001">
 						<SyncMan>001080002600010001000000240080008000001026010000</SyncMan>
 						<SyncMan>801080002200010002000000240080008000801022010000</SyncMan>
 						<SyncMan>00112a006400010003000000000000002a00001164010000</SyncMan>
@@ -805,9 +1008,9 @@
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500840010403}" Id="#x02030010"/>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500820000403}" Id="#x02030010"/>
 		<OwnerA Name="TIPC^SlaveController^SlaveController Instance">
-			<OwnerB Name="TIID^Device 10 (EtherCAT)^Box 4 (AX58200_MotorControl)">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^Box 1 (AX58200_MotorControl)">
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Velocity actual value for aix2"/>
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix2"/>
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix2"/>
@@ -824,7 +1027,7 @@
 				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value for aix3"/>
 				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position value for aix3"/>
 			</OwnerB>
-			<OwnerB Name="TIID^Device 10 (EtherCAT)^Box 5 (AX58200_MotorControl)">
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^Box 2 (AX58200_MotorControl)">
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Velocity actual value for aix2"/>
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix2"/>
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix2"/>

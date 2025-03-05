@@ -1,0 +1,108 @@
+<Node>
+  <Title>AgiBot-InstrumentTestScope</Title>
+  <Expanded>False</Expanded>
+  <FileName></FileName>
+  <Children>
+    <Node>
+      <Title>YT Scope Project</Title>
+      <Expanded>False</Expanded>
+      <FileName>C:\Users\Ni Feijian\Career\AgiBot\Develop Code\New Architecture\instrumentTest\PR\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.tcscopex</FileName>
+      <Children>
+        <Node>
+          <Title>DataPool</Title>
+          <Expanded>False</Expanded>
+          <FileName></FileName>
+          <Children>
+            <Node>
+              <Title>m_filtJntCurrent[4]</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_filtJntCurrent[5]</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_nextSlaveArmState[1]</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_slaveArmState[1]</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_timePeriod</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+          </Children>
+        </Node>
+        <Node>
+          <Title>YT Chart</Title>
+          <Expanded>False</Expanded>
+          <FileName></FileName>
+          <Children>
+            <Node>
+              <Title>Axis Group</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children>
+                <Node>
+                  <Title>m_nextSlaveArmState[1]</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_slaveArmState[1]</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+              </Children>
+            </Node>
+            <Node>
+              <Title>Axis Group (1)</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children>
+                <Node>
+                  <Title>m_timePeriod</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_filtJntCurrent[4]</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_filtJntCurrent[5]</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+              </Children>
+            </Node>
+          </Children>
+        </Node>
+        <Node>
+          <Title>Trigger</Title>
+          <Expanded>False</Expanded>
+          <FileName></FileName>
+          <Children />
+        </Node>
+      </Children>
+    </Node>
+  </Children>
+</Node>

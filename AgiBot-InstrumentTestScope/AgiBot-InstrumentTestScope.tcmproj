@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{19b90a11-6497-4fe7-ac2c-dfa25b8ff021}</ProjectGuid>
+    <AssemblyName>AgiBot-InstrumentTestScope</AssemblyName>
+    <Name>AgiBot-InstrumentTestScope</Name>
+    <RootNamespace>AgiBot-InstrumentTestScope</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="YT Scope Project.tcscopex">
+      <SubType>Content</SubType>
+    </Content>
+  </ItemGroup>
+</Project>
