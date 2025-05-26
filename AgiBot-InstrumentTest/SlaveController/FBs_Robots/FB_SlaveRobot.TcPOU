@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveRobot" Id="{8cbdb2ba-9735-46e3-8cbc-296330acc8cc}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveRobot
 VAR
@@ -54,6 +54,8 @@ VAR
 	m_powerBoxCalibration: ARRAY[1..g_sArmNum] OF FB_SlaveCtrlPowerBoxCalibration;
 	fbTonMotorGoHomeState: TON;
 	fbTonPowerBoxCalibrationState: TON;
+	m_endoscopeTest: ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruEndoscopeTest;
+	m_enableMode:BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -142,6 +144,7 @@ END_VAR
 	m_armCtrlFactory[i,SlaveArmState_InstruVerify] := m_instruVerify[i];
 	m_armCtrlFactory[i,SlaveArmState_MotorGoHome] := m_motorGoHome[i];
 	m_armCtrlFactory[i,SlaveArmState_PowerBoxCalibration] := m_powerBoxCalibration[i];
+	m_armCtrlFactory[i,SlaveArmState_EndoscopeTest] := m_endoscopeTest[i];
 	// assign controller
 	m_armCtrl[i]:=m_armCtrlFactory[i,m_slaveArmState[i]];
 	m_armCtrl[i].Init(m_slaveArms[i],m_armCtrlCmds[i]);
@@ -193,7 +196,7 @@ FOR i:=1 TO g_sArmNum DO
 END_FOR
 // ################# update insrument UI data #########################################
 FOR i:=1 TO 5 DO 
-	GVL_InstruTestUIVars.g_curInstruJntPos[i]:= m_slaveArms[1].curJntPos[i+3];
+	GVL_InstruTestUIVars.g_curInstruJntPos[i]:= m_slaveArms[1].linkSingle[i+3];
 	GVL_InstruTestUIVars.g_curInstruJntCurrent[i]:= m_slaveArms[1].filtJntCurrent[i+3];
 	GVL_InstruTestUIVars.g_instruZeroPos[i]:= m_slaveArms[1].instrument.onChipData.m_InstruPos[i];
 END_FOR
@@ -242,15 +245,15 @@ FOR i:=1 TO g_sArmNum DO
 		//standby
 		SlaveArmState_Standby:
 			// to mount panel
-			IF m_slaveArms[i].panelOn AND (GVL_InstruTestUIVars.g_snappingSeparator OR  m_panelMountedFlag[i] )AND NOT GVL_InstruTestUIVars.g_powerBoxCalibration THEN 
+			IF m_slaveArms[i].panelOn AND ((GVL_InstruTestUIVars.g_snappingSeparator AND NOT m_slaveArms[i].instruOn) OR  m_panelMountedFlag[i] )AND NOT GVL_InstruTestUIVars.g_powerBoxCalibration THEN 
 				IF m_panelMountedFlag[i] THEN
 					m_nextSlaveArmState[i]:=SlaveArmState_PanelReady;
 				ELSE
 					m_nextSlaveArmState[i]:=SlaveArmState_MountPanel;
 				END_IF
-			ELSIF GVL_InstruTestUIVars.g_goHome THEN 
+			ELSIF GVL_InstruTestUIVars.g_goHome AND NOT m_slaveArms[i].instruOn THEN  
 				GVL_InstruTestUIVars.g_beHomed:=FALSE;
-			    m_nextSlaveArmState[i]:=SlaveArmState_MotorGoHome;
+				m_nextSlaveArmState[i]:=SlaveArmState_MotorGoHome;
 			END_IF
 			IF GVL_InstruTestUIVars.g_powerBoxCalibration THEN
 				GVL_InstruTestUIVars.g_powerBoxCalibrationed:=FALSE;;
@@ -278,6 +281,7 @@ FOR i:=1 TO g_sArmNum DO
 				IF NOT m_slaveArms[i].panelOn THEN
 					GVL_InstruTestUIVars.g_powerBoxCalibrationFlag:=FALSE;
 					m_nextSlaveArmState[i]:=SlaveArmState_Standby;;
+					m_slaveArms[i].setSaveCaliLinkEncoder();
 				END_IF
 			// to standby
 			ELSIF fbTonPowerBoxCalibrationState.Q AND NOT m_slaveArms[i].panelOn THEN
@@ -335,7 +339,7 @@ FOR i:=1 TO g_sArmNum DO
 			// to instrument standby
 			IF  NOT(m_slaveArms[i].instruOn)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
-				
+				GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 			// to instrument caliberation
 			ELSIF GVL_InstruTestUIVars.g_instruCaliFlag THEN
 				m_nextSlaveArmState[i] := SlaveArmState_InstruCali;
@@ -351,8 +355,12 @@ FOR i:=1 TO g_sArmNum DO
 			// to instrument verify
 			ELSIF GVL_InstruTestUIVars.g_instruVerifyFlag THEN
 				m_nextSlaveArmState[i] := SlaveArmState_InstruVerify;
+				
+			// to instrument verify
+			ELSIF GVL_InstruTestUIVars.g_endoscopeTest THEN
+				m_nextSlaveArmState[i] := SlaveArmState_EndoscopeTest;
 			END_IF
-		
+			
 		//instrument caliberation
 		SlaveArmState_InstruCali:
 			// to standby
@@ -365,6 +373,7 @@ FOR i:=1 TO g_sArmNum DO
 			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruAutoTestFlag)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+				GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 				m_armStop[i].setInstruBacklash(m_instruAutoTest[i].InstruBacklash);
 			END_IF
 			IF m_armCtrl[i].isFinished THEN
@@ -376,6 +385,7 @@ FOR i:=1 TO g_sArmNum DO
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruManualTestFlag)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
 				m_armStop[i].setInstruBacklash(m_instruManualTest[i].InstruBacklash);
+				GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 			END_IF
 			
 		//instrument verify
@@ -383,6 +393,7 @@ FOR i:=1 TO g_sArmNum DO
 			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_instruVerifyFlag)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+				GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 				m_armStop[i].setInstruBacklash(m_instruVerify[i].InstruBacklash);
 			END_IF
 			IF m_armCtrl[i].isFinished THEN
@@ -402,6 +413,10 @@ FOR i:=1 TO g_sArmNum DO
 		    IF  NOT( m_slaveArms[1].instruOn) THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Init;
 			END_IF
+		SlaveArmState_EndoscopeTest:
+			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_endoscopeTest)  THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
+			END_IF
 	END_CASE
 	IF NOT m_slaveArms[i].instruOn THEN
 		GVL_InstruTestUIVars.g_instruCaliState:=FALSE;
@@ -420,8 +435,28 @@ FOR i:=1 TO g_sArmNum DO
 		GVL_InstruTestUIVars.g_beHomed:=FALSE;
 	END_IF
 GVL_InstruTestUIVars.g_stateMachine:=m_slaveArmState[i];
+	IF GVL_InstruTestUIVars.g_manualPowerBoxCalibration THEN
+		FOR j:=4 TO g_sJntNum DO
+			GVL_InstruTestUIVars.g_powerBoxCalibrationPos[i,j]:=SlaveArmControl.m_slaveRobot.m_slaveArms[i].m_joints[j].m_motorInputs.m_linkEncoder;
+		END_FOR
+		GVL_SlaveJointEncoderCaliData.g_caliLinkEncoder:=GVL_InstruTestUIVars.g_powerBoxCalibrationPos;
+		GVL_InstruTestUIVars.g_manualPowerBoxCalibration:=FALSE;
+		GVL_InstruTestUIVars.g_powerBoxCalibrationFlag:=FALSE;
+	END_IF
 END_FOR
-]]></ST>
+m_enableMode:=GVL_InstruTestUIVars.g_testMode<>4 AND GVL_InstruTestUIVars.g_testMode<>5;
+GVL_InstruTestUIVars.g_logOutEnable:=GVL_InstruTestUIVars.g_stateMachine<>SlaveArmState_InstruAutoTest;
+GVL_InstruTestUIVars.g_snappingSeparatoring:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_MountPanel;
+GVL_InstruTestUIVars.g_instruAutoSnapping:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_MountInstru;
+GVL_InstruTestUIVars.g_instruCalibrationing:=m_instruCali[1].getState AND GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruCali;
+GVL_MES.g_autoTestMode:=m_instruAutoTest[1].getTestMode;
+GVL_InstruTestUIVars.g_testEnable:=m_slaveArms[1].instrument.onChipData.m_InstruReadSucceed AND m_instrumentMountedFlag[1];
+IF NOT GVL_InstruTestUIVars.g_testEnable THEN
+	GVL_InstruTestUIVars.g_instruAutoTestFlag:=FALSE;
+	GVL_InstruTestUIVars.g_instruManualTestFlag:=FALSE;
+	GVL_InstruTestUIVars.g_instruVerifyFlag:=FALSE;
+END_IF
+GVL_InstruTestUIVars.g_standbyEnable:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_Standby AND NOT m_slaveArms[1].panelOn;]]></ST>
       </Implementation>
     </Method>
     <Method Name="updateArmLight" Id="{0d4d98a3-ae97-4bc5-8d05-6e3f5cc1e792}">
@@ -499,6 +534,7 @@ END_FOR
       <LineId Id="189" Count="2" />
       <LineId Id="199" Count="0" />
       <LineId Id="110" Count="0" />
+      <LineId Id="206" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="101" Count="0" />
@@ -514,8 +550,36 @@ END_FOR
       <LineId Id="22" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.stateMachine">
-      <LineId Id="1050" Count="202" />
+      <LineId Id="1260" Count="59" />
+      <LineId Id="1489" Count="0" />
+      <LineId Id="1320" Count="72" />
+      <LineId Id="1478" Count="0" />
+      <LineId Id="1480" Count="1" />
+      <LineId Id="1479" Count="0" />
+      <LineId Id="1393" Count="0" />
+      <LineId Id="1477" Count="0" />
+      <LineId Id="1395" Count="51" />
+      <LineId Id="1474" Count="1" />
+      <LineId Id="1473" Count="0" />
+      <LineId Id="1476" Count="0" />
+      <LineId Id="1447" Count="17" />
+      <LineId Id="1498" Count="0" />
+      <LineId Id="1503" Count="2" />
+      <LineId Id="1499" Count="0" />
+      <LineId Id="1501" Count="0" />
+      <LineId Id="1531" Count="0" />
+      <LineId Id="1500" Count="0" />
+      <LineId Id="1465" Count="0" />
       <LineId Id="1016" Count="0" />
+      <LineId Id="1513" Count="0" />
+      <LineId Id="1522" Count="0" />
+      <LineId Id="1521" Count="0" />
+      <LineId Id="1523" Count="0" />
+      <LineId Id="1539" Count="0" />
+      <LineId Id="1548" Count="2" />
+      <LineId Id="1552" Count="1" />
+      <LineId Id="1551" Count="0" />
+      <LineId Id="1547" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.updateArmLight">
       <LineId Id="8" Count="7" />

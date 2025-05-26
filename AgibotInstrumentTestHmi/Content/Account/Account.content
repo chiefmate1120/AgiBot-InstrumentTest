@@ -1,0 +1,1247 @@
+<div id="Logon_2" data-tchmi-type="TcHmi.Controls.System.TcHmiContent" data-tchmi-top="0" data-tchmi-left="0" data-tchmi-width="1861" data-tchmi-height="1640" data-tchmi-zindex="26">
+<div id="TcHmiButton_450" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1538" data-tchmi-left-unit="px" data-tchmi-text="退出" data-tchmi-top="735" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiButton_450.onPressed",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_account::actualPermission%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "value": 4
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiRegion_33::TargetContent%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/ContentPath",
+                  "value": "Content/ContentP.content"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "elseif": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_account::actualPermission%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "value": 3
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiRegion_33::TargetContent%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/ContentPath",
+                  "value": "Content/ContentTechnician.content"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "elseif": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_account::actualPermission%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "value": 2
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiRegion_33::TargetContent%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/ContentPath",
+                  "value": "Content/ContentRD.content"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "elseif": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_account::actualPermission%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/USINT",
+                  "value": 1
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiRegion_33::TargetContent%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/ContentPath",
+                  "value": "Content/ContentAdmin.content"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiRegion_33::TargetContent%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/ContentPath",
+                  "value": "Content/Account/Logon.content"
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+
+
+
+
+
+
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(0, 0, 0, 1)"
+}
+</script>
+</div>
+<div id="TcHmiTextblock_1690" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户1账号" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1691" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[1]%/s%" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1371" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+</div>
+<div id="TcHmiTextblock_1692" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户2账号" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1693" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[2]%/s%" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1372" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+</div>
+<div id="TcHmiTextblock_1694" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户3账号" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1695" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[3]%/s%" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1373" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+</div>
+<div id="TcHmiTextblock_1696" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户4账号" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1697" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[4]%/s%" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1374" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+</div>
+<div id="TcHmiTextblock_1698" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户5账号" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1699" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[5]%/s%" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1375" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="25">
+</div>
+<div id="TcHmiTextblock_1700" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户6账号" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1701" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[6]%/s%" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1376" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="24">
+</div>
+<div id="TcHmiTextblock_1702" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户7账号" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1703" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[7]%/s%" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1377" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="23">
+</div>
+<div id="TcHmiTextblock_1704" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户8账号" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1705" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[8]%/s%" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1378" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="22">
+</div>
+<div id="TcHmiTextblock_1706" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户9账号" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1707" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[9]%/s%" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1379" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="21">
+</div>
+<div id="TcHmiTextblock_1708" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户10账号" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1709" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[10]%/s%" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1380" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="20">
+</div>
+<div id="TcHmiTextblock_1710" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户11账号" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1711" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[11]%/s%" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1381" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="19">
+</div>
+<div id="TcHmiTextblock_1712" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户12账号" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1713" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[12]%/s%" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1382" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="17">
+</div>
+<div id="TcHmiTextblock_1714" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户13账号" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1715" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[13]%/s%" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1383" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="18">
+</div>
+<div id="TcHmiTextblock_1716" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户14账号" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1717" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[14]%/s%" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1384" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="16">
+</div>
+<div id="TcHmiTextblock_1718" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户15账号" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1719" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[15]%/s%" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1385" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="15">
+</div>
+<div id="TcHmiTextblock_1720" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户16账号" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1721" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[16]%/s%" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1386" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="14">
+</div>
+<div id="TcHmiTextblock_1722" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户17账号" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1723" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[17]%/s%" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1387" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="13">
+</div>
+<div id="TcHmiTextblock_1724" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户18账号" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1725" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[18]%/s%" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1388" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="12">
+</div>
+<div id="TcHmiTextblock_1726" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户19账号" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1727" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[19]%/s%" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1389" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="11">
+</div>
+<div id="TcHmiTextblock_1728" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="9" data-tchmi-left-unit="px" data-tchmi-text="用户20账号" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1729" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[20]%/s%" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1390" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="144" data-tchmi-left-unit="px" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="10">
+</div>
+<div id="TcHmiTextblock_1730" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户21账号" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1731" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[21]%/s%" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1391" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="9">
+</div>
+<div id="TcHmiTextblock_1732" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户22账号" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1733" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[22]%/s%" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1392" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="8">
+</div>
+<div id="TcHmiTextblock_1734" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户23账号" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1735" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[23]%/s%" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1393" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="7">
+</div>
+<div id="TcHmiTextblock_1736" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户24账号" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1737" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[24]%/s%" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1394" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="6">
+</div>
+<div id="TcHmiTextblock_1738" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户25账号" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1739" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[25]%/s%" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="5">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1395" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="25">
+</div>
+<div id="TcHmiTextblock_1740" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户26账号" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1741" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[26]%/s%" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1396" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="24">
+</div>
+<div id="TcHmiTextblock_1742" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户27账号" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1743" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[27]%/s%" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1397" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="23">
+</div>
+<div id="TcHmiTextblock_1744" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户28账号" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1745" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[28]%/s%" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1398" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="22">
+</div>
+<div id="TcHmiTextblock_1746" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户29账号" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1747" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[29]%/s%" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1399" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="21">
+</div>
+<div id="TcHmiTextblock_1748" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户30账号" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1749" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[30]%/s%" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1400" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="20">
+</div>
+<div id="TcHmiTextblock_1750" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户31账号" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1751" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[31]%/s%" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1401" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="19">
+</div>
+<div id="TcHmiTextblock_1752" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户32账号" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1753" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[32]%/s%" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1402" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="17">
+</div>
+<div id="TcHmiTextblock_1754" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户33账号" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1755" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[33]%/s%" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1403" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="829" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="18">
+</div>
+<div id="TcHmiTextblock_1756" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户34账号" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1757" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[34]%/s%" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1404" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="894" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="16">
+</div>
+<div id="TcHmiTextblock_1758" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户35账号" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1759" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[35]%/s%" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1405" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="15">
+</div>
+<div id="TcHmiTextblock_1760" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户36账号" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1761" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[36]%/s%" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1406" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="14">
+</div>
+<div id="TcHmiTextblock_1762" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户37账号" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1763" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[37]%/s%" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1407" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="13">
+</div>
+<div id="TcHmiTextblock_1764" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户38账号" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1765" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[38]%/s%" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1408" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="1158" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="12">
+</div>
+<div id="TcHmiTextblock_1766" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户39账号" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1767" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[39]%/s%" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1409" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="11">
+</div>
+<div id="TcHmiTextblock_1768" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="589" data-tchmi-left-unit="px" data-tchmi-text="用户40账号" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1769" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[40]%/s%" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1410" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="724" data-tchmi-left-unit="px" data-tchmi-top="1291" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="10">
+</div>
+<div id="TcHmiTextblock_1770" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户41账号" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1771" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[41]%/s%" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1411" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="0">
+</div>
+<div id="TcHmiTextblock_1772" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户42账号" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1773" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[42]%/s%" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1412" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="1">
+</div>
+<div id="TcHmiTextblock_1774" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户43账号" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1775" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[43]%/s%" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1413" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="2">
+</div>
+<div id="TcHmiTextblock_1776" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户44账号" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1777" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[44]%/s%" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1414" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="226" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
+</div>
+<div id="TcHmiTextblock_1778" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户45账号" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1779" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[45]%/s%" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1415" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="295" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="25">
+</div>
+<div id="TcHmiTextblock_1780" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户46账号" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1781" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[46]%/s%" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1416" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="360" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="24">
+</div>
+<div id="TcHmiTextblock_1782" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户47账号" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1783" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[47]%/s%" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1417" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="23">
+</div>
+<div id="TcHmiTextblock_1784" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户48账号" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1785" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[48]%/s%" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1418" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="491" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="22">
+</div>
+<div id="TcHmiTextblock_1786" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户49账号" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1787" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[49]%/s%" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1419" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="21">
+</div>
+<div id="TcHmiTextblock_1788" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1154" data-tchmi-left-unit="px" data-tchmi-text="用户50账号" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiTextblock_1789" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_account::memoryAccountNumber[50]%/s%" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiRectangle_1420" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1289" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="20">
+</div>
+<div id="TcHmiTextblock_1790" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1150" data-tchmi-left-unit="px" data-tchmi-text="用户序号" data-tchmi-top="735" data-tchmi-top-unit="px" data-tchmi-width="120" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="30" data-tchmi-text-font-size="20">
+</div>
+<div id="TcHmiButton_451" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1412" data-tchmi-left-unit="px" data-tchmi-text="删除" data-tchmi-top="700" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiButton_451.onStatePressed",
+    "actions": [
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_accountDelete%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": true
+        },
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "TcHmiButton_451.onStateReleased",
+    "actions": [
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_accountDelete%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": false
+        },
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "%s%PLC1.GVL_InstruTestUIVars.g_accountDelete%/s%",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_accountDelete%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_451::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(104, 236, 30, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_451::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      },
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%ctrl%TcHmiButton_451::BackgroundColor%/ctrl%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:framework#/definitions/Color",
+          "value": null
+        },
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+
+
+
+
+
+
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(0, 0, 0, 1)"
+}
+</script>
+</div>
+<div id="TcHmiTextbox_226" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextbox" data-tchmi-height="32" data-tchmi-height-unit="px" data-tchmi-left="1309" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_accountSN%/s%" data-tchmi-top="745" data-tchmi-top-unit="px" data-tchmi-width="82" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-zindex="1">
+<script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
+{
+  "top": 3,
+  "right": 3,
+  "bottom": 3,
+  "left": 3
+}
+</script>
+
+
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiTextbox_226.onTextChanged",
+    "actions": [
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_accountSN%/s%",
+        "value": {
+          "objectType": "Symbol",
+          "valueType": "tchmi:general#/definitions/String",
+          "symbolExpression": "%ctrl%TcHmiTextbox_226::Text%/ctrl%"
+        },
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+</div>
+<div id="TcHmiButton_462" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="1412" data-tchmi-left-unit="px" data-tchmi-text="禁用/启用" data-tchmi-top="775" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiButton_462.onStatePressed",
+    "actions": [
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_disableAccount%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": true
+        },
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "TcHmiButton_462.onStateReleased",
+    "actions": [
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_disableAccount%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": false
+        },
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "%s%PLC1.GVL_InstruTestUIVars.g_disableAccount%/s%",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_disableAccount%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_462::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(104, 236, 30, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_462::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      },
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%ctrl%TcHmiButton_462::BackgroundColor%/ctrl%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:framework#/definitions/Color",
+          "value": null
+        },
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+
+
+
+
+
+
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(0, 0, 0, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_67" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-text="" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[1]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_68" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[2]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_69" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="164" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[3]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_70" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="363" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[6]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_71" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="298" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[5]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_72" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="230" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[4]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_73" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="429" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[7]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_74" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="494" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[8]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_75" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="567" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[9]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_76" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[12]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_77" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[11]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_78" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[10]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_79" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="835" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[13]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_80" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="897" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[14]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_81" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[15]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_82" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="1161" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[18]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_83" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[17]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_84" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[16]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_85" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="1294" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[20]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_86" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="483" data-tchmi-left-unit="px" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[19]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_87" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[21]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_88" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="95" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[22]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_89" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="164" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[23]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_90" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="363" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[26]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_91" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="298" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[25]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_92" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="230" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[24]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_93" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="429" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[27]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_94" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="494" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[28]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_95" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="567" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[29]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_96" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="760" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[32]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_97" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="695" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[31]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_98" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[30]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_99" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="835" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[33]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_100" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="897" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[34]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_101" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="960" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[35]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_102" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="1161" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[38]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_103" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="1093" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[37]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_104" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="1025" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[36]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_105" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="1294" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[40]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_106" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1063" data-tchmi-left-unit="px" data-tchmi-top="1226" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[39]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_107" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="161" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[43]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_108" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="96" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[42]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_109" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="30" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[41]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_110" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="236" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[44]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_111" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="298" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[45]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_112" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="361" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[46]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_113" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="564" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[49]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_114" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="494" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[48]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_115" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="426" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[47]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRadioButton_117" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRadioButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1628" data-tchmi-left-unit="px" data-tchmi-top="629" data-tchmi-top-unit="px" data-tchmi-width="48" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-state-symbol="%s%PLC1.GVL_InstruTestUIVars.g_account.memoryDisable[50]%/s%" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-radio-state-icon-color" type="application/json">
+{
+  "color": "rgba(28, 235, 94, 1)"
+}
+</script>
+</div>
+</div>

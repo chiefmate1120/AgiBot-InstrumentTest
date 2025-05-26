@@ -3,9 +3,7 @@
   <POU Name="FB_Instrument" Id="{851fd539-e88c-4a52-b2dc-b810ec435a75}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Instrument
 
-VAR_IN_OUT CONSTANT
-	i_slaveArm	:FB_SlaveArm;
-END_VAR
+
 
 VAR
 	// instrument type
@@ -70,7 +68,7 @@ VAR
 	m_signL1,m_signL2,m_signL3:UDINT;
 	m_UsageReadResult:ULINT;
 	m_InstruUsageToLED:ULINT;
-	
+	m_purposeReadResult:ULINT;
 	m_HaveRecord:BOOL;
 	m_SdoWrite:FB_EcCoESdoWrite;
 	m_SdoRead:FB_EcCoESdoRead;
@@ -86,6 +84,7 @@ VAR
 	m_SDOStep: INT;
 	m_fbTon_Step: ARRAY[0..5] OF TON;
 	value: ULINT;
+	m_purposeMode:uINT;
 END_VAR
 
 ]]></Declaration>
@@ -121,6 +120,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[// search instrument type
 checkInstruType :=FALSE;
+ //m_onChipData.m_InstruID := InstruType_UltrasoundKnifeS;
 FOR i:=1 TO g_instruTypeNum DO 
 	IF g_instruTypePool[i].m_InstruID = m_onChipData.m_InstruID THEN
 		checkInstruType:=TRUE;
@@ -725,6 +725,7 @@ END_VAR
 
 VAR
 	paramIdx :INT;
+	endoscopeData:UINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// TODO: read m_kinematic parameters from chip 
@@ -775,13 +776,17 @@ CASE m_Step OF
 			m_SdoRead(bExecute:=FALSE);
 			m_Step:=50;
 		END_IF	
-	
-		
 	50://处理序列号，低30位
 		m_onChipData.m_InstruseriesNum:=SHL(m_IDResult,31)+(16#7FFFFFFF AND m_SeriesReadResult);
 		m_onChipData.m_InstruID:=LREAL_TO_INT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,9))); //取十进制前三位为器械ID
+		IF m_onChipData.m_InstruID = InstruType_Endoscope THEN
+			endoscopeData := LREAL_TO_UINT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,7)));
+			endoscopeData := endoscopeData MOD 100;
+			IF endoscopeData>= 25 THEN
+				m_onChipData.m_InstruID := InstruType_NewEndoscope;
+			END_IF
+		END_IF
 		m_Step:=60;
-		
 		
 	60://读取6096---器械零点位置
 		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6096, pDstBuf:= ADR(m_PosReadResult), cbBufLen:= SIZEOF(m_PosReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
@@ -821,6 +826,19 @@ CASE m_Step OF
 		END_IF
 		
 	110:
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6097, pDstBuf:= ADR(m_purposeReadResult), cbBufLen:= SIZEOF(m_purposeReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_Step:=120;
+		END_IF	
+		
+		
+	120:
+		m_onChipData.m_InstruPurpose:=SHR(m_purposeReadResult,16) AND 16#7FFF;
+		m_onChipData.m_InstruPurposeTime:=m_purposeReadResult AND 16#FFFF;
+		m_Step:=130;
+	
+	130:
 		// get insturment typeinfo
 		m_onChipData.m_InstruReadSucceed:=checkInstruType();
 		
@@ -901,7 +919,13 @@ IF NOT m_SdoWrite.bBusy THEN
 	m_resetArmLEDFlag := FALSE;
 END_IF
 
-]]></ST>
+//Reset zero pos
+FOR i:=1 TO 5 DO
+	m_onChipData.m_InstruPos[i]:=0;
+END_FOR
+onChipData.m_InstruusageCounts:=0;
+onChipData.m_InstruPurpose:=0;
+onChipData.m_InstruPurposeTime:=0;]]></ST>
       </Implementation>
     </Method>
     <Property Name="resetArmLED" Id="{55c3281e-2652-4243-8250-a72a78fa0e9b}" FolderPath="property\">
@@ -1004,6 +1028,38 @@ CASE m_useNumStep OF
 		END_IF
 		
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="writePurpose" Id="{13b4eac4-bb8f-4057-9ab2-82e8eeab1f7f}">
+      <Declaration><![CDATA[METHOD writePurpose : BOOL
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF InstruType_Endoscope=m_instruType OR InstruType_NewEndoscope=m_instruType THEN
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum+10;
+ELSIF InstruType_UltrasoundKnifeS=m_instruType OR InstruType_UltrasoundKnifeU=m_instruType THEN 
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum+20;
+ELSE
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum;
+END_IF
+CASE m_purposeMode OF
+	1: m_Value:=16#A OR 16#10000; 
+	2: m_Value:=16#3E7 OR 16#20000; 
+	3: m_Value:=16#A OR 16#30000; 
+	4: m_Value:=16#1E OR 16#40000; 
+	11: m_Value:=16#14 OR 16#10000; 
+	12: m_Value:=16#3E7 OR 16#20000; 
+	13: m_Value:=16#14 OR 16#30000; 
+	14: m_Value:=16#64 OR 16#40000; 
+ELSE
+	RETURN;
+END_CASE
+m_Value:=m_Value OR 16#80000000; 
+m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6097, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
+IF NOT m_SdoWrite.bBusy THEN
+	m_SdoWrite(bExecute:=FALSE);
+	writePurpose := 1;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="writeSNToChip" Id="{83a532fd-275d-44b8-b8ab-c7e1f43e9534}">
@@ -1145,6 +1201,7 @@ o_q1 := g_2pi *  posCode/16#3FF;
     <LineIds Name="FB_Instrument.checkInstruType">
       <LineId Id="468" Count="0" />
       <LineId Id="541" Count="0" />
+      <LineId Id="549" Count="0" />
       <LineId Id="534" Count="1" />
       <LineId Id="537" Count="0" />
       <LineId Id="539" Count="1" />
@@ -1278,7 +1335,15 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="31" Count="5" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParameters">
-      <LineId Id="1095" Count="93" />
+      <LineId Id="1095" Count="47" />
+      <LineId Id="1256" Count="9" />
+      <LineId Id="1149" Count="37" />
+      <LineId Id="1288" Count="0" />
+      <LineId Id="1277" Count="9" />
+      <LineId Id="1289" Count="0" />
+      <LineId Id="1276" Count="0" />
+      <LineId Id="1274" Count="0" />
+      <LineId Id="1188" Count="0" />
       <LineId Id="1239" Count="2" />
       <LineId Id="1238" Count="0" />
       <LineId Id="1200" Count="19" />
@@ -1314,6 +1379,10 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="113" Count="0" />
       <LineId Id="87" Count="0" />
       <LineId Id="17" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="142" Count="2" />
     </LineIds>
     <LineIds Name="FB_Instrument.resetArmLED.Set">
       <LineId Id="2" Count="0" />
@@ -1328,6 +1397,26 @@ o_q1 := g_2pi *  posCode/16#3FF;
     </LineIds>
     <LineIds Name="FB_Instrument.writeNumOfUseToChip">
       <LineId Id="74" Count="45" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.writePurpose">
+      <LineId Id="138" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="130" Count="2" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="133" Count="1" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="84" Count="2" />
+      <LineId Id="137" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.writeSNToChip">

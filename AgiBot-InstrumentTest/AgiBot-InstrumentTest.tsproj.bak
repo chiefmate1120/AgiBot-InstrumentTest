@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.53">
+<TcSmProject xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.beckhoff.com/schemas/2012/07/TcSmProject" TcSmVersion="1.0" TcVersion="3.1.4024.29">
 	<DataTypes>
 		<DataType>
 			<Name GUID="{CC09E5C4-B5B4-D7CD-B4FE-AA9C379B3C8A}" AutoDeleteType="true">ST_MotorInputs</Name>
@@ -105,8 +105,8 @@
 			</ArrayInfo>
 		</DataType>
 		<DataType>
-			<Name GUID="{FFE6EB9D-4294-798A-CDDF-4F1C5212F8FD}" AutoDeleteType="true">Account</Name>
-			<BitSize>107488</BitSize>
+			<Name GUID="{745586A8-1963-5496-68F7-D8EF11800546}" AutoDeleteType="true">Account</Name>
+			<BitSize>139328</BitSize>
 			<SubItem>
 				<Name>logOn</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
@@ -128,7 +128,7 @@
 			<SubItem>
 				<Name>register</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™]]></Comment>
+				<Comment><![CDATA[注册]]></Comment>
 				<BitSize>8</BitSize>
 				<BitOffs>24</BitOffs>
 			</SubItem>
@@ -147,7 +147,7 @@
 			<SubItem>
 				<Name>actualPermission</Name>
 				<Type GUID="{18071995-0000-0000-0000-000000000002}">USINT</Type>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚ÂÃ†â€™ÃƒÂ©Ã¢â€žÂ¢Ã‚Â 0 ÃƒÂ¦Ã¢â‚¬â€Ã‚Â ÃƒÂ§Ã¢â€žÂ¢Ã‚Â»ÃƒÂ¥Ã‚Â½Ã¢â‚¬Â¢ 1 ÃƒÂ§Ã¢â‚¬ÂÃ…Â¸ÃƒÂ¤Ã‚ÂºÃ‚Â§ 2 ÃƒÂ¨Ã‚Â´Ã‚Â¨ÃƒÂ©Ã¢â‚¬Â¡Ã‚Â 3 ÃƒÂ§Ã‚Â Ã¢â‚¬ÂÃƒÂ¥Ã‚ÂÃ¢â‚¬Ëœ 4 ÃƒÂ§Ã‚Â®Ã‚Â¡ÃƒÂ§Ã‚ÂÃ¢â‚¬Â ]]></Comment>
+				<Comment><![CDATA[权限 0 无登录 1 管理 2 研发 3 质量 4 生产]]></Comment>
 				<BitSize>8</BitSize>
 				<BitOffs>1328</BitOffs>
 			</SubItem>
@@ -196,7 +196,7 @@
 			<SubItem>
 				<Name>prompt</Name>
 				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚ÂÃ‚ÂÃƒÂ§Ã‚Â¤Ã‚Âº]]></Comment>
+				<Comment><![CDATA[提示]]></Comment>
 				<BitSize>648</BitSize>
 				<BitOffs>4008</BitOffs>
 			</SubItem>
@@ -207,7 +207,7 @@
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚ÂÃ‚Â·]]></Comment>
+				<Comment><![CDATA[注册账号]]></Comment>
 				<BitSize>33048</BitSize>
 				<BitOffs>4656</BitOffs>
 			</SubItem>
@@ -218,7 +218,7 @@
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â¯Ã¢â‚¬Â ÃƒÂ§Ã‚Â Ã‚Â]]></Comment>
+				<Comment><![CDATA[注册账密码]]></Comment>
 				<BitSize>33048</BitSize>
 				<BitOffs>37704</BitOffs>
 			</SubItem>
@@ -229,7 +229,7 @@
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¦Ã‚ÂÃ†â€™ÃƒÂ©Ã¢â€žÂ¢Ã‚Â]]></Comment>
+				<Comment><![CDATA[注册账权限]]></Comment>
 				<BitSize>408</BitSize>
 				<BitOffs>70752</BitOffs>
 			</SubItem>
@@ -240,7 +240,7 @@
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â·Ã‚Â¥ÃƒÂ¥Ã‚ÂÃ‚Â·]]></Comment>
+				<Comment><![CDATA[注册账工号]]></Comment>
 				<BitSize>1632</BitSize>
 				<BitOffs>71168</BitOffs>
 			</SubItem>
@@ -251,20 +251,31 @@
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¨Ã‚Â´Ã‚Â¦ÃƒÂ¥Ã‚Â§Ã¢â‚¬Å“ÃƒÂ¥Ã‚ÂÃ‚Â]]></Comment>
+				<Comment><![CDATA[注册账姓名]]></Comment>
 				<BitSize>33048</BitSize>
 				<BitOffs>72800</BitOffs>
 			</SubItem>
 			<SubItem>
 				<Name>memoryTime</Name>
-				<Type GUID="{18071995-0000-0000-0000-000000000048}">TIME</Type>
+				<Type GUID="{18071995-0000-0000-0000-000100000050}">STRING(80)</Type>
 				<ArrayInfo>
 					<LBound>0</LBound>
 					<Elements>51</Elements>
 				</ArrayInfo>
-				<Comment><![CDATA[ÃƒÂ¦Ã‚Â³Ã‚Â¨ÃƒÂ¥Ã¢â‚¬Â Ã…â€™ÃƒÂ¦Ã¢â‚¬â€Ã‚Â¶ÃƒÂ©Ã¢â‚¬â€Ã‚Â´]]></Comment>
-				<BitSize>1632</BitSize>
-				<BitOffs>105856</BitOffs>
+				<Comment><![CDATA[注册时间]]></Comment>
+				<BitSize>33048</BitSize>
+				<BitOffs>105848</BitOffs>
+			</SubItem>
+			<SubItem>
+				<Name>memoryDisable</Name>
+				<Type GUID="{18071995-0000-0000-0000-000000000030}">BOOL</Type>
+				<ArrayInfo>
+					<LBound>0</LBound>
+					<Elements>51</Elements>
+				</ArrayInfo>
+				<Comment><![CDATA[使能]]></Comment>
+				<BitSize>408</BitSize>
+				<BitOffs>138896</BitOffs>
 			</SubItem>
 		</DataType>
 		<DataType>
@@ -424,6 +435,7 @@
 			</Settings>
 			<Licenses CacheOrCheckLicensesOnStartup="true">
 				<Target>
+					<ManualSelect>{3EBB9639-5FF3-42B6-8847-35C70DC013C8}</ManualSelect>
 					<LicenseDevice Disabled="true" DongleHardwareId="2" DongleDevice="#x03020017" DongleLevel="92" DongleSerialNumber="000brza4"/>
 				</Target>
 			</Licenses>
@@ -435,7 +447,7 @@
 		</System>
 		<Plc>
 			<Project GUID="{0C182974-8910-4DEE-A0B7-B414028AF699}" Name="SlaveController" PrjFilePath="SlaveController\SlaveController.plcproj" TmcFilePath="SlaveController\SlaveController.tmc" ReloadTmc="true" AmsPort="851" TargetArchiveSettings="#x0001" FileArchiveSettings="#x0000" SymbolicMapping="true">
-				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SlaveController\SlaveController.tmc" TmcHash="{CCFCCF3B-91DD-D4F2-B933-DFDDEF30DC80}">
+				<Instance Id="#x08502000" TcSmClass="TComPlcObjDef" KeepUnrestoredLinks="2" TmcPath="SlaveController\SlaveController.tmc">
 					<Name>SlaveController Instance</Name>
 					<CLSID ClassFactory="TcPlc30">{08500001-0000-0000-F000-000000000064}</CLSID>
 					<Vars VarGrpType="1">
@@ -548,7 +560,7 @@
 						<Var>
 							<Name>GVL_InstruTestUIVars.g_account</Name>
 							<Comment><![CDATA[ 账户]]></Comment>
-							<Type GUID="{FFE6EB9D-4294-798A-CDDF-4F1C5212F8FD}">Account</Type>
+							<Type GUID="{745586A8-1963-5496-68F7-D8EF11800546}">Account</Type>
 							<InOut>7</InOut>
 						</Var>
 						<Var>
@@ -670,7 +682,7 @@
 					</UnrestoredVarLinks>
 					<Contexts>
 						<Context>
-							<Id>0</Id>
+							<Id NeedCalleeCall="true">0</Id>
 							<Name>TaskSlaveArmControl</Name>
 							<ManualConfig>
 								<OTCID>#x02010030</OTCID>
@@ -687,13 +699,13 @@
 			<PlcAuxTask Affinity="#x00000040"/>
 		</Plc>
 		<Io>
-			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="192.168.2.195.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="3">
+			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="169.254.106.122.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="3">
 				<Name>Device 3 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
 						<DeviceDesc>? (TwinCAT-Intel PCI Ethernet Adapter (Gigabit</DeviceDesc>
-						<DeviceName>\DEVICE\{F37EED28-5D5A-44EE-9CB5-1B9F59B895AE}</DeviceName>
-						<DeviceData>68eda467852b</DeviceData>
+						<DeviceName>\DEVICE\{461C00D3-A043-49D8-9F72-D82FBA7EA80A}</DeviceName>
+						<DeviceData>00e2699180e2</DeviceData>
 					</Pnp>
 				</AddressInfo>
 				<Image Id="2" AddrType="9" ImageType="3">

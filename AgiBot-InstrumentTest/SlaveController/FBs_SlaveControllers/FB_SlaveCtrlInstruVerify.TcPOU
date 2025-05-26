@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveCtrlInstruVerify" Id="{74bf1659-c4e2-4299-b125-0d552104c6b1}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruVerify EXTENDS FB_SlaveArmCtrlBase
@@ -53,7 +53,7 @@ VAR
 	0,		0-90,		0,				15,		0,
 	0,		0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,	    0,
 	0,		0-90,		0,				30,	    0,
-	0,		0-90,		0,				GVL_InstruTestUIVars.g_minGripAngle,	    0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_minGripAngle,	    100,
 	0,		0-90,		0,				0,	    0
 	];
 	m_openGripMoveTest: ARRAY [1..60, 1..5] OF LREAL:=
@@ -244,7 +244,8 @@ VAR
 	0,		0-90,		0,				0,	    0,
 	0,		0-90,		0,				GVL_InstruTestUIVars.g_maxGripAngle,	    0,
 	0,		0-90,		0,				0,	    0,
-	0,		0-90,		0,				-GVL_InstruTestUIVars.g_minGripAngle,	    0,
+	0,		0-90,		0,				GVL_InstruTestUIVars.g_minGripAngle,	    100,
+	0,		0-90,		0,				0,	    0,
 	0,		0-90,		0,				0,	    0,
 	0,		0-90,		0,				0,	    0
 	];
@@ -363,8 +364,6 @@ m_jntOPMode[7] := DriverOPMode_Trq;
 m_jntOPMode[8] := DriverOPMode_Trq;
 m_armIdx:=i_slaveArm.armIdx;
 fbTime.init();
-GVL_InstruTestUIVars.g_autoTestStart:=FALSE;
-GVL_InstruTestUIVars.g_autoTestStop:=FALSE;
 
 //IF i_slaveArm.instrument.onChipData.m_InstruReadSucceed AND (InstruType_UltrasoundKnifeS = i_slaveArm.instrument.m_instruType 
  //  OR InstruType_UltrasoundKnifeU = i_slaveArm.instrument.m_instruType) THEN
@@ -428,7 +427,7 @@ END_VAR]]></Declaration>
 	0:
 		m_testStep := LIMIT(0,m_testStep, 12);
 		m_instruPos:=m_postureTest;
-		iStep1:=11;
+		iStep1:=12;
 		iStep2:=10;
 	1:
 		m_testStep := LIMIT(0,m_testStep, 8);
@@ -568,7 +567,7 @@ END_CASE]]></ST>
       <LineId Id="86" Count="6" />
       <LineId Id="19" Count="0" />
       <LineId Id="207" Count="0" />
-      <LineId Id="226" Count="2" />
+      <LineId Id="228" Count="0" />
       <LineId Id="206" Count="0" />
       <LineId Id="222" Count="0" />
       <LineId Id="225" Count="0" />

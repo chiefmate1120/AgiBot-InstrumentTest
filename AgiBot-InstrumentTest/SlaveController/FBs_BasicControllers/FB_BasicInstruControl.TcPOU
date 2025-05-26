@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_BasicInstruControl" Id="{133d07e3-99c5-4338-ad65-0a5f3241047e}" SpecialFunc="None">
     <Declaration><![CDATA[// instrument joints control
 FUNCTION_BLOCK FB_BasicInstruControl
@@ -13,7 +13,7 @@ VAR
 	m_instruKd:ARRAY[1..5] OF LREAL:=[4(0.25), 0];
 	m_instruKi:ARRAY[1..5] OF LREAL:=[4(10.0),0];
 	m_instruKiLimit:ARRAY[1..5] OF LREAL:=[5(50.0)];
-	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[2(120.0), 3(200.0)];
+	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[(*2(120.0), *)5(250.0)];
 	
 	// gripper force level threshold for variable PID parameter
 	m_forceLevelThres : ARRAY[1..3] OF LREAL := [40, 70, 101];
@@ -23,11 +23,11 @@ VAR
 	m_yawKd:ARRAY[1..3] OF LREAL:=[0.25, 0.4, 0.6];
 	m_yawKi:ARRAY[1..3] OF LREAL:=[10.0, 15.0, 20.0];
 	m_yawKiLimit:LREAL:=100.0;
-	m_yawCtrlLimit:LREAL:=200.0;
+	m_yawCtrlLimit:LREAL:=250.0;
 	
 	// max grip force/current(mA)
 	m_maxGripForce:LREAL;
-	m_maxGripCurrent:LREAL:=150.0;
+	m_maxGripCurrent:LREAL:=250.0;
 	
 	// max gripper finger control force/current(mA)
 	m_maxGripCtrlForce:LREAL;
@@ -157,12 +157,41 @@ FOR i:=1 TO 4 DO
 	ELSE
 		maxBacklash:=0;
 	END_IF
+	
+	IF GVL_InstruTestUIVars.g_enableRDCompensation THEN 
+		GVL_InstruTestUIVars.g_enableBackendCompensation:=0;
+		IF InstruType_ProGraspForceps = i_slaveArm.instrument.onChipData.m_InstruID THEN
+			IF i<3 THEN 
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[2]*i_slaveArm.instrument.instruTypeInfo.m_k2*g_deg2Rad));
+			ELSIF i=3 THEN
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[1]*i_slaveArm.instrument.instruTypeInfo.m_k1*g_deg2Rad));
+			ELSIF i=4 THEN
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[3]*i_slaveArm.instrument.instruTypeInfo.m_k3*g_deg2Rad));
+			ELSE
+				maxBacklash:=0;
+			END_IF
+		ELSE
+			IF i<3 THEN 
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[2]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k2;
+			ELSIF i=3 THEN
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[1]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k1;
+			ELSIF i=4 THEN
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[3]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k3;
+			ELSE
+				maxBacklash:=0;
+			END_IF
+		END_IF
+	END_IF
+	
 	IF g_instruBacklashDir[i] > 0 THEN
 		m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], maxBacklash);
 	ELSE
 		m_jntBacklash [i] := LIMIT(-maxBacklash, m_jntBacklash[i], 0);	
 	END_IF
 	
+	IF GVL_InstruTestUIVars.g_enableBackendCompensation THEN 
+		m_jntBacklash [i] := 0;
+	END_IF
 	
 END_FOR]]></ST>
       </Implementation>
@@ -287,9 +316,22 @@ o_cmdJntTrq := m_instruJntCtrlTrq;]]></ST>
       <LineId Id="468" Count="0" />
       <LineId Id="515" Count="2" />
       <LineId Id="466" Count="0" />
+      <LineId Id="560" Count="0" />
+      <LineId Id="562" Count="1" />
+      <LineId Id="590" Count="0" />
+      <LineId Id="597" Count="7" />
+      <LineId Id="592" Count="1" />
+      <LineId Id="605" Count="7" />
+      <LineId Id="595" Count="0" />
+      <LineId Id="574" Count="0" />
+      <LineId Id="564" Count="0" />
+      <LineId Id="561" Count="0" />
       <LineId Id="519" Count="3" />
       <LineId Id="518" Count="0" />
-      <LineId Id="539" Count="1" />
+      <LineId Id="559" Count="0" />
+      <LineId Id="539" Count="0" />
+      <LineId Id="557" Count="1" />
+      <LineId Id="540" Count="0" />
       <LineId Id="448" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.init">

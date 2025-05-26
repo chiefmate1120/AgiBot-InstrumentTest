@@ -28,6 +28,14 @@
     "DEFAULTTIMEZONE": "client",
     "DEFAULTUSERGROUP": "__SystemUsers",
     "DEFINITIONS": {
+        "PLC1.ARRAY_0..50_OF-BOOL": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "maxItems": 51,
+            "minItems": 51,
+            "type": "array"
+        },
         "PLC1.ARRAY_0..50_OF-STRING-80": {
             "items": {
                 "$ref": "tchmi:general#/definitions/STRING%2880%29"
@@ -480,8 +488,8 @@
     "DISCOVERY": 2,
     "ENABLE_SERVER_UPDATE": true,
     "ENDPOINTS": [
-        "http://127.0.0.1:13004",
-        "http://127.0.0.1:3002"
+        "http://127.0.0.1:13006",
+        "http://127.0.0.1:3005"
     ],
     "ETAGENABLED": true,
     "EXTENSIONS": {
@@ -2965,6 +2973,44 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_account.memoryDisable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_account::memoryDisable",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.ARRAY_0..50_OF-BOOL"
+                    },
+                    {
+                        "comment": "Ê¹ÄÜ",
+                        "propertyOrder": 22
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_accountDelete": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_accountDelete",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_accountSN": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_accountSN",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_actualRatedCurrent": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3308,6 +3354,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_cycleEndoscopeTest": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_cycleEndoscopeTest",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_deviationActualCurrent": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3355,6 +3411,26 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_disableAccount": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_disableAccount",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_disableAccpunt": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_disableAccpunt",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_enableBackendCompensation": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3389,6 +3465,26 @@
                         "comment": "µç»úÊ¹ÄÜ×´Ì¬"
                     }
                 ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_endoscopeAngle": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_endoscopeAngle",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_endoscopeTest": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_endoscopeTest",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
             },
             "USEMAPPING": true
         },
@@ -3476,6 +3572,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_instruAutoSnapping": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruAutoSnapping",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_instruAutoTestFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3544,6 +3650,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_instruCalibrationing": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruCalibrationing",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3602,6 +3718,16 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruSN",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/ULINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instruSNLen": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruSNLen",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
             },
             "USEMAPPING": true
         },
@@ -3753,11 +3879,61 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_jogClose": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_jogClose",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_lastStep": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
             "DYNAMIC": true,
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_lastStep",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_logOutEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_logOutEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_manualPowerBoxCalibration": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_manualPowerBoxCalibration",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxAngle": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxAngle",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxAngleEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxAngleEnable",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/BOOL"
             },
@@ -3807,6 +3983,66 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxInstruAutoTestCycles",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/DINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxPitch": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxPitch",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxPitchEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxPitchEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxRoll": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxRoll",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxRollEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxRollEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxYaw": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxYaw",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_maxYawEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_maxYawEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
             },
             "USEMAPPING": true
         },
@@ -4029,6 +4265,96 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_queryAccountFlag": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryAccountFlag",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryAccountNumber": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryAccountNumber",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryAccountSN": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryAccountSN",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryClear": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryClear",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryName": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryName",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryPassWord": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryPassWord",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryPermission": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryPermission",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/USINT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryTime": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryTime",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_queryWorkNum": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_queryWorkNum",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/UDINT"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_readENC2PosData": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -4063,6 +4389,23 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_readInstruPurpose": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readInstruPurpose",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/UINT"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡Æ÷ÐµÓÃÍ¾"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_readInstruinformationFlag": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -4075,6 +4418,23 @@
                     },
                     {
                         "comment": "¶ÁÈ¡Æ÷ÐµÐÅÏ¢×´Ì¬"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_readPurposeTime": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_readPurposeTime",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/UINT"
+                    },
+                    {
+                        "comment": "¶ÁÈ¡Æ÷ÐµµÄÓÃÍ¾"
                     }
                 ]
             },
@@ -4215,6 +4575,36 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_snappingSeparatoring": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_snappingSeparatoring",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_standbyEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_standbyEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_startEndoscopeTest": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_startEndoscopeTest",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_stateMachine": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -4327,6 +4717,16 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testCycles",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_testEnable": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_testEnable",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
             },
             "USEMAPPING": true
         },
@@ -4495,6 +4895,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_writeZeroPosFlagErr": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_writeZeroPosFlagErr",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -4577,6 +4987,98 @@
                     },
                     {
                         "$ref": "tchmi:server#/definitions/PLC1.Vec5d"
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_MES.g_attitudeNG": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_MES::g_attitudeNG",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_MES.g_attitudeOK": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_MES::g_attitudeOK",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_MES.g_serialNum": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_MES::g_serialNum",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_MES.g_serialNumLen": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_MES::g_serialNumLen",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/INT"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_enableMode": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_enableMode",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "propertyOrder": 42
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_instruTypeInfo.m_maxGripAngle": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_slaveArms[0]::m_instrument::m_instruTypeInfo::m_maxGripAngle",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/LREAL"
+                    },
+                    {
+                        "propertyOrder": 10
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_onChipData.m_InstruID": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_slaveArms[0]::m_instrument::m_onChipData::m_InstruID",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/INT"
+                    },
+                    {
+                        "comment": "ID",
+                        "propertyOrder": 1
                     }
                 ]
             },
@@ -5503,6 +6005,9 @@
                 "Logout": 3,
                 "PLC1.GVL_InstruTestUIVars.g_RFID_SN": 3,
                 "PLC1.GVL_InstruTestUIVars.g_account": 3,
+                "PLC1.GVL_InstruTestUIVars.g_account.memoryDisable": 3,
+                "PLC1.GVL_InstruTestUIVars.g_accountDelete": 3,
+                "PLC1.GVL_InstruTestUIVars.g_accountSN": 3,
                 "PLC1.GVL_InstruTestUIVars.g_actualRatedCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_autoTestCycles": 3,
                 "PLC1.GVL_InstruTestUIVars.g_autoTestPause": 3,
@@ -5531,13 +6036,18 @@
                 "PLC1.GVL_InstruTestUIVars.g_curInstruJntPos.3": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curInstruJntPos.4": 3,
                 "PLC1.GVL_InstruTestUIVars.g_curTestCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_cycleEndoscopeTest": 3,
                 "PLC1.GVL_InstruTestUIVars.g_deviationActualCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_deviationAngularAcc": 3,
                 "PLC1.GVL_InstruTestUIVars.g_deviationAngularVel": 3,
                 "PLC1.GVL_InstruTestUIVars.g_deviationTargetCurrent": 3,
+                "PLC1.GVL_InstruTestUIVars.g_disableAccount": 3,
+                "PLC1.GVL_InstruTestUIVars.g_disableAccpunt": 3,
                 "PLC1.GVL_InstruTestUIVars.g_enableBackendCompensation": 3,
                 "PLC1.GVL_InstruTestUIVars.g_enableRDCompensation": 3,
                 "PLC1.GVL_InstruTestUIVars.g_enabled": 3,
+                "PLC1.GVL_InstruTestUIVars.g_endoscopeAngle": 3,
+                "PLC1.GVL_InstruTestUIVars.g_endoscopeTest": 3,
                 "PLC1.GVL_InstruTestUIVars.g_funcCurrentDetection": 3,
                 "PLC1.GVL_InstruTestUIVars.g_goHome": 3,
                 "PLC1.GVL_InstruTestUIVars.g_gripperCloseFlag": 3,
@@ -5545,14 +6055,17 @@
                 "PLC1.GVL_InstruTestUIVars.g_inPos": 3,
                 "PLC1.GVL_InstruTestUIVars.g_incInstruNumOfUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_informationVerificationPassed": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruAutoSnapping": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruAutoTestFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruAutoTestMode": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruCaliFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruCaliState": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruCalibrationing": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruSN": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruSNLen": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruVerifyFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruVerifyLastStepFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruVerifyNextStepFlag": 3,
@@ -5565,11 +6078,22 @@
                 "PLC1.GVL_InstruTestUIVars.g_instrumentAutoSnapping": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instrumentSnapping": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instrumentSnappingStop": 3,
+                "PLC1.GVL_InstruTestUIVars.g_jogClose": 3,
                 "PLC1.GVL_InstruTestUIVars.g_lastStep": 3,
+                "PLC1.GVL_InstruTestUIVars.g_logOutEnable": 3,
+                "PLC1.GVL_InstruTestUIVars.g_manualPowerBoxCalibration": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxAngle": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxAngleEnable": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxGripAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxGripAngle": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxGripForceFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_maxInstruAutoTestCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxPitch": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxPitchEnable": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxRoll": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxRollEnable": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxYaw": 3,
+                "PLC1.GVL_InstruTestUIVars.g_maxYawEnable": 3,
                 "PLC1.GVL_InstruTestUIVars.g_minGripAngle": 3,
                 "PLC1.GVL_InstruTestUIVars.g_modifyRatedCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_motorStops": 3,
@@ -5587,9 +6111,20 @@
                 "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationPos": 3,
                 "PLC1.GVL_InstruTestUIVars.g_powerBoxCalibrationed": 3,
                 "PLC1.GVL_InstruTestUIVars.g_powerOn": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryAccountFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryAccountNumber": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryAccountSN": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryClear": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryName": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryPassWord": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryPermission": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryTime": 3,
+                "PLC1.GVL_InstruTestUIVars.g_queryWorkNum": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readENC2PosData": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readInstruInformation": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readInstruPurpose": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readInstruinformationFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_readPurposeTime": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readRFID": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readRFIDFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_readSNNum": 3,
@@ -5600,6 +6135,9 @@
                 "PLC1.GVL_InstruTestUIVars.g_rotationTargetCurrent": 3,
                 "PLC1.GVL_InstruTestUIVars.g_searchZeroPosFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_snappingSeparator": 3,
+                "PLC1.GVL_InstruTestUIVars.g_snappingSeparatoring": 3,
+                "PLC1.GVL_InstruTestUIVars.g_standbyEnable": 3,
+                "PLC1.GVL_InstruTestUIVars.g_startEndoscopeTest": 3,
                 "PLC1.GVL_InstruTestUIVars.g_stateMachine": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetGripAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetGripForceLevel": 3,
@@ -5608,6 +6146,7 @@
                 "PLC1.GVL_InstruTestUIVars.g_targetRollAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_targetYawAng": 3,
                 "PLC1.GVL_InstruTestUIVars.g_testCycles": 3,
+                "PLC1.GVL_InstruTestUIVars.g_testEnable": 3,
                 "PLC1.GVL_InstruTestUIVars.g_testMode": 3,
                 "PLC1.GVL_InstruTestUIVars.g_testStep": 3,
                 "PLC1.GVL_InstruTestUIVars.g_testTimeHour": 3,
@@ -5621,6 +6160,7 @@
                 "PLC1.GVL_InstruTestUIVars.g_writeSNFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_writeSNNum": 3,
                 "PLC1.GVL_InstruTestUIVars.g_writeZeroPosFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_writeZeroPosFlagErr": 3,
                 "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1": 3,
                 "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L2": 3,
                 "PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L3": 3,
@@ -5629,6 +6169,13 @@
                 "PLC1.GVL_InstruTestUIVars.m_cycleStop": 3,
                 "PLC1.GVL_InstruTestUIVars.m_postureTestStep": 3,
                 "PLC1.GVL_InstruTestUIVars.writeInstruZeroPos": 3,
+                "PLC1.GVL_MES.g_attitudeNG": 3,
+                "PLC1.GVL_MES.g_attitudeOK": 3,
+                "PLC1.GVL_MES.g_serialNum": 3,
+                "PLC1.GVL_MES.g_serialNumLen": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_enableMode": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_instruTypeInfo.m_maxGripAngle": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_onChipData.m_InstruID": 3,
                 "SetLocale": 3,
                 "SubscribeEvents": 3,
                 "TcHmiSqliteLogger.Diagnostics": 1,

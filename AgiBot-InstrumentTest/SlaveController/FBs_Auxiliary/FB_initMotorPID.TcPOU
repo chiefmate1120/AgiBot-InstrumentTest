@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_initMotorPID" Id="{4ddc97dd-2f24-4e06-b715-6f7f397d6966}" SpecialFunc="None">
+    <Declaration><![CDATA[FUNCTION_BLOCK FB_initMotorPID
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	m_SdoWrite:FB_EcCoESdoWrite;
+	m_SdoRead:FB_EcCoESdoRead;
+	m_step:INT;
+	m_armIdx :INT;
+	m_jntIdx :INT;
+	m_curjntIdx: INT;
+	//IP of operating arm
+	m_armNetId:T_AmsNetId; 	
+	
+	//Joint port number
+	m_jointPortAddr:ARRAY[1..g_sJntNum] OF UINT ;
+	m_Value	:UDINT;
+	m_number:INT;
+	m_motorPID:ARRAY[1..g_sJntNum,1..6] OF INT;
+	m_ton:TON;
+	m_readMotorPID:ARRAY[1..g_sJntNum,1..6] OF INT;
+	m_clearReadMotorPID:ARRAY[1..g_sJntNum,1..6] OF INT;
+	m_ifSame:INT;
+	m_isFinished:INT;
+	m_initPID:BOOL:=FALSE;
+	m_stepRun:INT;
+	m_armNum:INT;
+	m_initFinishPID:ARRAY[1..g_sArmNum] OF BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="armMotorRun" Id="{3850e16b-89c4-474c-9f55-3cf66d23e780}">
+      <Declaration><![CDATA[METHOD armMotorRun : BOOL
+VAR_INPUT
+END_VAR
+VAR
+	i:INT;
+	j:INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_ton(IN:= m_step = 10, PT:= T#100MS, Q=> , ET=> );
+CASE m_step OF
+	0: ;
+	2:
+		armMotorRun:=FALSE;
+		m_Step:=5;
+	5://Write
+		m_Value:=INT_TO_UDINT(m_motorPID[m_curjntIdx,m_number] );
+		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_jointPortAddr[m_curjntIdx], nSubIndex:=INT_TO_BYTE( m_number), nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
+		IF NOT m_SdoWrite.bBusy THEN
+			m_SdoWrite(bExecute:=FALSE);
+			m_Step:=10;
+		END_IF
+	10:
+ 		IF m_ton.Q THEN
+			m_step:=15;
+		END_IF
+	15:
+		m_number:=m_number+1;
+		m_step:=5;
+		IF m_number=6+1 THEN
+			m_number:=1;
+			m_curjntIdx:=m_curjntIdx+1;
+		END_IF
+		IF m_curjntIdx=m_jntIdx+1 THEN
+			m_number:=1;
+			m_curjntIdx:=1;
+			m_step:=20;
+		END_IF
+	20://Read
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_jointPortAddr[m_curjntIdx],	nSubIndex:= INT_TO_BYTE( m_number), nIndex:= 16#6090, pDstBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_Step:=25;
+		END_IF	
+	25:
+ 		m_readMotorPID[m_curjntIdx,m_number]:=UDINT_TO_INT(m_Value);
+		m_Step:=27;
+	27: 
+		IF m_ton.Q OR 1  THEN
+			m_step:=30;
+		END_IF
+	30:
+		m_number:=m_number+1;
+		m_step:=20;
+		IF m_number=6+1 THEN
+			m_number:=1;
+			m_curjntIdx:=m_curjntIdx+1;
+		END_IF
+		IF m_curjntIdx=m_jntIdx+1 THEN
+			m_step:=40;
+		END_IF
+	40:
+		FOR i:=1 TO m_jntIdx BY 1 DO
+			FOR j:=1 TO 6 BY 1 DO
+				IF m_readMotorPID[i,j]<>m_motorPID[i,j] THEN
+					m_ifSame:=10;
+				END_IF
+			END_FOR
+		END_FOR
+		m_step:=50;
+	50:
+		IF m_ifSame=5 THEN
+			armMotorRun:=TRUE;
+		ELSE
+			armMotorRun:=FALSE;
+		END_IF
+		m_step:=0;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{bfcc323e-46b2-4d3e-9f3e-193ec1d2026b}">
+      <Declaration><![CDATA[METHOD init : BOOL
+VAR_INPUT
+	i_armIdx :INT;
+END_VAR
+VAR
+	i:INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_step:=2;
+m_armIdx:=i_armIdx;
+m_jntIdx:=g_sJntNum;
+m_curjntIdx:=1;
+m_number:=1;
+m_ifSame:=5;
+m_armNetId:=GVL_SlaveJointEncoderCaliData.g_slaveArmNetID[m_armIdx];
+FOR i:=1 TO m_jntIdx BY 1 DO
+	m_jointPortAddr[i]:=GVL_SlaveJointEncoderCaliData.g_slaveJointNetPort[m_armIdx,i];
+END_FOR
+
+m_motorPID:=GVL_SlaveMotorParameters.g_motorPID;
+
+m_readMotorPID:=m_clearReadMotorPID;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="robotMotorRun" Id="{c50e2ecc-4d5f-4b4b-bf26-12348c102601}">
+      <Declaration><![CDATA[METHOD robotMotorRun : BOOL
+VAR_INPUT
+END_VAR
+VAR
+  i:INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//init motor pid
+IF m_initPID=0 THEN
+	m_stepRun:=5;
+	m_armNum:=1;
+	m_initPID:=1;
+	robotMotorRun:=FALSE;
+	m_isFinished:=5;
+END_IF
+
+CASE m_stepRun OF
+	0:;
+	5:  init(m_armNum);
+		m_stepRun:=10;
+	10: m_initFinishPID[m_armNum]:=armMotorRun();
+	    IF m_step=0 THEN
+			m_stepRun:=15;
+		END_IF
+	15: m_stepRun:=5;
+		m_armNum:=m_armNum+1;
+		IF m_armNum>=g_sArmNum THEN
+			m_stepRun:=20;
+		END_IF
+	20: 
+		FOR i:=1 TO g_sArmNum DO
+			IF NOT m_initFinishPID[i] THEN
+				m_isFinished:=10;
+			END_IF
+		END_FOR
+		m_stepRun:=25;
+	25:
+		IF m_isFinished=5 THEN
+			robotMotorRun:=TRUE;
+		ELSE
+			robotMotorRun:=FALSE;
+		END_IF
+		m_stepRun:=0;
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_initMotorPID">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_initMotorPID.armMotorRun">
+      <LineId Id="96" Count="37" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="163" Count="1" />
+      <LineId Id="162" Count="0" />
+      <LineId Id="134" Count="10" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="172" Count="0" />
+      <LineId Id="150" Count="3" />
+      <LineId Id="173" Count="2" />
+      <LineId Id="178" Count="1" />
+      <LineId Id="176" Count="1" />
+      <LineId Id="7" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_initMotorPID.init">
+      <LineId Id="9" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="21" Count="0" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="30" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_initMotorPID.robotMotorRun">
+      <LineId Id="6" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="11" Count="0" />
+      <LineId Id="63" Count="0" />
+      <LineId Id="86" Count="0" />
+      <LineId Id="12" Count="0" />
+      <LineId Id="36" Count="0" />
+      <LineId Id="5" Count="0" />
+      <LineId Id="39" Count="1" />
+      <LineId Id="47" Count="1" />
+      <LineId Id="37" Count="0" />
+      <LineId Id="49" Count="2" />
+      <LineId Id="55" Count="0" />
+      <LineId Id="52" Count="2" />
+      <LineId Id="56" Count="0" />
+      <LineId Id="76" Count="0" />
+      <LineId Id="64" Count="0" />
+      <LineId Id="78" Count="0" />
+      <LineId Id="66" Count="0" />
+      <LineId Id="77" Count="0" />
+      <LineId Id="68" Count="0" />
+      <LineId Id="79" Count="1" />
+      <LineId Id="84" Count="0" />
+      <LineId Id="83" Count="0" />
+      <LineId Id="81" Count="1" />
+      <LineId Id="85" Count="0" />
+      <LineId Id="38" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

@@ -349,6 +349,9 @@
     <Compile Include="FBs_Auxiliary\FB_cartJntEnableDetect.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_Auxiliary\FB_initMotorPID.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_Auxiliary\FB_InstruNearDetect.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -415,13 +418,16 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlDisable.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruCali.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruInvasion.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruRetract.TcPOU">
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruEndoscopeTest.TcPOU">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruCali.TcPOU">
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruRetract.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruManualTest.TcPOU">
@@ -534,6 +540,10 @@
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
     </Compile>
+    <Compile Include="GVLs\GVL_MES.TcGVL">
+      <SubType>Code</SubType>
+      <LinkAlways>true</LinkAlways>
+    </Compile>
     <Compile Include="GVLs\GVL_SafetyParameters.TcGVL">
       <SubType>Code</SubType>
       <LinkAlways>true</LinkAlways>
@@ -595,6 +605,9 @@
       <LinkAlways>true</LinkAlways>
     </Compile>
     <Compile Include="Mains\SlaveArmControl.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="RecipeManager.TcRMO">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SafetyCheck\ASSERT.TcPOU">
@@ -697,6 +710,11 @@
       <DefaultResolution>CAA Memory, * (CAA Technical Workgroup)</DefaultResolution>
       <Namespace>MEM</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="RecipeManagement">
+      <DefaultResolution>Recipe Management, 3.3.1.0 (System)</DefaultResolution>
+      <Namespace>Recipe_Management</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+    </PlaceholderReference>
     <PlaceholderReference Include="Tc2_EtherCAT">
       <DefaultResolution>Tc2_EtherCAT, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc2_EtherCAT</Namespace>
@@ -725,6 +743,12 @@
       <DefaultResolution>Tc3_Module, * (Beckhoff Automation GmbH)</DefaultResolution>
       <Namespace>Tc3_Module</Namespace>
     </PlaceholderReference>
+    <PlaceholderReference Include="UML State Chart Types">
+      <DefaultResolution>UML Statechart Types, 4.1.1.0 (3S - Smart Software Solutions GmbH)</DefaultResolution>
+      <Namespace>UML_SC</Namespace>
+      <SystemLibrary>true</SystemLibrary>
+      <ResolverGuid>d9a6b70a-92f0-4827-8ca3-8ce8a61652d9</ResolverGuid>
+    </PlaceholderReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="SlaveController.tmc">
@@ -751,6 +775,15 @@
         <v>{192FAD59-8248-4824-A8DE-9177C94C195A}</v>
         <o>
           <v n="Name">"{192FAD59-8248-4824-A8DE-9177C94C195A}"</v>
+          <d n="SubKeys" t="Hashtable" />
+          <d n="Values" t="Hashtable" ckt="String" cvt="String">
+            <v>CurrentUmlCompilerVersion</v>
+            <v>4.2.1.0</v>
+          </d>
+        </o>
+        <v>{246001F4-279D-43AC-B241-948EB31120E1}</v>
+        <o>
+          <v n="Name">"{246001F4-279D-43AC-B241-948EB31120E1}"</v>
           <d n="SubKeys" t="Hashtable" />
           <d n="Values" t="Hashtable" />
         </o>
