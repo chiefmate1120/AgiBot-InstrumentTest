@@ -468,7 +468,7 @@
 
 
 </div>
-<div id="TcHmiCombobox_13" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiCombobox" data-tchmi-combobox-text="1" data-tchmi-height="56" data-tchmi-height-unit="px" data-tchmi-left="549" data-tchmi-left-unit="px" data-tchmi-top="607" data-tchmi-top-unit="px" data-tchmi-width="338" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-drop-down-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-drop-down-horizontal-alignment="Center" data-tchmi-drop-down-category-vertical-alignment="Center" data-tchmi-selected-id="1" data-tchmi-zindex="3">
+<div id="TcHmiCombobox_13" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiCombobox" data-tchmi-combobox-text="1" data-tchmi-height="56" data-tchmi-height-unit="px" data-tchmi-left="549" data-tchmi-left-unit="px" data-tchmi-top="607" data-tchmi-top-unit="px" data-tchmi-width="338" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-drop-down-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-drop-down-horizontal-alignment="Center" data-tchmi-drop-down-category-vertical-alignment="Center" data-tchmi-selected-id="1" data-tchmi-zindex="3" data-tchmi-allow-text-input="true" data-tchmi-auto-select-text="false" data-tchmi-auto-focus-out="false">
 <script data-tchmi-target-attribute="data-tchmi-content-padding" type="application/json">
 {
   "top": 3,
@@ -484,7 +484,7 @@
 <script data-tchmi-target-attribute="data-tchmi-src-data" type="application/json">
 [
   {
-    "id": 4.0,
+    "id": 1.0,
     "text": "生产",
     "value": "%s%PLC1.GVL_InstruTestUIVars.g_account::registerPermission%/s%"
   },
@@ -495,7 +495,7 @@
   },
   {
     "id": 2.0,
-    "text": "研发",
+    "text": "研发及测试",
     "value": "%s%PLC1.GVL_InstruTestUIVars.g_account::registerPermission%/s%"
   }
 ]

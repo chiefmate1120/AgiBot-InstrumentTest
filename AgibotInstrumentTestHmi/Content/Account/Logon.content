@@ -440,7 +440,7 @@
                 "value": {
                   "objectType": "StaticValue",
                   "valueType": "tchmi:general#/definitions/String",
-                  "value": "研发"
+                  "value": "研发及测试"
                 },
                 "asyncWait": true
               }

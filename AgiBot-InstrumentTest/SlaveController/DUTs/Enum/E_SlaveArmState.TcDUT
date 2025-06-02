@@ -31,8 +31,8 @@
 	SlaveArmState_InstruVerify :=26,
 	SlaveArmState_MotorGoHome:= 27,
 	SlaveArmState_PowerBoxCalibration:= 28,
-	
-	SlaveArmState_totalNum :=SlaveArmState_PowerBoxCalibration
+	SlaveArmState_EndoscopeTest:= 29,
+	SlaveArmState_totalNum :=SlaveArmState_EndoscopeTest
 );
 END_TYPE
 ]]></Declaration>

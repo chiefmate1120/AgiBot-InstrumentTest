@@ -55,6 +55,20 @@
   "userControls": [],
   "content": [
     {
+      "url": "Content/Account/AccountHistory.content",
+      "preload": false,
+      "keepAlive": false,
+      "loadSync": false,
+      "preloadBindings": false
+    },
+    {
+      "url": "Content/Account/Account.content",
+      "preload": false,
+      "keepAlive": false,
+      "loadSync": false,
+      "preloadBindings": false
+    },
+    {
       "url": "Content/Account/register.content",
       "preload": false,
       "keepAlive": false,
