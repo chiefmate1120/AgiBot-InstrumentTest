@@ -5,12 +5,12 @@
   <Children>
     <Node>
       <Title>YT Scope Project</Title>
-      <Expanded>True</Expanded>
-      <FileName>C:\Users\admin1\Desktop\无框动力盒\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.svdx</FileName>
+      <Expanded>False</Expanded>
+      <FileName>C:\Users\Ni Feijian\Career\AgiBot\Repository\instrumentTest\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.svdx</FileName>
       <Children>
         <Node>
           <Title>DataPool</Title>
-          <Expanded>True</Expanded>
+          <Expanded>False</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
@@ -131,12 +131,12 @@
         </Node>
         <Node>
           <Title>YT Chart</Title>
-          <Expanded>True</Expanded>
+          <Expanded>False</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
               <Title>Axis Group (1)</Title>
-              <Expanded>True</Expanded>
+              <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
@@ -183,12 +183,12 @@
     </Node>
     <Node>
       <Title>YT Scope Project</Title>
-      <Expanded>True</Expanded>
-      <FileName>C:\Users\admin1\Desktop\无框动力盒\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.tcscopex</FileName>
+      <Expanded>False</Expanded>
+      <FileName>C:\Users\Ni Feijian\Career\AgiBot\Repository\instrumentTest\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.tcscopex</FileName>
       <Children>
         <Node>
           <Title>DataPool</Title>
-          <Expanded>True</Expanded>
+          <Expanded>False</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
@@ -267,12 +267,12 @@
         </Node>
         <Node>
           <Title>YT Chart</Title>
-          <Expanded>True</Expanded>
+          <Expanded>False</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
               <Title>Axis Group (1)</Title>
-              <Expanded>True</Expanded>
+              <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
@@ -317,12 +317,12 @@
         </Node>
         <Node>
           <Title>YT Chart (1)</Title>
-          <Expanded>True</Expanded>
+          <Expanded>False</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
               <Title>Axis Group (2)</Title>
-              <Expanded>True</Expanded>
+              <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
@@ -341,7 +341,7 @@
             </Node>
             <Node>
               <Title>Axis Group</Title>
-              <Expanded>True</Expanded>
+              <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
@@ -360,7 +360,7 @@
             </Node>
             <Node>
               <Title>Axis Group (3)</Title>
-              <Expanded>True</Expanded>
+              <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>

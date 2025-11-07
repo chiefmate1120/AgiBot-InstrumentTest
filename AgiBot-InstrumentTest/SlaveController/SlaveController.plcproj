@@ -493,6 +493,9 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruVerify.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlFrictionTest.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrMotorGoHome.TcPOU">
       <SubType>Code</SubType>
     </Compile>

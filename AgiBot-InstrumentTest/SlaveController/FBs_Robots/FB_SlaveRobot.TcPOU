@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
   <POU Name="FB_SlaveRobot" Id="{8cbdb2ba-9735-46e3-8cbc-296330acc8cc}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveRobot
 VAR
@@ -46,6 +46,7 @@ VAR
 	m_instruAutoTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruAutoTest;
 	m_instruManualTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruManualTest;
 	m_instruVerify :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruVerify;
+	m_frictionTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlFrictionTest;
 	
 	// arm controller interface
 	m_armCtrl :ARRAY[1..g_sArmNum] OF I_SlaveArmCtrl;
@@ -145,6 +146,7 @@ END_VAR
 	m_armCtrlFactory[i,SlaveArmState_MotorGoHome] := m_motorGoHome[i];
 	m_armCtrlFactory[i,SlaveArmState_PowerBoxCalibration] := m_powerBoxCalibration[i];
 	m_armCtrlFactory[i,SlaveArmState_EndoscopeTest] := m_endoscopeTest[i];
+	m_armCtrlFactory[i,SlaveArmState_FrictionTest] := m_frictionTest[i];
 	// assign controller
 	m_armCtrl[i]:=m_armCtrlFactory[i,m_slaveArmState[i]];
 	m_armCtrl[i].Init(m_slaveArms[i],m_armCtrlCmds[i]);
@@ -417,6 +419,11 @@ FOR i:=1 TO g_sArmNum DO
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_endoscopeTest)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
 			END_IF
+		SlaveArmState_FrictionTest:
+			// to stop
+			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished  THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+			END_IF
 	END_CASE
 	IF NOT m_slaveArms[i].instruOn THEN
 		GVL_InstruTestUIVars.g_instruCaliState:=FALSE;
@@ -536,6 +543,7 @@ END_FOR
       <LineId Id="199" Count="0" />
       <LineId Id="110" Count="0" />
       <LineId Id="206" Count="0" />
+      <LineId Id="213" Count="0" />
       <LineId Id="72" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="101" Count="0" />
@@ -563,6 +571,9 @@ END_FOR
       <LineId Id="1474" Count="1" />
       <LineId Id="1473" Count="0" />
       <LineId Id="1476" Count="0" />
+      <LineId Id="1570" Count="0" />
+      <LineId Id="1573" Count="2" />
+      <LineId Id="1578" Count="0" />
       <LineId Id="1447" Count="17" />
       <LineId Id="1498" Count="0" />
       <LineId Id="1503" Count="2" />
