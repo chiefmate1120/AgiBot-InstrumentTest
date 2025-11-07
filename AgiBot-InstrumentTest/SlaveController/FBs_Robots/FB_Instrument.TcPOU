@@ -3,9 +3,7 @@
   <POU Name="FB_Instrument" Id="{851fd539-e88c-4a52-b2dc-b810ec435a75}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_Instrument
 
-VAR_IN_OUT CONSTANT
-	i_slaveArm	:FB_SlaveArm;
-END_VAR
+
 
 VAR
 	// instrument type
@@ -70,7 +68,7 @@ VAR
 	m_signL1,m_signL2,m_signL3:UDINT;
 	m_UsageReadResult:ULINT;
 	m_InstruUsageToLED:ULINT;
-	
+	m_purposeReadResult:ULINT;
 	m_HaveRecord:BOOL;
 	m_SdoWrite:FB_EcCoESdoWrite;
 	m_SdoRead:FB_EcCoESdoRead;
@@ -86,6 +84,9 @@ VAR
 	m_SDOStep: INT;
 	m_fbTon_Step: ARRAY[0..5] OF TON;
 	value: ULINT;
+	m_purposeMode:UINT;
+	m_StepRFID:INT;
+	m_ReadDelayRFID:TON;
 END_VAR
 
 ]]></Declaration>
@@ -121,6 +122,7 @@ END_VAR
       <Implementation>
         <ST><![CDATA[// search instrument type
 checkInstruType :=FALSE;
+ //m_onChipData.m_InstruID := InstruType_UltrasoundKnifeS;
 FOR i:=1 TO g_instruTypeNum DO 
 	IF g_instruTypePool[i].m_InstruID = m_onChipData.m_InstruID THEN
 		checkInstruType:=TRUE;
@@ -668,7 +670,7 @@ Angle_Inc_A:=frontAngle/2;
 Angle_A:=initA+Angle_Inc_A;
 Angle_A := LIMIT(0.0, Angle_A, pi);
 
-SIN_C:=AB*SIN(Angle_A)/BC;
+SIN_C:=limit(-1, AB*SIN(Angle_A)/BC, 1);
 Angle_C:=ASIN(SIN_C);
 
 Angle_Inc_C:=Angle_C-initC;
@@ -710,7 +712,7 @@ Angle_Inc_C:=endAngle/2;
 Angle_C:=initC+Angle_Inc_C;
 Angle_C := LIMIT(0, Angle_C, pi);
 
-SIN_A:=BC*SIN(Angle_C)/AB;
+SIN_A:=limit(-1, BC*SIN(Angle_C)/AB, 1);
 Angle_A:=ASIN(SIN_A);
 
 Angle_Inc_A:=Angle_A-initA;
@@ -725,23 +727,36 @@ END_VAR
 
 VAR
 	paramIdx :INT;
+	endoscopeData:UINT;
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[// TODO: read m_kinematic parameters from chip 
 //Take the rising edge of the read signal
-m_ReadDelay(IN:= m_Step=10, PT:= m_DealyTime, Q=> , ET=> );//计时器
+m_ReadDelay(IN:= m_Step=10 OR m_Step=2, PT:= m_DealyTime, Q=> , ET=> );//计时器
 IF startFlag AND m_curReadTries < m_maxReadTries THEN
 	m_Step:=0;
 	m_onChipData.m_InstruReadSucceed:=FALSE;
 	m_onChipData.m_Error:=FALSE;
 	m_onChipData.m_ErrorID:=0;
 	m_resetArmLEDFlag :=TRUE;
+	
 END_IF
 
 
 CASE m_Step OF
+	0:	m_Value:=0;
+		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6098, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
+		IF NOT m_SdoWrite.bBusy THEN
+			m_SdoWrite(bExecute:=FALSE);
+			m_Step:=2;
+		END_IF
+			
+	2://延时0.5s、防止值还没有返回
+		IF m_ReadDelay.Q THEN
+			m_Step:=5;
+		END_IF
 	
-	0://向6093发送0x8000  0000---发送读取信号
+	5://向6093发送0x8000  0000---发送读取信号
 		m_Value:=16#80000000; 
 		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6093, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
 		IF NOT m_SdoWrite.bBusy THEN
@@ -775,13 +790,17 @@ CASE m_Step OF
 			m_SdoRead(bExecute:=FALSE);
 			m_Step:=50;
 		END_IF	
-	
-		
 	50://处理序列号，低30位
 		m_onChipData.m_InstruseriesNum:=SHL(m_IDResult,31)+(16#7FFFFFFF AND m_SeriesReadResult);
 		m_onChipData.m_InstruID:=LREAL_TO_INT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,9))); //取十进制前三位为器械ID
+		IF m_onChipData.m_InstruID = InstruType_Endoscope THEN
+			endoscopeData := LREAL_TO_UINT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,7)));
+			endoscopeData := endoscopeData MOD 100;
+			IF endoscopeData>= 25 THEN
+				m_onChipData.m_InstruID := InstruType_NewEndoscope;
+			END_IF
+		END_IF
 		m_Step:=60;
-		
 		
 	60://读取6096---器械零点位置
 		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6096, pDstBuf:= ADR(m_PosReadResult), cbBufLen:= SIZEOF(m_PosReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
@@ -814,13 +833,195 @@ CASE m_Step OF
 		
 	100://将器械使用次数写入LED
 		m_Value:=ULINT_TO_UDINT(16#FFFF AND m_InstruUsageToLED) ;
-		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
+//		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
 		IF NOT m_SdoWrite.bBusy THEN
 			m_SdoWrite(bExecute:=FALSE);
 			m_Step:=110;
 		END_IF
 		
 	110:
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6097, pDstBuf:= ADR(m_purposeReadResult), cbBufLen:= SIZEOF(m_purposeReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_Step:=120;
+		END_IF	
+		
+		
+	120:
+		m_onChipData.m_InstruPurpose:=SHR(m_purposeReadResult,16) AND 16#7FFF;
+		m_onChipData.m_InstruPurposeTime:=m_purposeReadResult AND 16#FFFF;
+		m_Step:=130;
+	
+	130:
+		// get insturment typeinfo
+		m_onChipData.m_InstruReadSucceed:=checkInstruType();
+		
+		//结果诊断
+		m_onChipData.m_ErrorID:=0;
+		IF NOT(m_onChipData.m_InstruReadSucceed) THEN
+			m_onChipData.m_Error:=TRUE;
+			m_onChipData.m_ErrorID:=1;
+			
+			IF m_onChipData.m_InstruPurposeTime < m_instruTypeInfo.m_maxUseNum THEN
+				m_onChipData.m_InstruPurposeTime:= m_instruTypeInfo.m_maxUseNum;
+			END_IF
+//		ELSIF SlaveArmControl.m_slaveRobot.m_endoscopeMounted AND m_instruType = InstruType_Endoscope THEN
+//			m_onChipData.m_InstruReadSucceed := FALSE;
+//			m_onChipData.m_Error:=TRUE;
+//			m_onChipData.m_ErrorID:=3;
+			
+//		ELSIF m_onChipData.m_InstruusageCounts>(m_instruTypeInfo.m_maxUseNum -1) AND m_instruType<>InstruType_Endoscope THEN
+//			m_HaveRecord:=InstruSreiesFind(i_NewValue:=m_onChipData.m_InstruseriesNum , i_ArrayData:=GVL_interactUI.g_InstruSeriesRecord );
+//			IF m_HaveRecord THEN
+//				//
+//			ELSE
+//				m_onChipData.m_InstruReadSucceed := FALSE; 
+//				m_onChipData.m_Error:=TRUE;
+//				m_onChipData.m_ErrorID:=2;
+//			END_IF
+		END_IF
+		
+		//处理当器械使用次数达到上限后、在同一场手术中还能使用
+//		IF m_onChipData.m_InstruReadSucceed AND m_onChipData.m_InstruusageCounts=(m_instruTypeInfo.m_maxUseNum -1) THEN		
+//			//TODO: check this part
+//			GVL_interactUI.g_InstruSeriesRecord:=InstruIDRecord(i_NewValue:= m_onChipData.m_InstruseriesNum, i_ArrayData:= GVL_interactUI.g_InstruSeriesRecord);
+//		END_IF
+		
+		m_Step :=-1;
+		m_curReadTries := m_curReadTries +1;
+	
+END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="readParametersRFID" Id="{f2dae007-f4b5-4d28-a2f1-94dcf9f4e7b9}">
+      <Declaration><![CDATA[METHOD PUBLIC readParametersRFID : BOOL
+VAR_INPUT
+	startFlag :BOOL;
+END_VAR
+
+VAR
+	paramIdx :INT;
+	endoscopeData:UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// TODO: read m_kinematic parameters from chip 
+//Take the rising edge of the read signal
+m_ReadDelayRFID(IN:= m_StepRFID=10 OR m_StepRFID=2, PT:= m_DealyTime, Q=> , ET=> );//计时器
+IF startFlag  THEN
+	m_StepRFID:=0;
+	m_onChipData.m_InstruReadSucceedRFID:=FALSE;
+END_IF
+
+
+CASE m_StepRFID OF
+	0:	m_Value:=1;
+		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6098, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
+		IF NOT m_SdoWrite.bBusy THEN
+			m_SdoWrite(bExecute:=FALSE);
+			m_StepRFID:=2;
+		END_IF
+			
+	2://延时0.5s、防止值还没有返回
+		IF m_ReadDelayRFID.Q THEN
+			m_StepRFID:=5;
+		END_IF
+	
+	5://向6093发送0x8000  0000---发送读取信号
+		m_Value:=16#80000000; 
+		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6093, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
+		IF NOT m_SdoWrite.bBusy THEN
+			m_SdoWrite(bExecute:=FALSE);
+			m_StepRFID:=10;
+		END_IF
+		
+		
+	10://延时0.5s、防止值还没有返回
+		IF m_ReadDelayRFID.Q THEN
+			m_StepRFID:=20;
+		END_IF
+
+		
+	20://从6093地址中拿值
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6093, pDstBuf:= ADR(m_IDReadResult), cbBufLen:= SIZEOF(m_IDReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_StepRFID:=30;
+		END_IF	
+		
+	
+	30://处理器械ID、低16位
+		m_IDResult:=UDINT_TO_ULINT(16#0000FFFF AND m_IDReadResult);
+		m_StepRFID:=40;
+		
+		
+	40://读取6095、器械序列号
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6095, pDstBuf:= ADR(m_SeriesReadResult), cbBufLen:= SIZEOF(m_SeriesReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_StepRFID:=50;
+		END_IF	
+	50://处理序列号，低30位
+		m_onChipData.m_InstruseriesNumRFID:=SHL(m_IDResult,31)+(16#7FFFFFFF AND m_SeriesReadResult);
+		m_onChipData.m_InstruIDFromRFID:=LREAL_TO_INT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNumRFID/EXPT(10,9))); //取十进制前三位为器械ID
+		IF m_onChipData.m_InstruIDFromRFID = InstruType_Endoscope THEN
+			endoscopeData := LREAL_TO_UINT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNumRFID/EXPT(10,7)));
+			endoscopeData := endoscopeData MOD 100;
+			IF endoscopeData>= 25 THEN
+				m_onChipData.m_InstruIDFromRFID := InstruType_NewEndoscope;
+			END_IF
+		END_IF
+		m_StepRFID:=60;
+		
+	60://读取6096---器械零点位置
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6096, pDstBuf:= ADR(m_PosReadResult), cbBufLen:= SIZEOF(m_PosReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_StepRFID:=70;
+		END_IF	
+		
+		
+	70: //处理位置，L1:0-9位，L2:10-19位，L3:20-29位
+		zeroPosDecode(m_PosReadResult, o_q1=>m_onChipData.m_InstruPosRFID[1],o_q2=>m_onChipData.m_InstruPosRFID[2],o_q3=>m_onChipData.m_InstruPosRFID[3]);
+		m_onChipData.m_InstruPosRFID[4] := m_jnt4ZeroPos;
+		m_onChipData.m_InstruPosRFID[5] := 0;
+		
+		m_StepRFID:=80;
+		
+	80://读取器械使用次数 6094
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6094, pDstBuf:= ADR(m_UsageReadResult), cbBufLen:= SIZEOF(m_UsageReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_StepRFID:=90;
+		END_IF	
+		
+		
+	90://处理器械使用次数读取结果
+		m_onChipData.m_InstruUsageCountsRFID:=m_UsageReadResult;
+		m_StepRFID:=-1;
+		m_onChipData.m_InstruReadSucceedRFID:=TRUE;
+(*		
+	100://将器械使用次数写入LED
+		m_Value:=ULINT_TO_UDINT(16#FFFF AND m_InstruUsageToLED) ;
+//		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
+		IF NOT m_SdoWrite.bBusy THEN
+			m_SdoWrite(bExecute:=FALSE);
+			m_Step:=110;
+		END_IF
+		
+	110:
+		m_SdoRead(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr,	nSubIndex:= 0, nIndex:= 16#6097, pDstBuf:= ADR(m_purposeReadResult), cbBufLen:= SIZEOF(m_purposeReadResult), bExecute:= TRUE, 	tTimeout:= , bBusy=> , bError=> , nErrId=> , cbRead=> );
+		IF NOT m_SdoRead.bBusy THEN
+			m_SdoRead(bExecute:=FALSE);
+			m_Step:=120;
+		END_IF	
+		
+		
+	120:
+		m_onChipData.m_InstruPurpose:=SHR(m_purposeReadResult,16) AND 16#7FFF;
+		m_onChipData.m_InstruPurposeTime:=m_purposeReadResult AND 16#FFFF;
+		m_Step:=130;
+	
+	130:
 		// get insturment typeinfo
 		m_onChipData.m_InstruReadSucceed:=checkInstruType();
 		
@@ -854,7 +1055,7 @@ CASE m_Step OF
 		
 		m_Step :=-1;
 		m_curReadTries := m_curReadTries +1;
-	
+	*)
 END_CASE]]></ST>
       </Implementation>
     </Method>
@@ -867,6 +1068,7 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[m_Step := -1;
+m_StepRFID:=-1;
 m_curReadTries := 0;
 m_onChipData.m_InstruID := 0;
 m_onChipData.m_InstruseriesNum :=0;
@@ -875,6 +1077,9 @@ m_onChipData.m_ErrorID:=0;
 m_onChipData.m_InstruReadSucceed:=FALSE;
 m_instruType:=InstruType_UNKNOWM;
 
+m_onChipData.m_InstruIDFromRFID := 0;
+m_onChipData.m_InstruseriesNumRFID :=0;
+m_onChipData.m_InstruReadSucceedRFID:=FALSE;
 FOR i:= 4 TO 8 BY 1 DO
 	m_jntPosOffset[i]:=0;
 END_FOR
@@ -894,14 +1099,22 @@ m_nextEndoscopePosture :=EndoscopePosture_HeadDown;
 //arm LED reset
 IF m_resetArmLEDFlag THEN
 	m_Value:=0 ;
-	m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
+//	m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
 END_IF
 IF NOT m_SdoWrite.bBusy THEN
 	m_SdoWrite(bExecute:=FALSE);
 	m_resetArmLEDFlag := FALSE;
 END_IF
 
-]]></ST>
+//Reset zero pos
+FOR i:=1 TO 5 DO
+	m_onChipData.m_InstruPos[i]:=0;
+	m_onChipData.m_InstruPosRFID[i]:=0;
+END_FOR
+onChipData.m_InstruusageCounts:=0;
+onChipData.m_InstruPurpose:=0;
+onChipData.m_InstruPurposeTime:=0;
+onChipData.m_InstruUsageCountsRFID:=0;]]></ST>
       </Implementation>
     </Method>
     <Property Name="resetArmLED" Id="{55c3281e-2652-4243-8250-a72a78fa0e9b}" FolderPath="property\">
@@ -995,7 +1208,7 @@ CASE m_useNumStep OF
 		
 	40: 
 		m_Value:=ULINT_TO_UDINT( m_useNumSendToLED) ;
-		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
+//		m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_LEDAddr, nSubIndex:= 06, nIndex:= 16#6090, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, tTimeout:= , bBusy=> , bError=> , nErrId=> );
 		IF NOT m_SdoWrite.bBusy THEN
 			m_SdoWrite(bExecute:=FALSE);
 			m_onChipData.m_InstruUsageCounts:=m_useNumReadResult;
@@ -1004,6 +1217,46 @@ CASE m_useNumStep OF
 		END_IF
 		
 END_CASE]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="writePurpose" Id="{13b4eac4-bb8f-4057-9ab2-82e8eeab1f7f}">
+      <Declaration><![CDATA[METHOD writePurpose : BOOL
+VAR
+	instruMaxUsed : UINT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF InstruType_Endoscope=m_instruType OR InstruType_NewEndoscope=m_instruType THEN
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum+10;
+ELSIF InstruType_UltrasoundKnifeS=m_instruType OR InstruType_UltrasoundKnifeU=m_instruType THEN 
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum+20;
+ELSE
+	m_purposeMode:=GVL_InstruTestUIVars.g_writePurposeNum;
+END_IF
+IF m_instruTypeInfo.m_maxUseNum <> 0 THEN
+	instruMaxUsed := m_instruTypeInfo.m_maxUseNum;
+ELSE
+	instruMaxUsed := 10;
+END_IF
+
+CASE m_purposeMode OF
+	1: m_Value:=instruMaxUsed OR 16#10000; 
+	2: m_Value:=16#3E7 OR 16#20000; 
+	3: m_Value:=instruMaxUsed OR 16#30000; 
+	4: m_Value:=16#1E OR 16#40000; 
+	11: m_Value:=16#64 OR 16#10000; 
+	12: m_Value:=16#3E7 OR 16#20000; 
+	13: m_Value:=16#64 OR 16#30000; 
+	14: m_Value:=16#64 OR 16#40000; 
+ELSE
+	RETURN;
+END_CASE
+m_Value:=m_Value OR 16#80000000; 
+m_SdoWrite(sNetId:= m_ArmNetId, nSlaveAddr:= m_JointInstruAddr, nSubIndex:= 0, nIndex:= 16#6097, pSrcBuf:= ADR(m_Value), cbBufLen:= SIZEOF(m_Value), bExecute:= TRUE, );
+IF NOT m_SdoWrite.bBusy THEN
+	m_SdoWrite(bExecute:=FALSE);
+	writePurpose := 1;
+END_IF]]></ST>
       </Implementation>
     </Method>
     <Method Name="writeSNToChip" Id="{83a532fd-275d-44b8-b8ab-c7e1f43e9534}">
@@ -1145,6 +1398,7 @@ o_q1 := g_2pi *  posCode/16#3FF;
     <LineIds Name="FB_Instrument.checkInstruType">
       <LineId Id="468" Count="0" />
       <LineId Id="541" Count="0" />
+      <LineId Id="549" Count="0" />
       <LineId Id="534" Count="1" />
       <LineId Id="537" Count="0" />
       <LineId Id="539" Count="1" />
@@ -1278,7 +1532,53 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="31" Count="5" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParameters">
-      <LineId Id="1095" Count="93" />
+      <LineId Id="1095" Count="8" />
+      <LineId Id="1298" Count="0" />
+      <LineId Id="1104" Count="3" />
+      <LineId Id="1299" Count="0" />
+      <LineId Id="1301" Count="5" />
+      <LineId Id="1308" Count="2" />
+      <LineId Id="1300" Count="0" />
+      <LineId Id="1108" Count="34" />
+      <LineId Id="1256" Count="9" />
+      <LineId Id="1149" Count="37" />
+      <LineId Id="1288" Count="0" />
+      <LineId Id="1277" Count="9" />
+      <LineId Id="1289" Count="0" />
+      <LineId Id="1276" Count="0" />
+      <LineId Id="1274" Count="0" />
+      <LineId Id="1188" Count="0" />
+      <LineId Id="1239" Count="2" />
+      <LineId Id="1238" Count="0" />
+      <LineId Id="1200" Count="4" />
+      <LineId Id="1319" Count="2" />
+      <LineId Id="1205" Count="14" />
+      <LineId Id="1242" Count="0" />
+      <LineId Id="1244" Count="3" />
+      <LineId Id="1243" Count="0" />
+      <LineId Id="1248" Count="0" />
+      <LineId Id="1220" Count="2" />
+      <LineId Id="28" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.readParametersRFID">
+      <LineId Id="1095" Count="4" />
+      <LineId Id="1103" Count="4" />
+      <LineId Id="1299" Count="0" />
+      <LineId Id="1301" Count="5" />
+      <LineId Id="1308" Count="2" />
+      <LineId Id="1300" Count="0" />
+      <LineId Id="1108" Count="34" />
+      <LineId Id="1256" Count="9" />
+      <LineId Id="1149" Count="23" />
+      <LineId Id="1319" Count="0" />
+      <LineId Id="1174" Count="1" />
+      <LineId Id="1177" Count="1" />
+      <LineId Id="1320" Count="16" />
+      <LineId Id="1285" Count="1" />
+      <LineId Id="1289" Count="0" />
+      <LineId Id="1276" Count="0" />
+      <LineId Id="1274" Count="0" />
+      <LineId Id="1188" Count="0" />
       <LineId Id="1239" Count="2" />
       <LineId Id="1238" Count="0" />
       <LineId Id="1200" Count="19" />
@@ -1290,12 +1590,16 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="28" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.reset">
-      <LineId Id="51" Count="1" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="155" Count="0" />
+      <LineId Id="52" Count="0" />
       <LineId Id="5" Count="1" />
       <LineId Id="11" Count="1" />
       <LineId Id="16" Count="0" />
       <LineId Id="59" Count="0" />
+      <LineId Id="150" Count="1" />
       <LineId Id="26" Count="0" />
+      <LineId Id="152" Count="0" />
       <LineId Id="22" Count="1" />
       <LineId Id="21" Count="0" />
       <LineId Id="41" Count="4" />
@@ -1314,6 +1618,12 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="113" Count="0" />
       <LineId Id="87" Count="0" />
       <LineId Id="17" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="138" Count="0" />
+      <LineId Id="142" Count="2" />
+      <LineId Id="154" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.resetArmLED.Set">
       <LineId Id="2" Count="0" />
@@ -1328,6 +1638,30 @@ o_q1 := g_2pi *  posCode/16#3FF;
     </LineIds>
     <LineIds Name="FB_Instrument.writeNumOfUseToChip">
       <LineId Id="74" Count="45" />
+      <LineId Id="16" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.writePurpose">
+      <LineId Id="138" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="143" Count="0" />
+      <LineId Id="142" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="140" Count="0" />
+      <LineId Id="151" Count="1" />
+      <LineId Id="158" Count="1" />
+      <LineId Id="153" Count="0" />
+      <LineId Id="157" Count="0" />
+      <LineId Id="125" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="130" Count="2" />
+      <LineId Id="146" Count="2" />
+      <LineId Id="145" Count="0" />
+      <LineId Id="133" Count="1" />
+      <LineId Id="129" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="84" Count="2" />
+      <LineId Id="137" Count="0" />
       <LineId Id="16" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.writeSNToChip">

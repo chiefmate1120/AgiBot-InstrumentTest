@@ -9,7 +9,7 @@ STRUCT
 	register:BOOL;//注册
 	actualAccountNumber:STRING;
 	actualPassWord:STRING;
-	actualPermission:USINT;//权限 0 无登录 1 生产 2 质量 3 研发 4 管理
+	actualPermission:USINT;//权限 0 无登录 1 管理 2 研发 3 质量 4 生产
 	actualWorkNum:UDINT;
 	actualName:STRING;
 	registerAccountNumber:STRING;
@@ -23,7 +23,8 @@ STRUCT
 	memoryPermission:ARRAY [0..50] OF USINT; //注册账权限
 	memoryWorkNum:ARRAY [0..50] OF UDINT;//注册账工号
 	memoryName:ARRAY [0..50] OF STRING; //注册账姓名
-	memoryTime:ARRAY [0..50] OF TIME; //注册时间
+	memoryTime:ARRAY [0..50] OF STRING; //注册时间
+	memoryDisable:ARRAY [0..50] OF BOOL;//使能
 END_STRUCT
 END_TYPE
 ]]></Declaration>

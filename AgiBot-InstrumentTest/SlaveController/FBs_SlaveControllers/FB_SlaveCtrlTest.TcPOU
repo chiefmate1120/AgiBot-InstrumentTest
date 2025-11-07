@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveCtrlTest" Id="{25b7ca7b-a3c0-4d1d-9db6-09421c0085dc}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm test
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlTest EXTENDS FB_SlaveArmCtrlBase
@@ -30,7 +30,8 @@ VAR
 	m_usKnifeController : FB_UltrosonicKnifeControl;
 	m_instruCmdJntPos,m_instruCmdJntVel : Vec5d;
 	m_instruCmdJntTrq :Vec5d;
-	
+	m_maxGripCurrent:LREAL:=350.0;
+	m_maxGripCtrlCurrent:LREAL:=540.0;
 	
 	m_errCmdPos, m_errCurPos :LREAL;
 	m_errPosIdx : INT;
@@ -83,7 +84,7 @@ ELSE
 	m_cmdDHJntVel :=g_zeroVec6d;
 	m_gripperAngle := i_slaveArm.curGripAngle;
 	// init instrument controller
-	m_instruController.init(i_slaveArm);
+	m_instruController.init(i_slaveArm,m_maxGripCurrent,m_maxGripCtrlCurrent);
 	m_usKnifeController.init(i_slaveArm);
 	
 	FOR i:=1 TO 6  DO
@@ -178,7 +179,7 @@ m_cmdDHJntVel :=g_zeroVec6d;
 m_gripperAngle := i_slaveArm.curGripAngle;
 
 // init instrument controller
-m_instruController.init(i_slaveArm);
+m_instruController.init(i_slaveArm,m_maxGripCurrent,m_maxGripCtrlCurrent);
 m_usKnifeController.init(i_slaveArm);
 
 FOR i:=1 TO 6  DO

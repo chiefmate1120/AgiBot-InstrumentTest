@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_BasicInstruControl" Id="{133d07e3-99c5-4338-ad65-0a5f3241047e}" SpecialFunc="None">
     <Declaration><![CDATA[// instrument joints control
 FUNCTION_BLOCK FB_BasicInstruControl
@@ -9,29 +9,30 @@ VAR_OUTPUT
 END_VAR
 VAR
 	// instrument PID control paramters
-	m_instruKp:ARRAY[1..5] OF LREAL:=[4(5),0.0];
-	m_instruKd:ARRAY[1..5] OF LREAL:=[4(0.25), 0];
-	m_instruKi:ARRAY[1..5] OF LREAL:=[4(10.0),0];
-	m_instruKiLimit:ARRAY[1..5] OF LREAL:=[5(50.0)];
-	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[2(120.0), 3(200.0)];
+	m_instruKp:ARRAY[1..5] OF LREAL:=[5(2)];
+	m_instruKd:ARRAY[1..5] OF LREAL:=[5(0.04)];
+	m_instruKi:ARRAY[1..5] OF LREAL:=[5(5.0)];
+	m_instruKiLimit:ARRAY[1..5] OF LREAL:=[5(250.0)];
+	m_instruCtrlLimit:ARRAY[1..5] OF LREAL:=[5(540.0)];
+	
 	
 	// gripper force level threshold for variable PID parameter
 	m_forceLevelThres : ARRAY[1..3] OF LREAL := [40, 70, 101];
 	
 	// yaw PID control (when fingers grasp with force)
-	m_yawKp:ARRAY[1..3] OF LREAL:=[5, 8, 10];
-	m_yawKd:ARRAY[1..3] OF LREAL:=[0.25, 0.4, 0.6];
-	m_yawKi:ARRAY[1..3] OF LREAL:=[10.0, 15.0, 20.0];
-	m_yawKiLimit:LREAL:=100.0;
-	m_yawCtrlLimit:LREAL:=200.0;
+	m_yawKp:ARRAY[1..3] OF LREAL:=[2, 2, 2];
+	m_yawKd:ARRAY[1..3] OF LREAL:=[0.04, 0.04, 0.04];
+	m_yawKi:ARRAY[1..3] OF LREAL:=[2, 4, 6];
+	m_yawKiLimit:LREAL:=250.0;
+	m_yawCtrlLimit:LREAL:=540.0;
 	
 	// max grip force/current(mA)
 	m_maxGripForce:LREAL;
-	m_maxGripCurrent:LREAL:=150.0;
+	m_maxGripCurrent:LREAL:=450.0;
 	
 	// max gripper finger control force/current(mA)
 	m_maxGripCtrlForce:LREAL;
-	m_maxGripCtrlCurrent:LREAL:=250.0;
+	m_maxGripCtrlCurrent:LREAL:=540.0;
 	
 	// PID for instrument joint position
 	m_instruJntCtrl:ARRAY[1..5] OF FB_PID;
@@ -157,20 +158,52 @@ FOR i:=1 TO 4 DO
 	ELSE
 		maxBacklash:=0;
 	END_IF
+	
+	IF GVL_InstruTestUIVars.g_enableRDCompensation THEN 
+		GVL_InstruTestUIVars.g_enableBackendCompensation:=0;
+		IF InstruType_ProGraspForceps = i_slaveArm.instrument.onChipData.m_InstruID THEN
+			IF i<3 THEN 
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[2]*i_slaveArm.instrument.instruTypeInfo.m_k2*g_deg2Rad));
+			ELSIF i=3 THEN
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[1]*i_slaveArm.instrument.instruTypeInfo.m_k1*g_deg2Rad));
+			ELSIF i=4 THEN
+				maxBacklash:=ASIN((2.8/5.26) * SIN(GVL_InstruTestUIVars.g_compensationAngleDH[3]*i_slaveArm.instrument.instruTypeInfo.m_k3*g_deg2Rad));
+			ELSE
+				maxBacklash:=0;
+			END_IF
+		ELSE
+			IF i<3 THEN 
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[2]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k2;
+			ELSIF i=3 THEN
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[1]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k1;
+			ELSIF i=4 THEN
+				maxBacklash:=GVL_InstruTestUIVars.g_compensationAngleDH[3]*g_deg2Rad*i_slaveArm.instrument.instruTypeInfo.m_k3;
+			ELSE
+				maxBacklash:=0;
+			END_IF
+		END_IF
+	END_IF
+	
 	IF g_instruBacklashDir[i] > 0 THEN
 		m_jntBacklash [i] := LIMIT(0, m_jntBacklash[i], maxBacklash);
 	ELSE
 		m_jntBacklash [i] := LIMIT(-maxBacklash, m_jntBacklash[i], 0);	
 	END_IF
 	
+	IF GVL_InstruTestUIVars.g_enableBackendCompensation THEN 
+		m_jntBacklash [i] := 0;
+	END_IF
 	
-END_FOR]]></ST>
+END_FOR
+]]></ST>
       </Implementation>
     </Method>
     <Method Name="init" Id="{ad68ad31-14f3-42f4-bf27-26d385743fba}">
       <Declaration><![CDATA[METHOD init : BOOL
 VAR_IN_OUT CONSTANT
 	i_slaveArm:FB_SlaveArm;
+	i_maxGripCurrent : LREAL;
+	i_maxGripCtrlCurrent : LREAL;
 END_VAR
 
 VAR
@@ -179,13 +212,18 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[m_graspForceLevel:=0;
-
+//m_maxGripCurrent := i_maxGripCurrent;
+//m_maxGripCtrlCurrent :=i_maxGripCtrlCurrent;
+//m_yawKiLimit := i_maxGripCurrent;
+//m_yawCtrlLimit := i_maxGripCtrlCurrent;
 // init controller
 currentRatioMotor2Jnt:=GVL_SlaveMotorParameters.g_motorTrqConst[4]*GVL_SlaveMotorParameters.g_motorReduction[4]/1000;
 m_maxGripForce := m_maxGripCurrent * currentRatioMotor2Jnt;
 m_maxGripCtrlForce := m_maxGripCtrlCurrent * currentRatioMotor2Jnt;
 FOR i:=1 TO 4 DO
 	m_jntBacklash[i] := 0;
+	//m_instruKiLimit[i] := i_maxGripCurrent;
+	//m_instruCtrlLimit[i] := i_maxGripCtrlCurrent;
 	m_instruCmdJntPos[i]:=i_slaveArm.curJntPos[i+3];
 	
 	m_instruCmdJntVel[i]:=0;
@@ -287,13 +325,34 @@ o_cmdJntTrq := m_instruJntCtrlTrq;]]></ST>
       <LineId Id="468" Count="0" />
       <LineId Id="515" Count="2" />
       <LineId Id="466" Count="0" />
+      <LineId Id="560" Count="0" />
+      <LineId Id="562" Count="1" />
+      <LineId Id="590" Count="0" />
+      <LineId Id="597" Count="7" />
+      <LineId Id="592" Count="1" />
+      <LineId Id="605" Count="7" />
+      <LineId Id="595" Count="0" />
+      <LineId Id="574" Count="0" />
+      <LineId Id="564" Count="0" />
+      <LineId Id="561" Count="0" />
       <LineId Id="519" Count="3" />
       <LineId Id="518" Count="0" />
-      <LineId Id="539" Count="1" />
+      <LineId Id="559" Count="0" />
+      <LineId Id="539" Count="0" />
+      <LineId Id="557" Count="1" />
+      <LineId Id="540" Count="0" />
       <LineId Id="448" Count="0" />
+      <LineId Id="629" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.init">
-      <LineId Id="216" Count="16" />
+      <LineId Id="216" Count="0" />
+      <LineId Id="248" Count="0" />
+      <LineId Id="217" Count="0" />
+      <LineId Id="245" Count="0" />
+      <LineId Id="259" Count="0" />
+      <LineId Id="218" Count="5" />
+      <LineId Id="246" Count="1" />
+      <LineId Id="224" Count="8" />
       <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.run">

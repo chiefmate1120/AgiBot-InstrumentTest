@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveArm" Id="{623926f8-06e2-46b6-bb1f-baa6bc16e9cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveArm
 VAR
@@ -100,13 +100,12 @@ VAR
 	m_jointAddrPbox:UINT;	
 	m_autoLogoutTon: TON;
 	g_autoLogOutTRIG: R_TRIG;
-	fbRegisterTon:TON;
-	fbAccountTon:TON;
 	m_logStep: INT;
 	m_actualNum: INT;
 	m_registerNum: INT;
 	m_register: INT;
-	g_targetRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(250)];
+	m_accountRepeat:BOOL;
+	g_targetRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(800)];
 
 	
 	fbSocketConnect      :FB_SocketConnect;
@@ -169,7 +168,18 @@ VAR
 	m_writeSdoFinished: BOOL;
 	m_SNWritten: BOOL;
 	m_SNWriteStart: BOOL;
-	
+	m_bReadRecipeStep:   INT := 1;
+	m_saveAccount:BOOL;
+	m_saveCaliLinkEncoder:BOOL;
+	RecipeManCommands:   RecipeManCommands;
+	m_writePurposeSdoStart: BOOL;
+	m_getSysTime:GETSYSTEMTIME;
+	m_fileTime:T_FILETIME;
+	m_time:STRING;
+	m_timeNow:TIMESTRUCT;
+	//mes
+	m_serialNumOld:STRING;
+	m_curTestCyclesOld:INT;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -300,8 +310,8 @@ r_jaco[6,6]:=c5*s1*s2 - s5*(c1*s4 - c2*c4*s1);
 VAR
 
 	i: INT;
-	
-	
+	ReturnDwordRead:DWORD;
+	ReturnDwordWrite:DWORD;
 END_VAR
 ]]></Declaration>
       <Implementation>
@@ -386,12 +396,39 @@ ELSE
 		END_IF
 	END_IF
 END_IF
+
+IF GVL_InstruTestUIVars.g_writeInstruPurpose AND m_instrument.onChipData.m_InstruReadSucceed THEN
+	m_writePurposeSdoStart := TRUE;
+ELSE
+	IF m_writePurposeSdoStart THEN
+		IF   NOT m_writeSdoFinished THEN
+			m_writeSdoFinished :=instrument.writePurpose();
+
+		ELSE
+			m_writePurposeSdoStart :=FALSE;
+			m_writeSdoFinished:=FALSE;
+		END_IF
+	END_IF
+END_IF
+
+GVL_InstruTestUIVars.g_maxAngle:=INT_TO_REAL(REAL_TO_INT(m_instrument.instruTypeInfo.m_maxGripAngle/g_deg2Rad));
+GVL_InstruTestUIVars.g_maxRoll:=INT_TO_REAL(REAL_TO_INT(m_instrument.instruTypeInfo.m_rollLimit/g_deg2Rad));
+GVL_InstruTestUIVars.g_maxPitch:=INT_TO_REAL(REAL_TO_INT(m_instrument.instruTypeInfo.m_pitchLimit/g_deg2Rad));
+GVL_InstruTestUIVars.g_maxYaw:=INT_TO_REAL(REAL_TO_INT(m_instrument.instruTypeInfo.m_yawLimit/g_deg2Rad));
+GVL_InstruTestUIVars.g_maxAngleEnable:=GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad>m_instrument.instruTypeInfo.m_maxGripAngle;
+GVL_InstruTestUIVars.g_maxRollEnable:=ABS(GVL_InstruTestUIVars.g_targetRollAng)*g_deg2rad>m_instrument.instruTypeInfo.m_rollLimit;
+GVL_InstruTestUIVars.g_maxPitchEnable:=ABS(GVL_InstruTestUIVars.g_targetPitchAng)*g_deg2rad>m_instrument.instruTypeInfo.m_pitchLimit;
+GVL_InstruTestUIVars.g_maxYawEnable:=ABS(GVL_InstruTestUIVars.g_targetYawAng)*g_deg2rad>m_instrument.instruTypeInfo.m_yawLimit;
+
 GVL_InstruTestUIVars.g_incInstruNumOfUses:=FALSE;
 GVL_InstruTestUIVars.g_clearInstruNumOfUses:=FALSE;
 GVL_InstruTestUIVars.g_writeSNFlag:=FALSE;
+GVL_InstruTestUIVars.g_writeInstruPurpose:=FALSE;
 
 GVL_InstruTestUIVars.g_instruNumberOfUses:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruusageCounts);
 GVL_InstruTestUIVars.g_instruNumberOfAllUses:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruUsageCounts);
+GVL_InstruTestUIVars.g_readInstruPurpose:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruPurpose);
+GVL_InstruTestUIVars.g_readPurposeTime:=ULINT_TO_UINT( m_instrument.onChipData.m_InstruPurposeTime);
 
 GVL_InstruTestUIVars.g_instruSN:=ULINT_TO_STRING(m_instrument.onChipData.m_InstruseriesNum);
 IF (LEN(GVL_InstruTestUIVars.g_instruSN)=10)THEN
@@ -401,6 +438,10 @@ ELSIF  (LEN(GVL_InstruTestUIVars.g_instruSN)=11)THEN
 ELSE
 	GVL_InstruTestUIVars.g_instruSN:=GVL_InstruTestUIVars.g_instruSN;
 END_IF
+
+GVL_InstruTestUIVars.g_rotationActualCurrent:=m_filtJntCurrent[7];
+GVL_InstruTestUIVars.g_pitchActualCurrent:=m_filtJntCurrent[6];
+GVL_InstruTestUIVars.g_deviationActualCurrent:=m_filtJntCurrent[4];
 //***************************修改电流极限**************************//
 GVL_InstruTestUIVars.g_actualRatedCurrent:=g_targetRatedCurrent;
 IF GVL_InstruTestUIVars.g_modifyRatedCurrent THEN
@@ -410,17 +451,27 @@ IF GVL_InstruTestUIVars.g_modifyRatedCurrent THEN
 		g_targetRatedCurrent[i]:=GVL_InstruTestUIVars.g_targetRatedCurrent;
 	END_FOR
 END_IF
-IF GVL_InstruTestUIVars.g_account.actualPermission=3 AND GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruManualTest  THEN
-	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=GVL_InstruTestUIVars.g_rotationTargetCurrent;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=GVL_InstruTestUIVars.g_pitchTargetCurrent;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=GVL_InstruTestUIVars.g_deviationActualCurrent;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=GVL_InstruTestUIVars.g_deviationActualCurrent;
+IF GVL_InstruTestUIVars.g_rotationTargetCurrent=0 THEN GVL_InstruTestUIVars.g_rotationTargetCurrent:=100; END_IF
+IF GVL_InstruTestUIVars.g_pitchTargetCurrent=0 THEN GVL_InstruTestUIVars.g_pitchTargetCurrent:=100; END_IF
+IF GVL_InstruTestUIVars.g_deviationTargetCurrent=0 THEN GVL_InstruTestUIVars.g_deviationTargetCurrent:=100; END_IF
+IF GVL_InstruTestUIVars.g_deviationTargetCurrent=0 THEN GVL_InstruTestUIVars.g_deviationTargetCurrent:=100; END_IF
+IF GVL_InstruTestUIVars.g_account.actualPermission=2 AND GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruManualTest  THEN
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=GVL_InstruTestUIVars.g_rotationTargetCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=GVL_InstruTestUIVars.g_pitchTargetCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=GVL_InstruTestUIVars.g_deviationTargetCurrent;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=GVL_InstruTestUIVars.g_deviationTargetCurrent;
 END_IF
-IF GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruAutoTest  THEN
-	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=250;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=250;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=250;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=250;
+IF GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruAutoTest AND GVL_MES.g_autoTestMode=3 THEN
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=400;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=400;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=400;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=400;
+	IF m_instrument.onChipData.m_InstruReadSucceed AND(InstruType_CauteryHook=m_instrument.m_instruType OR InstruType_CauterySpatula=m_instrument.m_instruType) THEN
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=270;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=270;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=270;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=270;
+	END_IF
 END_IF
 //Account
 GVL_InstruTestUIVars.g_account.memoryAccountNumber[0] :='admin';
@@ -428,12 +479,12 @@ GVL_InstruTestUIVars.g_account.memoryPassWord[0] :='yfAGIBOT2025';
 GVL_InstruTestUIVars.g_account.memoryPermission[0] :=1;
 GVL_InstruTestUIVars.g_account.memoryName[0] :='admin';
 GVL_InstruTestUIVars.g_account.memoryWorkNum[0] :=101;
-
-fbAccountTon(IN:=m_logStep=5 OR m_registerNum=5,PT:=T#0.5S);
+GVL_InstruTestUIVars.g_account.memoryDisable[0]:=FALSE;
 CASE m_logStep OF 
 	0: 
 	  IF GVL_InstruTestUIVars.g_account.logOn THEN 
 		   m_logStep:=5;
+		   m_actualNum:=-1;
 		  GVL_InstruTestUIVars.g_account.logOn:=FALSE;
 	  END_IF
 	5:
@@ -442,7 +493,7 @@ CASE m_logStep OF
 			m_actualNum:=i;
 			m_logStep:=10;
 		ELSE
-			IF fbAccountTon.Q THEN
+			IF m_actualNum=-1 THEN
 				GVL_InstruTestUIVars.g_account.prompt:='Account Err';
 				m_logStep:=0;
 			END_IF
@@ -450,10 +501,17 @@ CASE m_logStep OF
 	END_FOR
 	10:
 	IF GVL_InstruTestUIVars.g_account.actualPassWord = GVL_InstruTestUIVars.g_account.memoryPassWord[m_actualNum] AND GVL_InstruTestUIVars.g_account.actualAccountNumber <> ''THEN
-		m_logStep:=15;
+		m_logStep:=12;
 	ELSE
 		GVL_InstruTestUIVars.g_account.prompt:='PassWord Err';
 		m_logStep:=0;
+	END_IF
+	12:
+	IF GVL_InstruTestUIVars.g_account.memoryDisable[m_actualNum] THEN
+		GVL_InstruTestUIVars.g_account.prompt:='No Enable';
+		m_logStep:=0;
+	ELSE
+		m_logStep:=15;
 	END_IF
 	15:
 	GVL_InstruTestUIVars.g_account.actualPermission := GVL_InstruTestUIVars.g_account.memoryPermission[m_actualNum];
@@ -507,29 +565,42 @@ IF GVL_InstruTestUIVars.g_clearInformation THEN
 	GVL_InstruTestUIVars.g_account.prompt:='';
 	GVL_InstruTestUIVars.g_clearInformation:=FALSE;
 END_IF
-fbRegisterTon(IN:=m_registerNum=30,PT:=T#0.1S);
 IF GVL_InstruTestUIVars.g_account.registerPermission<>2 AND GVL_InstruTestUIVars.g_account.registerPermission<>3 AND
 	GVL_InstruTestUIVars.g_account.registerPermission<>4 THEN
 //	GVL_InstruTestUIVars.g_account.registerPermission:=4;
 END_IF
+m_getSysTime(timeLoDW=>m_fileTime.dwLowDateTime, timeHiDW=>m_fileTime.dwHighDateTime);
+m_timeNow:=FILETIME_TO_SYSTEMTIME(m_fileTime);
+m_timeNow.wHour:=m_timeNow.wHour+8;
+IF m_timeNow.wHour>23 THEN
+	m_timeNow.wHour:=m_timeNow.wHour-24;
+END_IF
+m_time:=SYSTEMTIME_TO_STRING(m_timeNow);
 CASE m_registerNum OF 
 	0:
 	  IF GVL_InstruTestUIVars.g_account.register THEN 
 		  GVL_InstruTestUIVars.g_account.register:=FALSE;
 		  GVL_InstruTestUIVars.g_account.prompt:='';
+		  m_accountRepeat:=FALSE;
+		  m_register:=-1;
 		  m_registerNum:=5;
 	  END_IF
 	5:
 	FOR i:= 0 TO 50 BY 1 DO
       IF  GVL_InstruTestUIVars.g_account.registerAccountNumber <> GVL_InstruTestUIVars.g_account.memoryAccountNumber[i] AND GVL_InstruTestUIVars.g_account.registerAccountNumber <> ''THEN
-		  m_registerNum:=10;
+		;	  
 	  ELSE
-		  IF fbAccountTon.Q THEN
-			  GVL_InstruTestUIVars.g_account.prompt:='Account Repeat';
-			  m_registerNum:=0;
-		  END_IF
+		  m_accountRepeat:=TRUE;
 	  END_IF
 	END_FOR
+	m_registerNum:=6;
+	6:
+	IF m_accountRepeat THEN
+		GVL_InstruTestUIVars.g_account.prompt:='Account Repeat';
+		m_registerNum:=0;
+	ELSE
+		m_registerNum:=10;
+	END_IF
 	10:
 	IF GVL_InstruTestUIVars.g_account.registerPassWord<> '' THEN
 		m_registerNum:=15;
@@ -564,7 +635,7 @@ CASE m_registerNum OF
 		 m_register:=i;
 		 m_registerNum:=35;
 	  ELSE
-		  IF fbRegisterTon.Q THEN
+		  IF m_register=-1 THEN
 			 GVL_InstruTestUIVars.g_account.prompt:='No Room';
 			 m_registerNum:=0;	
 		END_IF
@@ -576,12 +647,66 @@ CASE m_registerNum OF
 	GVL_InstruTestUIVars.g_account.memoryWorkNum[m_register]:=GVL_InstruTestUIVars.g_account.registerWorkNum;
 	GVL_InstruTestUIVars.g_account.memoryName[m_register]:=GVL_InstruTestUIVars.g_account.registerName;
 	GVL_InstruTestUIVars.g_account.memoryPermission[m_register]:=GVL_InstruTestUIVars.g_account.registerPermission;
-	//m_account.memoryTime[m_register]:=;
+	IF GVL_InstruTestUIVars.g_account.registerPermission=1 THEN
+		GVL_InstruTestUIVars.g_account.memoryPermission[m_register]:=4;
+	END_IF
+	GVL_InstruTestUIVars.g_account.memoryTime[m_register]:=m_time;
 	GVL_InstruTestUIVars.g_account.prompt:='Register Succeeded';
 	m_registerNum:=0;
+	m_saveAccount:=TRUE;
 END_CASE
 
+GVL_InstruTestUIVars.g_accountSN := LIMIT(1,GVL_InstruTestUIVars.g_accountSN, 50);
+IF GVL_InstruTestUIVars.g_accountDelete THEN 
+	GVL_InstruTestUIVars.g_accountDelete:=FALSE;
+	m_saveAccount:=TRUE;
+	GVL_InstruTestUIVars.g_account.memoryAccountNumber[GVL_InstruTestUIVars.g_accountSN]:='';
+	GVL_InstruTestUIVars.g_account.memoryPassWord[GVL_InstruTestUIVars.g_accountSN]:='';
+	GVL_InstruTestUIVars.g_account.memoryWorkNum[GVL_InstruTestUIVars.g_accountSN]:=0;
+	GVL_InstruTestUIVars.g_account.memoryName[GVL_InstruTestUIVars.g_accountSN]:='';
+	GVL_InstruTestUIVars.g_account.memoryPermission[GVL_InstruTestUIVars.g_accountSN]:=0;
+	GVL_InstruTestUIVars.g_account.memoryTime[GVL_InstruTestUIVars.g_accountSN]:='';
+END_IF
+IF GVL_InstruTestUIVars.g_disableAccount THEN 
+	GVL_InstruTestUIVars.g_disableAccount:=FALSE;
+	IF GVL_InstruTestUIVars.g_account.memoryDisable[GVL_InstruTestUIVars.g_accountSN] THEN
+		GVL_InstruTestUIVars.g_account.memoryDisable[GVL_InstruTestUIVars.g_accountSN]:=FALSE;
+	ELSE
+		GVL_InstruTestUIVars.g_account.memoryDisable[GVL_InstruTestUIVars.g_accountSN]:=TRUE;
+	END_IF
+END_IF	
+FOR i:=1 TO 50 BY 1 DO 
+	IF GVL_InstruTestUIVars.g_account.memoryAccountNumber[i]='' THEN
+		GVL_InstruTestUIVars.g_account.memoryDisable[i]:=FALSE;
+	END_IF
+END_FOR
+GVL_InstruTestUIVars.g_queryAccountSN := LIMIT(0,GVL_InstruTestUIVars.g_queryAccountSN, 50);
+IF GVL_InstruTestUIVars.g_queryAccountFlag THEN 
+	GVL_InstruTestUIVars.g_queryAccountFlag:=FALSE;
+	GVL_InstruTestUIVars.g_queryAccountNumber:='';
+	GVL_InstruTestUIVars.g_queryPassWord:='';
+	GVL_InstruTestUIVars.g_queryPermission:=0;
+	GVL_InstruTestUIVars.g_queryWorkNum:=0;
+	GVL_InstruTestUIVars.g_queryName:='';
+	GVL_InstruTestUIVars.g_queryTime:='';
+	GVL_InstruTestUIVars.g_queryAccountNumber:=GVL_InstruTestUIVars.g_account.memoryAccountNumber[GVL_InstruTestUIVars.g_queryAccountSN];
+	GVL_InstruTestUIVars.g_queryPassWord:=GVL_InstruTestUIVars.g_account.memoryPassWord[GVL_InstruTestUIVars.g_queryAccountSN];
+	GVL_InstruTestUIVars.g_queryPermission:=GVL_InstruTestUIVars.g_account.memoryPermission[GVL_InstruTestUIVars.g_queryAccountSN];
+	GVL_InstruTestUIVars.g_queryWorkNum:=GVL_InstruTestUIVars.g_account.memoryWorkNum[GVL_InstruTestUIVars.g_queryAccountSN];
+	GVL_InstruTestUIVars.g_queryName:=GVL_InstruTestUIVars.g_account.memoryName[GVL_InstruTestUIVars.g_queryAccountSN];
+	GVL_InstruTestUIVars.g_queryTime:=GVL_InstruTestUIVars.g_account.memoryTime[GVL_InstruTestUIVars.g_queryAccountSN];
+END_IF
+IF GVL_InstruTestUIVars.g_queryClear THEN 
+	GVL_InstruTestUIVars.g_queryClear:=FALSE;
+	GVL_InstruTestUIVars.g_queryAccountNumber:='';
+	GVL_InstruTestUIVars.g_queryPassWord:='';
+	GVL_InstruTestUIVars.g_queryPermission:=0;
+	GVL_InstruTestUIVars.g_queryWorkNum:=0;
+	GVL_InstruTestUIVars.g_queryName:='';
+	GVL_InstruTestUIVars.g_queryTime:='';
+END_IF
 
+bExecute:=NOT fbSocketConnect.bError OR fbTon.Q;
 
 fbSocketConnect(
 	sSrvNetId:= , 
@@ -623,9 +748,34 @@ fbSocketConnect(
 	fbTonCLK2(IN:=fbTonCLK1.Q,PT:=T#1S);
 	bReceive:=fbTonCLK1.Q;
 //RFID
+m_instrument.readParametersRFID(GVL_InstruTestUIVars.g_readRFID);
+GVL_InstruTestUIVars.g_readRFID:=FALSE;
+g_informationVerificationPassed:=FALSE;
+IF m_instrument.onChipData.m_InstruReadSucceedRFID AND m_instrument.onChipData.m_InstruseriesNumRFID=m_instrument.onChipData.m_InstruseriesNum  AND 
+	ABS(m_instrument.onChipData.m_InstruPosRFID[1]-m_instrument.onChipData.m_InstruPos[1])<0.01 AND
+	ABS(m_instrument.onChipData.m_InstruPosRFID[2]-m_instrument.onChipData.m_InstruPos[2])<0.01 AND
+	ABS(m_instrument.onChipData.m_InstruPosRFID[3]-m_instrument.onChipData.m_InstruPos[3])<0.01 THEN
+	
+	g_informationVerificationPassed:=TRUE;
+END_IF;
+GVL_InstruTestUIVars.g_RFID_SN:=ULINT_TO_STRING(m_instrument.onChipData.m_InstruseriesNumRFID);
+IF (LEN(GVL_InstruTestUIVars.g_RFID_SN)=10)THEN
+	GVL_InstruTestUIVars.g_RFID_SN:=concat('00',GVL_InstruTestUIVars.g_RFID_SN);
+ELSIF  (LEN(GVL_InstruTestUIVars.g_RFID_SN)=11)THEN
+	GVL_InstruTestUIVars.g_RFID_SN:=concat('0',GVL_InstruTestUIVars.g_RFID_SN);
+ELSE
+	GVL_InstruTestUIVars.g_RFID_SN:=GVL_InstruTestUIVars.g_RFID_SN;
+END_IF
+GVL_InstruTestUIVars.m_RFIDTimes:=ULINT_TO_DINT(m_instrument.onChipData.m_InstruUsageCountsRFID);
+GVL_InstruTestUIVars.m_Instrument_pos_L1:=m_instrument.onChipData.m_InstruPosRFID[1];
+GVL_InstruTestUIVars.m_Instrument_pos_L2:=m_instrument.onChipData.m_InstruPosRFID[2];
+GVL_InstruTestUIVars.m_Instrument_pos_L3:=m_instrument.onChipData.m_InstruPosRFID[3];
+GVL_InstruTestUIVars.g_informationVerificationPassed:=g_informationVerificationPassed;
+GVL_InstruTestUIVars.g_readedRFID:=m_instrument.onChipData.m_InstruReadSucceedRFID;
 IF GVL_InstruTestUIVars.g_readRFID AND iStepRFID=0 THEN
 	GVL_InstruTestUIVars.g_readRFID:=FALSE;
 	g_readedRFID:=FALSE;
+	GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 	uiRFIDReadSN:=0;
 	iStepRFID:=3;
 	iStepRFIDOnLine:=0;
@@ -715,10 +865,12 @@ CASE iStepRFID OF
 	   wCRCReadSum:=SHL(BYTE_TO_ULINT(arrReadData[109]),8)OR BYTE_TO_ULINT(arrReadData[110]);
 	   IF wCRCReadSum=uiRFIDRead THEN
 	    	g_readedRFID:=TRUE;
+			GVL_InstruTestUIVars.g_readRFIDFlag:=TRUE;
 			uiRFIDReadSN:=0;
 	   FOR i:=1 TO 8 BY 1 DO
 		  uiRFIDReadSN:=SHL(BYTE_TO_ULINT(arrReadData[58+i]),64-i*8)+uiRFIDReadSN;
 	  END_FOR
+	  m_readRFIDTimes:=0;
 	   FOR i:=1 TO 4 BY 1 DO
 		  m_readRFIDTimes:=SHL(BYTE_TO_DINT(arrReadData[68+i]),32-i*8)+m_readRFIDTimes;
 	  END_FOR
@@ -746,6 +898,7 @@ CASE iStepRFID OF
 	   END_IF
 	 30:
 	    g_readedRFID:=FALSE;
+		GVL_InstruTestUIVars.g_readRFIDFlag:=FALSE;
 	    iStepRFID:=0;
 		iStepRFIDOnLine:=0;
  	 53:	                   //Write
@@ -818,7 +971,7 @@ CASE iStepRFID OF
 	   iStepRFIDOnLine:=0;
 	  
 END_CASE
-	 
+	 (*
 SNMid :=LREAL_TO_INT( FLOOR(ULINT_TO_LREAL(uiRFIDReadSN)/1000000000));
 g_informationVerificationPassed:=FALSE;
 IF g_readedRFID AND g_instruSN=uiRFIDReadSN  AND  (SNMid=042 OR SNMid=043 OR TRUE )AND 
@@ -829,7 +982,7 @@ IF g_readedRFID AND g_instruSN=uiRFIDReadSN  AND  (SNMid=042 OR SNMid=043 OR TRU
 	g_informationVerificationPassed:=TRUE;
 END_IF;
 
-
+*)
 IF g_informationVerificationPassed THEN
 (*	g_instruPurposeUI:=m_instruPurpose;
 	GVL_InstruTestUIVars.g_instruName:=1;
@@ -875,10 +1028,11 @@ ELSE
 	GVL_InstruTestUIVars.g_readOpenAngleLinkPos:=0;
 	*)
 END_IF
+(*
 IF m_instrument.onChipData.m_InstruReadSucceed THEN
 	GVL_InstruTestUIVars.g_readSNNum:=m_instrument.onChipData.m_InstruseriesNum;
 END_IF
-
+GVL_InstruTestUIVars.g_readRFIDFlag:=g_readedRFID;
 GVL_InstruTestUIVars.g_offLineRFID:=g_offLineRFID;
 GVL_InstruTestUIVars.g_informationVerificationPassed:=g_informationVerificationPassed;
 GVL_InstruTestUIVars.g_readedRFID:=g_readedRFID;
@@ -890,22 +1044,52 @@ ELSIF  (LEN(GVL_InstruTestUIVars.g_RFID_SN)=11)THEN
 ELSE
 	GVL_InstruTestUIVars.g_RFID_SN:=GVL_InstruTestUIVars.g_RFID_SN;
 END_IF
-g_instruSN:= GVL_InstruTestUIVars.g_readSNNum;
-g_RFIDinstruSN:=GVL_InstruTestUIVars.g_readSNNum;
-m_writeRFIDTimes:=GVL_InstruTestUIVars.g_instruNumberOfUses;
-m_writeInstrument_pos_L1:=GVL_InstruTestUIVars.g_instruZeroPos[1];
-m_writeInstrument_pos_L2:=GVL_InstruTestUIVars.g_instruZeroPos[2];
-m_writeInstrument_pos_L3:=GVL_InstruTestUIVars.g_instruZeroPos[3];
+IF m_instrument.onChipData.m_InstruReadSucceed THEN
+	g_instruSN:= GVL_InstruTestUIVars.g_readSNNum;
+	g_RFIDinstruSN:=GVL_InstruTestUIVars.g_readSNNum;
+	m_writeRFIDTimes:=GVL_InstruTestUIVars.g_instruNumberOfUses;
+	m_writeInstrument_pos_L1:=GVL_InstruTestUIVars.g_instruZeroPos[1];
+	m_writeInstrument_pos_L2:=GVL_InstruTestUIVars.g_instruZeroPos[2];
+	m_writeInstrument_pos_L3:=GVL_InstruTestUIVars.g_instruZeroPos[3];
+END_IF
 GVL_InstruTestUIVars.m_RFIDTimes:=m_readRFIDTimes;
 GVL_InstruTestUIVars.m_Instrument_pos_L1:=m_readInstrument_pos_L1;
 GVL_InstruTestUIVars.m_Instrument_pos_L2:=m_readInstrument_pos_L2;
 GVL_InstruTestUIVars.m_Instrument_pos_L3:=m_readInstrument_pos_L3;
+*)
 (*
 fbTonRFIDReaded(IN:=(GVL_InstruTestUIVars.IsolationPlate_Instrument_Install_Start AND 16#2)<>16#2,PT:=T#3S);
 IF fbTonRFIDReaded.Q THEN
 g_readedRFID:=FALSE;
 END_IF
-*)]]></ST>
+*)
+
+
+
+//read recipe
+IF (m_bReadRecipeStep<=2 AND m_bReadRecipeStep>0) THEN
+	//The method loads a recipe from the specified recipe file.  It subsequently writes the recipe into the PLC variables.
+    ReturnDwordRead:=RecipeManCommands.LoadAndWriteRecipe(RecipeDefinitionName:=GVL_SystemParameters.RecipeDefinitionName[m_bReadRecipeStep] , RecipeName:='RecipeRecord');
+	IF ReturnDwordRead = ERR_OK THEN
+		m_bReadRecipeStep:=m_bReadRecipeStep+1; 
+	END_IF
+END_IF 
+//loadConfigFile := m_bReadRecipeStep>2;
+//write recipe
+IF m_saveAccount THEN	
+	//This method creates a new recipe in the specified recipe definition. It subsequently reads the current PLC values into the new recipe and saves it as a recipe file with a standard name.
+	 RecipeManCommands.CreateRecipe(RecipeDefinitionName:=GVL_SystemParameters.RecipeDefinitionName[1] , RecipeName:='RecipeRecord' );
+	 ReturnDwordWrite:=RecipeManCommands.ReadAndSaveRecipe(RecipeDefinitionName:=GVL_SystemParameters.RecipeDefinitionName[1] , RecipeName:='RecipeRecord' ); 
+	 m_saveAccount:=0;
+END_IF
+IF  m_saveCaliLinkEncoder THEN	
+	//This method creates a new recipe in the specified recipe definition. It subsequently reads the current PLC values into the new recipe and saves it as a recipe file with a standard name.
+	 RecipeManCommands.CreateRecipe(RecipeDefinitionName:=GVL_SystemParameters.RecipeDefinitionName[2] , RecipeName:='RecipeRecord' );
+	 ReturnDwordWrite:=RecipeManCommands.ReadAndSaveRecipe(RecipeDefinitionName:=GVL_SystemParameters.RecipeDefinitionName[2] , RecipeName:='RecipeRecord' );
+	 m_saveCaliLinkEncoder:=0;
+END_IF
+
+GVL_InstruTestUIVars.g_instruSNLen:=LEN(GVL_InstruTestUIVars.g_newInstruSN);]]></ST>
       </Implementation>
     </Method>
     <Method Name="checkLight" Id="{f01081ee-1e3d-4082-9296-257b5773b0af}">
@@ -1407,6 +1591,63 @@ END_VAR
         </Implementation>
       </Get>
     </Property>
+    <Method Name="mes" Id="{76588c5b-a490-47ba-bff5-2070f32dad84}">
+      <Declaration><![CDATA[METHOD mes : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[GVL_MES.g_serialNumLen:=LEN(GVL_MES.g_serialNum);
+IF GVL_MES.g_serialNum<>m_serialNumOld AND GVL_MES.g_serialNumLen=9 THEN
+	GVL_MES.g_eventTime[1]:=m_time;
+END_IF
+m_serialNumOld:=GVL_MES.g_serialNum;
+GVL_MES.g_actualAccountNumber:=GVL_InstruTestUIVars.g_account.actualAccountNumber;
+IF m_logStep=15 THEN
+	GVL_MES.g_eventTime[2]:=m_time;
+END_IF
+GVL_MES.g_powerBoxCalibrationPos:=GVL_SlaveJointEncoderCaliData.g_caliLinkEncoder;
+IF GVL_InstruTestUIVars.g_powerBoxCalibrationFlag=FALSE THEN
+	GVL_MES.g_eventTime[3]:=m_time;
+END_IF
+GVL_MES.g_SN:=GVL_InstruTestUIVars.g_instruSN;
+IF startFlag THEN
+	GVL_MES.g_eventTime[4]:=m_time;
+END_IF
+GVL_MES.g_writeInstruZeroPos:=GVL_InstruTestUIVars.writeInstruZeroPos;
+IF GVL_InstruTestUIVars.g_writeZeroPosFlag THEN
+	GVL_MES.g_eventTime[5]:=m_time;
+END_IF
+GVL_MES.g_instruZeroPos:=GVL_InstruTestUIVars.g_instruZeroPos;
+IF startFlag THEN
+	GVL_MES.g_eventTime[6]:=m_time;
+END_IF
+GVL_MES.g_readRFIDFlig:=g_readedRFID;
+IF iStepRFID=5 THEN
+	GVL_MES.g_eventTime[7]:=m_time;
+END_IF
+IF GVL_MES.g_autoTestMode=3 OR GVL_MES.g_autoTestMode=13 THEN
+	GVL_MES.g_curNumTiredTest:=GVL_InstruTestUIVars.g_curTestCycles;
+ELSE
+	GVL_MES.g_curNumTiredTest:=0;
+END_IF
+IF m_curTestCyclesOld<>GVL_InstruTestUIVars.g_curTestCycles AND(GVL_MES.g_autoTestMode=3 OR GVL_MES.g_autoTestMode=13) THEN
+	GVL_MES.g_eventTime[8]:=m_time;
+END_IF
+m_curTestCyclesOld:=GVL_InstruTestUIVars.g_curTestCycles;
+IF GVL_MES.g_attitudeOK THEN
+	GVL_MES.g_attitudeConfirm:=1;
+	GVL_MES.g_attitudeOK:=0;
+	GVL_MES.g_eventTime[9]:=m_time;
+ELSIF
+	GVL_MES.g_attitudeNG THEN
+	GVL_MES.g_attitudeConfirm:=2;
+	GVL_MES.g_attitudeNG:=0;
+	GVL_MES.g_eventTime[9]:=m_time;
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
     <Method Name="modifyJaco" Id="{d0ec41d7-ce80-43b2-a117-9fcbd2b4368b}">
       <Declaration><![CDATA[METHOD PROTECTED modifyJaco : BOOL
 VAR_IN_OUT CONSTANT
@@ -1558,6 +1799,15 @@ END_VAR
       <Implementation>
         <ST><![CDATA[m_instruInvasionDepth := m_curJntPos[3]-m_instrument.instruTypeInfo.m_rodLength-m_instrument.instruTypeInfo.m_headLength
 						- m_instrument.instruTypeInfo.m_fingerLength;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="setSaveCaliLinkEncoder" Id="{b8308202-10fd-4610-ad6f-7e31e2afd5e3}">
+      <Declaration><![CDATA[METHOD setSaveCaliLinkEncoder : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_saveCaliLinkEncoder:=1;]]></ST>
       </Implementation>
     </Method>
     <Property Name="simCartPose" Id="{6426ffc4-f74f-4984-ac32-a9f9d8b8c8ca}" FolderPath="property\">
@@ -1726,6 +1976,9 @@ END_FOR
 // check IO informantion
 checkIO();
 
+//mes
+mes();
+
 // get joint data
 FOR i:=1 TO g_sJntNum DO
 	m_curMotorPos[i]:=m_joints[i].motorPos;
@@ -1787,165 +2040,126 @@ END_FOR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.checkIO">
-      <LineId Id="21" Count="1" />
-      <LineId Id="133" Count="0" />
-      <LineId Id="58" Count="1" />
-      <LineId Id="56" Count="0" />
-      <LineId Id="26" Count="0" />
-      <LineId Id="6" Count="2" />
-      <LineId Id="112" Count="0" />
-      <LineId Id="37" Count="0" />
-      <LineId Id="36" Count="0" />
-      <LineId Id="41" Count="0" />
-      <LineId Id="40" Count="0" />
-      <LineId Id="42" Count="0" />
-      <LineId Id="1254" Count="0" />
-      <LineId Id="1240" Count="0" />
-      <LineId Id="38" Count="0" />
-      <LineId Id="85" Count="0" />
-      <LineId Id="84" Count="0" />
-      <LineId Id="39" Count="0" />
-      <LineId Id="114" Count="0" />
-      <LineId Id="70" Count="0" />
-      <LineId Id="125" Count="0" />
-      <LineId Id="73" Count="0" />
-      <LineId Id="93" Count="1" />
-      <LineId Id="96" Count="1" />
-      <LineId Id="95" Count="0" />
-      <LineId Id="76" Count="0" />
-      <LineId Id="98" Count="5" />
-      <LineId Id="74" Count="0" />
-      <LineId Id="142" Count="5" />
-      <LineId Id="149" Count="0" />
-      <LineId Id="153" Count="5" />
-      <LineId Id="45" Count="0" />
-      <LineId Id="195" Count="2" />
-      <LineId Id="199" Count="9" />
-      <LineId Id="194" Count="0" />
-      <LineId Id="218" Count="12" />
-      <LineId Id="217" Count="0" />
-      <LineId Id="210" Count="0" />
-      <LineId Id="209" Count="0" />
-      <LineId Id="273" Count="0" />
-      <LineId Id="212" Count="0" />
-      <LineId Id="211" Count="0" />
-      <LineId Id="214" Count="0" />
-      <LineId Id="216" Count="0" />
-      <LineId Id="215" Count="0" />
-      <LineId Id="1300" Count="5" />
-      <LineId Id="274" Count="1" />
-      <LineId Id="578" Count="0" />
-      <LineId Id="276" Count="1" />
-      <LineId Id="574" Count="0" />
-      <LineId Id="279" Count="0" />
-      <LineId Id="640" Count="0" />
-      <LineId Id="575" Count="0" />
-      <LineId Id="213" Count="0" />
-      <LineId Id="318" Count="0" />
-      <LineId Id="576" Count="0" />
-      <LineId Id="656" Count="2" />
-      <LineId Id="577" Count="0" />
-      <LineId Id="764" Count="4" />
-      <LineId Id="763" Count="0" />
-      <LineId Id="317" Count="0" />
-      <LineId Id="789" Count="1" />
-      <LineId Id="793" Count="0" />
-      <LineId Id="791" Count="1" />
-      <LineId Id="795" Count="0" />
-      <LineId Id="794" Count="0" />
-      <LineId Id="319" Count="0" />
-      <LineId Id="346" Count="0" />
-      <LineId Id="349" Count="0" />
-      <LineId Id="788" Count="0" />
-      <LineId Id="350" Count="1" />
-      <LineId Id="348" Count="0" />
-      <LineId Id="354" Count="1" />
-      <LineId Id="357" Count="0" />
-      <LineId Id="387" Count="1" />
-      <LineId Id="796" Count="0" />
-      <LineId Id="389" Count="1" />
-      <LineId Id="797" Count="0" />
-      <LineId Id="392" Count="0" />
-      <LineId Id="356" Count="0" />
-      <LineId Id="353" Count="0" />
-      <LineId Id="393" Count="1" />
-      <LineId Id="397" Count="1" />
-      <LineId Id="396" Count="0" />
-      <LineId Id="395" Count="0" />
-      <LineId Id="399" Count="1" />
-      <LineId Id="408" Count="1" />
-      <LineId Id="746" Count="0" />
-      <LineId Id="402" Count="0" />
-      <LineId Id="401" Count="0" />
-      <LineId Id="347" Count="0" />
-      <LineId Id="1258" Count="0" />
-      <LineId Id="1260" Count="14" />
-      <LineId Id="1259" Count="0" />
-      <LineId Id="1256" Count="1" />
-      <LineId Id="1255" Count="0" />
-      <LineId Id="676" Count="0" />
-      <LineId Id="743" Count="0" />
-      <LineId Id="403" Count="1" />
-      <LineId Id="798" Count="3" />
-      <LineId Id="406" Count="0" />
-      <LineId Id="802" Count="0" />
-      <LineId Id="405" Count="0" />
-      <LineId Id="818" Count="4" />
-      <LineId Id="804" Count="0" />
-      <LineId Id="828" Count="3" />
-      <LineId Id="827" Count="0" />
-      <LineId Id="826" Count="0" />
-      <LineId Id="825" Count="0" />
-      <LineId Id="835" Count="0" />
-      <LineId Id="1321" Count="1" />
-      <LineId Id="1324" Count="0" />
-      <LineId Id="1323" Count="0" />
-      <LineId Id="407" Count="0" />
-      <LineId Id="445" Count="0" />
-      <LineId Id="442" Count="1" />
-      <LineId Id="803" Count="0" />
-      <LineId Id="444" Count="0" />
-      <LineId Id="410" Count="0" />
-      <LineId Id="446" Count="0" />
-      <LineId Id="448" Count="0" />
-      <LineId Id="447" Count="0" />
-      <LineId Id="449" Count="0" />
-      <LineId Id="452" Count="0" />
-      <LineId Id="832" Count="0" />
-      <LineId Id="453" Count="0" />
-      <LineId Id="833" Count="1" />
-      <LineId Id="450" Count="1" />
-      <LineId Id="455" Count="2" />
-      <LineId Id="460" Count="1" />
-      <LineId Id="459" Count="0" />
-      <LineId Id="458" Count="0" />
-      <LineId Id="463" Count="0" />
-      <LineId Id="465" Count="4" />
-      <LineId Id="464" Count="0" />
-      <LineId Id="471" Count="5" />
-      <LineId Id="470" Count="0" />
-      <LineId Id="478" Count="5" />
-      <LineId Id="477" Count="0" />
-      <LineId Id="484" Count="0" />
-      <LineId Id="486" Count="1" />
-      <LineId Id="485" Count="0" />
-      <LineId Id="545" Count="1" />
-      <LineId Id="836" Count="0" />
-      <LineId Id="548" Count="0" />
-      <LineId Id="547" Count="0" />
-      <LineId Id="837" Count="0" />
-      <LineId Id="549" Count="10" />
-      <LineId Id="411" Count="0" />
-      <LineId Id="839" Count="141" />
-      <LineId Id="1286" Count="2" />
-      <LineId Id="981" Count="35" />
-      <LineId Id="1045" Count="113" />
-      <LineId Id="1283" Count="2" />
-      <LineId Id="1159" Count="4" />
-      <LineId Id="1307" Count="5" />
-      <LineId Id="1306" Count="0" />
-      <LineId Id="1164" Count="14" />
+      <LineId Id="1333" Count="80" />
+      <LineId Id="1996" Count="0" />
+      <LineId Id="1998" Count="11" />
+      <LineId Id="1997" Count="0" />
+      <LineId Id="2033" Count="0" />
+      <LineId Id="2032" Count="0" />
+      <LineId Id="1995" Count="0" />
+      <LineId Id="2119" Count="1" />
+      <LineId Id="2122" Count="2" />
+      <LineId Id="2121" Count="0" />
+      <LineId Id="2125" Count="0" />
+      <LineId Id="1414" Count="2" />
+      <LineId Id="2010" Count="0" />
+      <LineId Id="1417" Count="3" />
+      <LineId Id="2012" Count="0" />
+      <LineId Id="2011" Count="0" />
+      <LineId Id="1421" Count="7" />
+      <LineId Id="2014" Count="2" />
+      <LineId Id="2013" Count="0" />
+      <LineId Id="1429" Count="8" />
+      <LineId Id="2025" Count="3" />
+      <LineId Id="1438" Count="10" />
+      <LineId Id="2030" Count="0" />
+      <LineId Id="1948" Count="0" />
+      <LineId Id="2031" Count="0" />
+      <LineId Id="1949" Count="0" />
+      <LineId Id="1946" Count="1" />
+      <LineId Id="1449" Count="6" />
+      <LineId Id="1457" Count="4" />
+      <LineId Id="2056" Count="0" />
+      <LineId Id="1462" Count="20" />
+      <LineId Id="2153" Count="0" />
+      <LineId Id="2147" Count="0" />
+      <LineId Id="2150" Count="0" />
+      <LineId Id="2148" Count="0" />
+      <LineId Id="2151" Count="1" />
+      <LineId Id="2149" Count="0" />
+      <LineId Id="1483" Count="51" />
+      <LineId Id="1536" Count="3" />
+      <LineId Id="2058" Count="0" />
+      <LineId Id="2134" Count="0" />
+      <LineId Id="2136" Count="2" />
+      <LineId Id="2135" Count="0" />
+      <LineId Id="2057" Count="0" />
+      <LineId Id="1540" Count="4" />
+      <LineId Id="2046" Count="0" />
+      <LineId Id="2055" Count="0" />
+      <LineId Id="1545" Count="6" />
+      <LineId Id="2044" Count="0" />
+      <LineId Id="1556" Count="1" />
+      <LineId Id="2054" Count="0" />
+      <LineId Id="2047" Count="0" />
+      <LineId Id="2049" Count="4" />
+      <LineId Id="2048" Count="0" />
+      <LineId Id="1558" Count="45" />
+      <LineId Id="2071" Count="1" />
+      <LineId Id="2068" Count="0" />
+      <LineId Id="1604" Count="2" />
+      <LineId Id="1986" Count="0" />
+      <LineId Id="1607" Count="0" />
+      <LineId Id="2081" Count="0" />
+      <LineId Id="2085" Count="0" />
+      <LineId Id="2079" Count="0" />
+      <LineId Id="2082" Count="0" />
+      <LineId Id="2086" Count="0" />
+      <LineId Id="2084" Count="0" />
+      <LineId Id="2088" Count="3" />
+      <LineId Id="2087" Count="0" />
+      <LineId Id="2083" Count="0" />
+      <LineId Id="2154" Count="0" />
+      <LineId Id="2092" Count="0" />
+      <LineId Id="2157" Count="0" />
+      <LineId Id="2156" Count="0" />
+      <LineId Id="2158" Count="2" />
+      <LineId Id="2155" Count="0" />
+      <LineId Id="2161" Count="1" />
+      <LineId Id="2164" Count="1" />
+      <LineId Id="2163" Count="0" />
+      <LineId Id="2093" Count="1" />
+      <LineId Id="2097" Count="0" />
+      <LineId Id="2113" Count="4" />
+      <LineId Id="2112" Count="0" />
+      <LineId Id="2098" Count="5" />
+      <LineId Id="1608" Count="0" />
+      <LineId Id="2111" Count="0" />
+      <LineId Id="2118" Count="0" />
+      <LineId Id="2106" Count="4" />
+      <LineId Id="2104" Count="1" />
+      <LineId Id="2095" Count="0" />
+      <LineId Id="1609" Count="41" />
+      <LineId Id="2175" Count="0" />
+      <LineId Id="2174" Count="0" />
+      <LineId Id="2178" Count="6" />
+      <LineId Id="2177" Count="0" />
+      <LineId Id="2189" Count="7" />
+      <LineId Id="2205" Count="2" />
+      <LineId Id="2187" Count="1" />
+      <LineId Id="2176" Count="0" />
+      <LineId Id="1651" Count="255" />
+      <LineId Id="2186" Count="0" />
+      <LineId Id="1907" Count="14" />
+      <LineId Id="2074" Count="0" />
+      <LineId Id="1922" Count="5" />
+      <LineId Id="2076" Count="0" />
+      <LineId Id="1928" Count="3" />
+      <LineId Id="2185" Count="0" />
+      <LineId Id="1932" Count="4" />
       <LineId Id="838" Count="0" />
+      <LineId Id="1959" Count="1" />
+      <LineId Id="1958" Count="0" />
+      <LineId Id="1962" Count="7" />
+      <LineId Id="1978" Count="0" />
+      <LineId Id="1972" Count="4" />
+      <LineId Id="1984" Count="0" />
+      <LineId Id="1961" Count="0" />
+      <LineId Id="1980" Count="3" />
+      <LineId Id="1985" Count="0" />
+      <LineId Id="1979" Count="0" />
+      <LineId Id="2035" Count="0" />
+      <LineId Id="2034" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.checkLight">
       <LineId Id="38" Count="0" />
@@ -2098,6 +2312,31 @@ END_FOR
     <LineIds Name="FB_SlaveArm.massMat.Get">
       <LineId Id="2" Count="0" />
     </LineIds>
+    <LineIds Name="FB_SlaveArm.mes">
+      <LineId Id="56" Count="0" />
+      <LineId Id="5" Count="7" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="13" Count="0" />
+      <LineId Id="16" Count="9" />
+      <LineId Id="27" Count="2" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="30" Count="0" />
+      <LineId Id="53" Count="2" />
+      <LineId Id="57" Count="0" />
+      <LineId Id="33" Count="0" />
+      <LineId Id="59" Count="1" />
+      <LineId Id="58" Count="0" />
+      <LineId Id="34" Count="0" />
+      <LineId Id="37" Count="1" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="42" Count="1" />
+      <LineId Id="45" Count="0" />
+      <LineId Id="50" Count="0" />
+      <LineId Id="46" Count="3" />
+      <LineId Id="51" Count="0" />
+      <LineId Id="44" Count="0" />
+      <LineId Id="39" Count="0" />
+    </LineIds>
     <LineIds Name="FB_SlaveArm.modifyJaco">
       <LineId Id="248" Count="0" />
       <LineId Id="338" Count="1" />
@@ -2131,6 +2370,9 @@ END_FOR
     </LineIds>
     <LineIds Name="FB_SlaveArm.setInstruDepth">
       <LineId Id="5" Count="1" />
+    </LineIds>
+    <LineIds Name="FB_SlaveArm.setSaveCaliLinkEncoder">
+      <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.simCartPose.Get">
       <LineId Id="2" Count="0" />
@@ -2177,7 +2419,10 @@ END_FOR
       <LineId Id="135" Count="0" />
       <LineId Id="103" Count="0" />
       <LineId Id="120" Count="0" />
+      <LineId Id="159" Count="0" />
       <LineId Id="128" Count="0" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="160" Count="0" />
       <LineId Id="5" Count="0" />
       <LineId Id="11" Count="0" />
       <LineId Id="63" Count="1" />
