@@ -27,11 +27,17 @@ VAR_GLOBAL
 	g_gripperOpenFlag :BOOL :=FALSE; // 命令器械张开按键, 按下反弹
 	g_gripperCloseFlag :BOOL :=FALSE; // 命令器械闭合按键, 按下反弹
 	g_maxGripForceFlag :BOOL :=FALSE;// 命令器械最大加紧力按键, 按下反弹
+	g_forceBipolarMode : BOOL := FALSE;
+	g_forceBipolarModeAllowed : BOOL := FALSE;
 	
 	// control variable for instrument verify
 	g_instruVerifyFlag :BOOL :=FALSE; // 器械验证按键，按下不反弹
 	g_instruVerifyLastStepFlag :BOOL:=FALSE; // 下一步按键， 按下反弹
 	g_instruVerifyNextStepFlag :BOOL :=FALSE; // 上一步按键，按下反弹
+	
+	//friction test
+	g_instruFrictionTestAllowed : BOOL;
+	g_instruFrictionTest : BOOL;
 	
 	//################ output variables  HMI ########################
 	g_curInstruJntPos :Vec5d;   // 当前器械角度位置

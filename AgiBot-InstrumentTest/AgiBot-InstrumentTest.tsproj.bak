@@ -682,9 +682,9 @@
 				<Name>Device 4 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
-						<DeviceDesc>????????a? 2 (TwinCAT-Intel PCI Ethernet Adap</DeviceDesc>
-						<DeviceName>\DEVICE\{DFF8102E-B860-45B4-81F9-64631F205420}</DeviceName>
-						<DeviceData>00e2699528e8</DeviceData>
+						<DeviceDesc>??? 2 (TwinCAT-Intel PCI Ethernet Adapter (Gi</DeviceDesc>
+						<DeviceName>\DEVICE\{CBC412AB-C401-497E-B857-7C4D83AC7013}</DeviceName>
+						<DeviceData>68eda467852c</DeviceData>
 					</Pnp>
 				</AddressInfo>
 				<Image Id="4" AddrType="9" ImageType="3">

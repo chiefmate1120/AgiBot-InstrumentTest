@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveRobot" Id="{8cbdb2ba-9735-46e3-8cbc-296330acc8cc}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveRobot
 VAR
@@ -361,6 +361,10 @@ FOR i:=1 TO g_sArmNum DO
 			// to instrument verify
 			ELSIF GVL_InstruTestUIVars.g_endoscopeTest THEN
 				m_nextSlaveArmState[i] := SlaveArmState_EndoscopeTest;
+				
+			//to friction Test
+			ELSIF GVL_InstruTestUIVars.g_instruFrictionTest THEN
+				m_nextSlaveArmState[i] := SlaveArmState_FrictionTest;
 			END_IF
 			
 		//instrument caliberation
@@ -401,12 +405,14 @@ FOR i:=1 TO g_sArmNum DO
 			IF m_armCtrl[i].isFinished THEN
 				GVL_InstruTestUIVars.g_instruVerifyFlag:=FALSE;
 			END_IF
+			
 		//arm stop
 		SlaveArmState_Stop:
 			// to standby
 			IF  m_armCtrl[i].isFinished THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
+			
 		SlaveArmState_Disable:
 			// to init
 			IF  NOT GVL_InstruTestUIVars.g_powerOn  THEN
@@ -415,13 +421,15 @@ FOR i:=1 TO g_sArmNum DO
 		    IF  NOT( m_slaveArms[1].instruOn) THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Init;
 			END_IF
+			
 		SlaveArmState_EndoscopeTest:
 			IF  NOT( m_slaveArms[1].instruOn) OR NOT(GVL_InstruTestUIVars.g_endoscopeTest)  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Stop;
 			END_IF
+			
 		SlaveArmState_FrictionTest:
 			// to stop
-			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished  THEN
+			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished OR NOT GVL_InstruTestUIVars.g_instruFrictionTest  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 	END_CASE
@@ -458,11 +466,14 @@ GVL_InstruTestUIVars.g_snappingSeparatoring:=GVL_InstruTestUIVars.g_stateMachine
 GVL_InstruTestUIVars.g_instruAutoSnapping:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_MountInstru;
 GVL_InstruTestUIVars.g_instruCalibrationing:=m_instruCali[1].getState AND GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruCali;
 GVL_MES.g_autoTestMode:=m_instruAutoTest[1].getTestMode;
+GVL_InstruTestUIVars.g_forceBipolarModeAllowed := InstruType_ForceBipolar = m_slaveArms[1].instrument.instruTypeInfo.m_InstruID;
+GVL_InstruTestUIVars.g_instruFrictionTestAllowed := m_slaveArms[1].instrument.onChipData.m_InstruReadSucceed AND m_instrumentMountedFlag[1];
 GVL_InstruTestUIVars.g_testEnable:=m_slaveArms[1].instrument.onChipData.m_InstruReadSucceed AND m_instrumentMountedFlag[1];
 IF NOT GVL_InstruTestUIVars.g_testEnable THEN
 	GVL_InstruTestUIVars.g_instruAutoTestFlag:=FALSE;
 	GVL_InstruTestUIVars.g_instruManualTestFlag:=FALSE;
 	GVL_InstruTestUIVars.g_instruVerifyFlag:=FALSE;
+	
 END_IF
 GVL_InstruTestUIVars.g_standbyEnable:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_Standby AND NOT m_slaveArms[1].panelOn;]]></ST>
       </Implementation>
@@ -565,12 +576,22 @@ END_FOR
       <LineId Id="1478" Count="0" />
       <LineId Id="1480" Count="1" />
       <LineId Id="1479" Count="0" />
+      <LineId Id="1598" Count="0" />
+      <LineId Id="1603" Count="0" />
+      <LineId Id="1599" Count="0" />
+      <LineId Id="1602" Count="0" />
       <LineId Id="1393" Count="0" />
       <LineId Id="1477" Count="0" />
-      <LineId Id="1395" Count="51" />
+      <LineId Id="1395" Count="37" />
+      <LineId Id="1594" Count="0" />
+      <LineId Id="1433" Count="5" />
+      <LineId Id="1595" Count="0" />
+      <LineId Id="1439" Count="7" />
+      <LineId Id="1596" Count="0" />
       <LineId Id="1474" Count="1" />
       <LineId Id="1473" Count="0" />
       <LineId Id="1476" Count="0" />
+      <LineId Id="1597" Count="0" />
       <LineId Id="1570" Count="0" />
       <LineId Id="1573" Count="2" />
       <LineId Id="1578" Count="0" />
@@ -589,8 +610,11 @@ END_FOR
       <LineId Id="1521" Count="0" />
       <LineId Id="1523" Count="0" />
       <LineId Id="1539" Count="0" />
+      <LineId Id="1586" Count="0" />
+      <LineId Id="1601" Count="0" />
       <LineId Id="1548" Count="2" />
       <LineId Id="1552" Count="1" />
+      <LineId Id="1600" Count="0" />
       <LineId Id="1551" Count="0" />
       <LineId Id="1547" Count="0" />
     </LineIds>

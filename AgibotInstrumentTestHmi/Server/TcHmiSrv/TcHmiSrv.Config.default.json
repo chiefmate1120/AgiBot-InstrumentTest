@@ -68,6 +68,14 @@
             "minItems": 51,
             "type": "array"
         },
+        "PLC1.ARRAY_0..5_OF-Tc2_Standard.TON": {
+            "items": {
+                "$ref": "#/definitions/PLC1.Tc2_Standard.TON"
+            },
+            "maxItems": 6,
+            "minItems": 6,
+            "type": "array"
+        },
         "PLC1.ARRAY_1..1_1..8_OF-DINT": {
             "displayAsMatrix": 2,
             "items": {
@@ -308,6 +316,181 @@
             },
             "type": "object"
         },
+        "PLC1.E_EndoscopePosture": {
+            "attributes": {
+                "generate_implicit_init_function": ""
+            },
+            "enum": [
+                1,
+                2
+            ],
+            "options": [
+                {
+                    "label": "EndoscopePosture_HeadUp",
+                    "value": 1
+                },
+                {
+                    "label": "EndoScopePosture_HeadDown",
+                    "value": 2
+                }
+            ],
+            "type": "integer"
+        },
+        "PLC1.E_EndoscopeType": {
+            "attributes": {
+                "generate_implicit_init_function": ""
+            },
+            "enum": [
+                1,
+                2
+            ],
+            "options": [
+                {
+                    "label": "EndoscopeType_0",
+                    "value": 1
+                },
+                {
+                    "label": "EndoScopeType_30",
+                    "value": 2
+                }
+            ],
+            "type": "integer"
+        },
+        "PLC1.E_InstrumentType": {
+            "attributes": {
+                "generate_implicit_init_function": ""
+            },
+            "enum": [
+                0,
+                7,
+                8,
+                9,
+                10,
+                11,
+                12,
+                13,
+                14,
+                15,
+                16,
+                17,
+                20,
+                31,
+                42,
+                43,
+                44,
+                45,
+                46,
+                47,
+                48,
+                49,
+                50,
+                51,
+                52
+            ],
+            "options": [
+                {
+                    "label": "InstruType_UNKNOWM",
+                    "value": 0
+                },
+                {
+                    "label": "InstruType_CadiereForceps",
+                    "value": 7
+                },
+                {
+                    "label": "InstruType_NeedleDriver",
+                    "value": 8
+                },
+                {
+                    "label": "InstruType_MegaSCNeedleDriver",
+                    "value": 9
+                },
+                {
+                    "label": "InstruType_SCNeedleDriver",
+                    "value": 10
+                },
+                {
+                    "label": "InstruType_RoundTipScissors",
+                    "value": 11
+                },
+                {
+                    "label": "InstruType_ProGraspForceps",
+                    "value": 12
+                },
+                {
+                    "label": "InstruType_MarylandForceps",
+                    "value": 13
+                },
+                {
+                    "label": "InstruType_FenestratedForceps",
+                    "value": 14
+                },
+                {
+                    "label": "InstruType_CurvedScissors",
+                    "value": 15
+                },
+                {
+                    "label": "InstruType_CauteryHook",
+                    "value": 16
+                },
+                {
+                    "label": "InstruType_CauterySpatula",
+                    "value": 17
+                },
+                {
+                    "label": "InstruType_Endoscope",
+                    "value": 20
+                },
+                {
+                    "label": "InstruType_NewEndoscope",
+                    "value": 31
+                },
+                {
+                    "label": "InstruType_UltrasoundKnifeS",
+                    "value": 42
+                },
+                {
+                    "label": "InstruType_UltrasoundKnifeU",
+                    "value": 43
+                },
+                {
+                    "label": "InstruType_TipUpFenestratedGrasper",
+                    "value": 44
+                },
+                {
+                    "label": "InstruType_MegaNeedleDriver",
+                    "value": 45
+                },
+                {
+                    "label": "InstruType_DeBakeyForceps",
+                    "value": 46
+                },
+                {
+                    "label": "InstruType_BlackDiamondForceps",
+                    "value": 47
+                },
+                {
+                    "label": "InstruType_PottsScissors",
+                    "value": 48
+                },
+                {
+                    "label": "InstruType_CurvedBipolarDissector",
+                    "value": 49
+                },
+                {
+                    "label": "InstruType_MicroBipolarForceps",
+                    "value": 50
+                },
+                {
+                    "label": "InstruType_ForceBipolar",
+                    "value": 51
+                },
+                {
+                    "label": "InstruType_MicroCauteryHook",
+                    "value": 52
+                }
+            ],
+            "type": "integer"
+        },
         "PLC1.E_SlaveArmState": {
             "attributes": {
                 "generate_implicit_init_function": ""
@@ -463,12 +646,1636 @@
             ],
             "type": "integer"
         },
+        "PLC1.FB_Instrument": {
+            "properties": {
+                "m_DealyTime": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "propertyOrder": 23
+                        }
+                    ]
+                },
+                "m_HaveRecord": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 37
+                        }
+                    ]
+                },
+                "m_IDReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 24
+                        }
+                    ]
+                },
+                "m_IDResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 25
+                        }
+                    ]
+                },
+                "m_InstruUsageToLED": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 35
+                        }
+                    ]
+                },
+                "m_LEDAddr": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "LED port address",
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "m_PosL1": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 28
+                        }
+                    ]
+                },
+                "m_PosL2": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 29
+                        }
+                    ]
+                },
+                "m_PosL3": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 30
+                        }
+                    ]
+                },
+                "m_PosReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 27
+                        }
+                    ]
+                },
+                "m_ReadDelay": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.TON"
+                        },
+                        {
+                            "propertyOrder": 22
+                        }
+                    ]
+                },
+                "m_ReadDelayRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.TON"
+                        },
+                        {
+                            "propertyOrder": 50
+                        }
+                    ]
+                },
+                "m_ReadNumDelay": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.TON"
+                        },
+                        {
+                            "propertyOrder": 41
+                        }
+                    ]
+                },
+                "m_SDOStep": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "propertyOrder": 45
+                        }
+                    ]
+                },
+                "m_SdoRead": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_EtherCAT.FB_EcCoESdoRead"
+                        },
+                        {
+                            "propertyOrder": 39
+                        }
+                    ]
+                },
+                "m_SdoWrite": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_EtherCAT.FB_EcCoESdoWrite"
+                        },
+                        {
+                            "propertyOrder": 38
+                        }
+                    ]
+                },
+                "m_SeriesReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 26
+                        }
+                    ]
+                },
+                "m_Step": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "variables used to read instrument information",
+                            "propertyOrder": 20
+                        }
+                    ]
+                },
+                "m_StepRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "propertyOrder": 49
+                        }
+                    ]
+                },
+                "m_UsageReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 34
+                        }
+                    ]
+                },
+                "m_Value": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 21
+                        }
+                    ]
+                },
+                "m_armNetId": {
+                    "allOf": [
+                        {
+                            "comment": "IP of operating arm",
+                            "maxLength": 23,
+                            "propertyOrder": 6
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "m_curEndoscopePosture": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.E_EndoscopePosture"
+                        },
+                        {
+                            "comment": "endoscope posutre",
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "m_curEndoscopeType": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.E_EndoscopeType"
+                        },
+                        {
+                            "comment": "endoscope type",
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "m_curReadTries": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "current and max allowed read tries",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "m_endoscopeRotateReduction": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "reduction from motor joint to endoscope rotate joint",
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "m_fbTon_Step": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ARRAY_0..5_OF-Tc2_Standard.TON"
+                        },
+                        {
+                            "propertyOrder": 46
+                        }
+                    ]
+                },
+                "m_instruType": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.E_InstrumentType"
+                        },
+                        {
+                            "comment": "instrument type",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "m_instruTypeInfo": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ST_InstruTypeInfo"
+                        },
+                        {
+                            "comment": "instrument type info",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "m_jnt4ZeroPos": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "joint4 zero position, which is supposed to be a contant value",
+                            "propertyOrder": 18
+                        }
+                    ]
+                },
+                "m_jntPosOffset": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Vec8d"
+                        },
+                        {
+                            "comment": "joint position when instrument is at ZERO posture",
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "m_jointInstruAddr": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "Joint port number",
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "m_maxReadTries": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "m_nextEndoscopePosture": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.E_EndoscopePosture"
+                        },
+                        {
+                            "propertyOrder": 16
+                        }
+                    ]
+                },
+                "m_nextEndoscopeType": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.E_EndoscopeType"
+                        },
+                        {
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "m_onChipData": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.ST_InstruOnChipData"
+                        },
+                        {
+                            "comment": "The state and parameters readed from the instrument",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "m_purposeMode": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "propertyOrder": 48
+                        }
+                    ]
+                },
+                "m_purposeReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 36
+                        }
+                    ]
+                },
+                "m_resetArmLEDFlag": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "reset arm  LED flag",
+                            "propertyOrder": 19
+                        }
+                    ]
+                },
+                "m_signL1": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 31
+                        }
+                    ]
+                },
+                "m_signL2": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 32
+                        }
+                    ]
+                },
+                "m_signL3": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 33
+                        }
+                    ]
+                },
+                "m_useNumReadResult": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 42
+                        }
+                    ]
+                },
+                "m_useNumSendToLED": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 43
+                        }
+                    ]
+                },
+                "m_useNumStep": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "variables used to read-write instrument number of use",
+                            "propertyOrder": 40
+                        }
+                    ]
+                },
+                "m_wristMaxDHJntPos": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Vec3d"
+                        },
+                        {
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "m_wristMinDHJntPos": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Vec3d"
+                        },
+                        {
+                            "comment": "instrument wrist DH joint limit",
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "m_writeLDP": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.R_TRIG"
+                        },
+                        {
+                            "comment": "rising edge generator for instrument information reading",
+                            "propertyOrder": 44
+                        }
+                    ]
+                },
+                "m_zeroPosCode": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "udint code for zero position",
+                            "propertyOrder": 17
+                        }
+                    ]
+                },
+                "value": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 47
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.PVOID": {
+            "type": "object"
+        },
+        "PLC1.ST_InstruOnChipData": {
+            "properties": {
+                "m_Error": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Instrument Clamp Error",
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "m_ErrorID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "1Æ÷ÐµÀàÐÍ´íÎó¡¢2Æ÷ÐµÊ¹ÓÃ´ÎÊý³¬ÏÞ¡¢3Á½¸öÄÚ¿ú¾µ",
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "m_InstruID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "ID",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "m_InstruIDFromRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "m_InstruPos": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Vec5d"
+                        },
+                        {
+                            "comment": "Instrument Zero augular offset",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "m_InstruPosRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Vec5d"
+                        },
+                        {
+                            "comment": "Instrument RFID",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "m_InstruPurpose": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "m_InstruPurposeTime": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "m_InstruReadSucceed": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Instrument state",
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "m_InstruReadSucceedRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "m_InstruUsageCounts": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "comment": "current and max usage counts",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "m_InstruUsageCountsRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "m_InstrumaxUsageCounts": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "m_InstruseriesNum": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "comment": "series number",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "m_InstruseriesNumRFID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/ULINT"
+                        },
+                        {
+                            "propertyOrder": 10
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.ST_InstruTypeInfo": {
+            "properties": {
+                "m_InstruID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/INT"
+                        },
+                        {
+                            "comment": "ID",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "m_energyType": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "energy type",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "m_fingerLength": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "m_headLength": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "m_instruName": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "comment": "name",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "m_instruNameCH": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/STRING%2880%29"
+                        },
+                        {
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "m_instruPitchBachlash": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 18
+                        }
+                    ]
+                },
+                "m_instruYawBacklash": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "instrument backlash",
+                            "propertyOrder": 17
+                        }
+                    ]
+                },
+                "m_isSingleFinger": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "has one or two finger",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "m_k1": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "instrument reduction parameters",
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "m_k2": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "m_k3": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "m_maxGripAngle": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "m_maxUseNum": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "max use number",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "m_pitchLimit": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "m_rodLength": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "instrument geometric parameters",
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "m_rollLimit": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "comment": "instrument wrist DH joint limit",
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "m_yawLimit": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/LREAL"
+                        },
+                        {
+                            "propertyOrder": 16
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_EtherCAT.FB_EcCoESdoRead": {
+            "attributes": {
+                "conditionalshow_all_locals": ""
+            },
+            "properties": {
+                "RisingEdge": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.R_TRIG"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 15
+                        }
+                    ]
+                },
+                "bBusy": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "bError": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "bExecute": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Function block execution is triggered by a rising edge at this input.",
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "cbBufLen": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Contains the max. number of bytes to be received.",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "cbRead": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "fbAdsReadEx": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_System.ADSREADEX"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "nErrId": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "nIndex": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/WORD"
+                        },
+                        {
+                            "comment": "CANopen Sdo index.",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "nOffset": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/DWORD"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "nSlaveAddr": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "Address of the slave device.",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "nSubIndex": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BYTE"
+                        },
+                        {
+                            "comment": "CANopen Sdo subindex.",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "pDstBuf": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.PVOID"
+                        },
+                        {
+                            "comment": "Contains the address of the buffer for the received data.",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "sNetId": {
+                    "allOf": [
+                        {
+                            "comment": "AmsNetId of the EtherCAT master device.",
+                            "maxLength": 23,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "tTimeout": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "States the time before the function is cancelled.",
+                            "propertyOrder": 8
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_EtherCAT.FB_EcCoESdoWrite": {
+            "attributes": {
+                "conditionalshow_all_locals": ""
+            },
+            "properties": {
+                "RisingEdge": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_Standard.R_TRIG"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 14
+                        }
+                    ]
+                },
+                "bBusy": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "bError": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "bExecute": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Function block execution is triggered by a rising edge at this input.",
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "cbBufLen": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Contains the max. number of bytes to be received.",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "fbAdsWrite": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.Tc2_System.ADSWRITE"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 13
+                        }
+                    ]
+                },
+                "nErrId": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "nIndex": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/WORD"
+                        },
+                        {
+                            "comment": "CANopen Sdo index.",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "nOffset": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/DWORD"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "nSlaveAddr": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT"
+                        },
+                        {
+                            "comment": "Address of the slave device.",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "nSubIndex": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BYTE"
+                        },
+                        {
+                            "comment": "CANopen Sdo subindex.",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "pSrcBuf": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.PVOID"
+                        },
+                        {
+                            "comment": "Contains the address of the buffer containing the data to be send.",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "sNetId": {
+                    "allOf": [
+                        {
+                            "comment": "AmsNetId of the EtherCAT master device.",
+                            "maxLength": 23,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "tTimeout": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "States the time before the function is cancelled.",
+                            "propertyOrder": 8
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_Standard.R_TRIG": {
+            "attributes": {
+                "conditionalshow_all_locals": ""
+            },
+            "properties": {
+                "CLK": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Signal to detect",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "M": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "attributes": {
+                                "conditionalshow": ""
+                            },
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "Q": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "rising edge at signal detected",
+                            "propertyOrder": 2
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_Standard.TON": {
+            "properties": {
+                "ET": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "elapsed time",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "IN": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "starts timer with rising edge, resets timer with falling edge",
+                            "propertyOrder": 1
+                        }
+                    ]
+                },
+                "M": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "PT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "time to pass, before Q is set",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "Q": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "gets TRUE, delay time (PT) after a rising edge at IN",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "StartTime": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "propertyOrder": 6
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_System.ADSREADEX": {
+            "attributes": {
+                "hide_all_locals": ""
+            },
+            "properties": {
+                "BUSY": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Busy flag",
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "COUNT_R": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Count of bytes actually read",
+                            "propertyOrder": 12
+                        }
+                    ]
+                },
+                "DESTADDR": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.PVOID"
+                        },
+                        {
+                            "attributes": {
+                                "TcIgnorePersistent": ""
+                            },
+                            "comment": "Pointer to destination buffer",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "ERR": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Error flag",
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "ERRID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "ADS error code",
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "IDXGRP": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Index group",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "IDXOFFS": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Index offset",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "LEN": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Max. number of data bytes to read (LEN <= max. size of destination buffer)",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "NETID": {
+                    "allOf": [
+                        {
+                            "comment": "Ams net id",
+                            "maxLength": 23,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "PORT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT16"
+                        },
+                        {
+                            "comment": "Ads communication port",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "READ": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Rising edge starts command execution",
+                            "propertyOrder": 7
+                        }
+                    ]
+                },
+                "TMOUT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "Maximum time allowed for the execution of this ADS command",
+                            "propertyOrder": 8
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "PLC1.Tc2_System.ADSWRITE": {
+            "attributes": {
+                "hide_all_locals": ""
+            },
+            "properties": {
+                "BUSY": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Busy flag",
+                            "propertyOrder": 9
+                        }
+                    ]
+                },
+                "ERR": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Error flag",
+                            "propertyOrder": 10
+                        }
+                    ]
+                },
+                "ERRID": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "ADS error code",
+                            "propertyOrder": 11
+                        }
+                    ]
+                },
+                "IDXGRP": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Index group",
+                            "propertyOrder": 3
+                        }
+                    ]
+                },
+                "IDXOFFS": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Index offset",
+                            "propertyOrder": 4
+                        }
+                    ]
+                },
+                "LEN": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UDINT"
+                        },
+                        {
+                            "comment": "Max. number of data bytes to write (LEN <= max. size of source buffer)",
+                            "propertyOrder": 5
+                        }
+                    ]
+                },
+                "NETID": {
+                    "allOf": [
+                        {
+                            "comment": "Ams net id",
+                            "maxLength": 23,
+                            "propertyOrder": 1
+                        },
+                        {
+                            "$ref": "tchmi:general#/definitions/String"
+                        }
+                    ]
+                },
+                "PORT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/UINT16"
+                        },
+                        {
+                            "comment": "Ads communication port",
+                            "propertyOrder": 2
+                        }
+                    ]
+                },
+                "SRCADDR": {
+                    "allOf": [
+                        {
+                            "$ref": "#/definitions/PLC1.PVOID"
+                        },
+                        {
+                            "attributes": {
+                                "TcIgnorePersistent": ""
+                            },
+                            "comment": "Pointer to source buffer",
+                            "propertyOrder": 6
+                        }
+                    ]
+                },
+                "TMOUT": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/TIME"
+                        },
+                        {
+                            "comment": "Maximum time allowed for the execution of this ADS command",
+                            "propertyOrder": 8
+                        }
+                    ]
+                },
+                "WRITE": {
+                    "allOf": [
+                        {
+                            "$ref": "tchmi:general#/definitions/BOOL"
+                        },
+                        {
+                            "comment": "Rising edge starts command execution",
+                            "propertyOrder": 7
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
         "PLC1.Vec3d": {
             "items": {
                 "$ref": "tchmi:general#/definitions/LREAL"
             },
             "maxItems": 3,
             "minItems": 3,
+            "startOffset": 1,
+            "type": "array"
+        },
+        "PLC1.Vec4d": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "maxItems": 4,
+            "minItems": 4,
             "startOffset": 1,
             "type": "array"
         },
@@ -480,6 +2287,15 @@
             "minItems": 5,
             "startOffset": 1,
             "type": "array"
+        },
+        "PLC1.Vec8d": {
+            "items": {
+                "$ref": "tchmi:general#/definitions/LREAL"
+            },
+            "maxItems": 8,
+            "minItems": 8,
+            "startOffset": 1,
+            "type": "array"
         }
     },
     "DEFLATECOMPRESSIONLEVEL": 5,
@@ -488,8 +2304,8 @@
     "DISCOVERY": 2,
     "ENABLE_SERVER_UPDATE": true,
     "ENDPOINTS": [
-        "http://127.0.0.1:13006",
-        "http://127.0.0.1:3005"
+        "http://127.0.0.1:13007",
+        "http://127.0.0.1:3006"
     ],
     "ETAGENABLED": true,
     "EXTENSIONS": {
@@ -3488,6 +5304,26 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_forceBipolarMode": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_forceBipolarMode",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_forceBipolarModeAllowed": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_forceBipolarModeAllowed",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_funcCurrentDetection": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -3657,6 +5493,33 @@
             "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruCalibrationing",
             "SCHEMA": {
                 "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instruFrictionTest": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruFrictionTest",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/BOOL"
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.GVL_InstruTestUIVars.g_instruFrictionTestAllowed": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruFrictionTestAllowed",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:general#/definitions/BOOL"
+                    },
+                    {
+                        "comment": "friction test"
+                    }
+                ]
             },
             "USEMAPPING": true
         },
@@ -5049,6 +6912,58 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_frictionTest[0]::m_jntFrictionNoLoad",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.Vec4d"
+                    },
+                    {
+                        "propertyOrder": 28
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_frictionTest[0]::m_jntFrictionWithLoad",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.Vec4d"
+                    },
+                    {
+                        "propertyOrder": 29
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
+        "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::SlaveArmControl::m_slaveRobot::m_slaveArms[0]::m_instrument",
+            "SCHEMA": {
+                "allOf": [
+                    {
+                        "$ref": "tchmi:server#/definitions/PLC1.FB_Instrument"
+                    },
+                    {
+                        "comment": "instrument instance",
+                        "propertyOrder": 20
+                    }
+                ]
+            },
+            "USEMAPPING": true
+        },
         "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_instruTypeInfo.m_maxGripAngle": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -6048,6 +7963,8 @@
                 "PLC1.GVL_InstruTestUIVars.g_enabled": 3,
                 "PLC1.GVL_InstruTestUIVars.g_endoscopeAngle": 3,
                 "PLC1.GVL_InstruTestUIVars.g_endoscopeTest": 3,
+                "PLC1.GVL_InstruTestUIVars.g_forceBipolarMode": 3,
+                "PLC1.GVL_InstruTestUIVars.g_forceBipolarModeAllowed": 3,
                 "PLC1.GVL_InstruTestUIVars.g_funcCurrentDetection": 3,
                 "PLC1.GVL_InstruTestUIVars.g_goHome": 3,
                 "PLC1.GVL_InstruTestUIVars.g_gripperCloseFlag": 3,
@@ -6061,6 +7978,8 @@
                 "PLC1.GVL_InstruTestUIVars.g_instruCaliFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruCaliState": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruCalibrationing": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruFrictionTest": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruFrictionTestAllowed": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfUses": 3,
@@ -6174,6 +8093,9 @@
                 "PLC1.GVL_MES.g_serialNum": 3,
                 "PLC1.GVL_MES.g_serialNumLen": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_enableMode": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad": 3,
+                "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_instruTypeInfo.m_maxGripAngle": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_slaveArms.0.m_instrument.m_onChipData.m_InstruID": 3,
                 "SetLocale": 3,
