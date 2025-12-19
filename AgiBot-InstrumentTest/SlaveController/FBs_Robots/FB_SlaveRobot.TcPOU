@@ -449,6 +449,8 @@ FOR i:=1 TO g_sArmNum DO
 	IF m_slaveArmState[i]<>SlaveArmState_MotorGoHome AND m_slaveArmState[i]<>SlaveArmState_Standby THEN
 		GVL_InstruTestUIVars.g_beHomed:=FALSE;
 	END_IF
+	
+	
 GVL_InstruTestUIVars.g_stateMachine:=m_slaveArmState[i];
 	IF GVL_InstruTestUIVars.g_manualPowerBoxCalibration THEN
 		FOR j:=4 TO g_sJntNum DO
@@ -460,6 +462,8 @@ GVL_InstruTestUIVars.g_stateMachine:=m_slaveArmState[i];
 		m_slaveArms[i].setSaveCaliLinkEncoder();
 	END_IF
 END_FOR
+
+
 m_enableMode:=TRUE;
 GVL_InstruTestUIVars.g_logOutEnable:=GVL_InstruTestUIVars.g_stateMachine<>SlaveArmState_InstruAutoTest;
 GVL_InstruTestUIVars.g_snappingSeparatoring:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_MountPanel;
@@ -473,7 +477,6 @@ IF NOT GVL_InstruTestUIVars.g_testEnable THEN
 	GVL_InstruTestUIVars.g_instruAutoTestFlag:=FALSE;
 	GVL_InstruTestUIVars.g_instruManualTestFlag:=FALSE;
 	GVL_InstruTestUIVars.g_instruVerifyFlag:=FALSE;
-	
 END_IF
 GVL_InstruTestUIVars.g_standbyEnable:=GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_Standby AND NOT m_slaveArms[1].panelOn;]]></ST>
       </Implementation>
@@ -595,7 +598,9 @@ END_FOR
       <LineId Id="1570" Count="0" />
       <LineId Id="1573" Count="2" />
       <LineId Id="1578" Count="0" />
-      <LineId Id="1447" Count="17" />
+      <LineId Id="1447" Count="16" />
+      <LineId Id="1611" Count="1" />
+      <LineId Id="1464" Count="0" />
       <LineId Id="1498" Count="0" />
       <LineId Id="1503" Count="2" />
       <LineId Id="1499" Count="0" />
@@ -604,6 +609,8 @@ END_FOR
       <LineId Id="1561" Count="0" />
       <LineId Id="1500" Count="0" />
       <LineId Id="1465" Count="0" />
+      <LineId Id="1614" Count="0" />
+      <LineId Id="1613" Count="0" />
       <LineId Id="1016" Count="0" />
       <LineId Id="1513" Count="0" />
       <LineId Id="1522" Count="0" />
@@ -614,7 +621,6 @@ END_FOR
       <LineId Id="1601" Count="0" />
       <LineId Id="1548" Count="2" />
       <LineId Id="1552" Count="1" />
-      <LineId Id="1600" Count="0" />
       <LineId Id="1551" Count="0" />
       <LineId Id="1547" Count="0" />
     </LineIds>

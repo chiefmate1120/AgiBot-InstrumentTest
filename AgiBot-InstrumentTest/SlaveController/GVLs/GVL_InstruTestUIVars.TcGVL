@@ -108,6 +108,7 @@ VAR_GLOBAL
 	g_readInstruPurpose: UINT;
 	// 读取器械的用途
 	g_readPurposeTime: UINT;	
+	g_instruNameCN : WSTRING := " ";
 END_VAR
 VAR_GLOBAL RETAIN PERSISTENT
 	// 动力盒零位已校准

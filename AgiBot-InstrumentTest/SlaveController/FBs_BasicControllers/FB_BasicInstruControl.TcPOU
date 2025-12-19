@@ -354,15 +354,7 @@ m_maxGripForce := m_maxGripCurrent * m_currentRatioMotor2Jnt;]]></ST>
       <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.run">
-      <LineId Id="1116" Count="3" />
-      <LineId Id="1193" Count="0" />
-      <LineId Id="1187" Count="0" />
-      <LineId Id="1196" Count="4" />
-      <LineId Id="1194" Count="0" />
-      <LineId Id="1231" Count="1" />
-      <LineId Id="1195" Count="0" />
-      <LineId Id="1189" Count="0" />
-      <LineId Id="1121" Count="35" />
+      <LineId Id="1263" Count="51" />
       <LineId Id="70" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.setMaxGripTrq">
