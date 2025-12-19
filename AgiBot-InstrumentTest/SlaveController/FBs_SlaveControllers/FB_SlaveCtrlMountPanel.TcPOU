@@ -67,7 +67,7 @@ CASE m_mountStatus OF
 			END_IF
 		END_FOR
 		
-		IF (m_jointMounted[1] AND m_jointMounted[2] AND m_jointMounted[3] AND m_jointMounted[4] AND m_jointMounted[5]) (*or m_timePeriod > 5.0 *)THEN
+		IF (m_jointMounted[1] AND m_jointMounted[2] AND m_jointMounted[3] AND m_jointMounted[4] AND m_jointMounted[5]) OR m_timePeriod > 5.0 THEN
 			m_mountStatus:=1;
 		END_IF
 	

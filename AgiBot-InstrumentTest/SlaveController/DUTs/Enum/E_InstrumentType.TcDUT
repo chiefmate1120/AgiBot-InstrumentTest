@@ -27,7 +27,8 @@
 	InstruType_CurvedBipolarDissector :=49,
 	InstruType_MicroBipolarForceps :=50,
 	InstruType_ForceBipolar :=51,
-	InstruType_MicroCauteryHook :=52
+	InstruType_MicroCauteryHook :=52,
+	InstruType_CENewEndoscope := 320
 );
 END_TYPE
 ]]></Declaration>

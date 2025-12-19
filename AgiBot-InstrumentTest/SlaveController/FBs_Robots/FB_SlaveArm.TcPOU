@@ -462,10 +462,10 @@ IF GVL_InstruTestUIVars.g_account.actualPermission=2 AND GVL_InstruTestUIVars.g_
 	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=GVL_InstruTestUIVars.g_deviationTargetCurrent;
 END_IF
 IF GVL_InstruTestUIVars.g_stateMachine=SlaveArmState_InstruAutoTest AND GVL_MES.g_autoTestMode=3 THEN
-	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=400;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=400;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=400;
-	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=400;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=540;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=540;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[6]:=540;
+	GVL_InstruTestUIVars.g_actualRatedCurrent[7]:=540;
 	IF m_instrument.onChipData.m_InstruReadSucceed AND(InstruType_CauteryHook=m_instrument.m_instruType OR InstruType_CauterySpatula=m_instrument.m_instruType) THEN
 	GVL_InstruTestUIVars.g_actualRatedCurrent[4]:=270;
 	GVL_InstruTestUIVars.g_actualRatedCurrent[5]:=270;

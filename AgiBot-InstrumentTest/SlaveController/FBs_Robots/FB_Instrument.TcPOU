@@ -793,12 +793,14 @@ CASE m_Step OF
 	50://处理序列号，低30位
 		m_onChipData.m_InstruseriesNum:=SHL(m_IDResult,31)+(16#7FFFFFFF AND m_SeriesReadResult);
 		m_onChipData.m_InstruID:=LREAL_TO_INT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,9))); //取十进制前三位为器械ID
-		IF m_onChipData.m_InstruID = InstruType_Endoscope THEN
+		IF m_onChipData.m_InstruID = InstruType_Endoscope  THEN
 			endoscopeData := LREAL_TO_UINT(FLOOR(lr_in:= m_onChipData.m_InstruseriesNum/EXPT(10,7)));
 			endoscopeData := endoscopeData MOD 100;
 			IF endoscopeData>= 25 THEN
 				m_onChipData.m_InstruID := InstruType_NewEndoscope;
 			END_IF
+		ELSIF m_onChipData.m_InstruID = InstruType_CENewEndoscope THEN
+			m_onChipData.m_InstruID := InstruType_NewEndoscope;
 		END_IF
 		m_Step:=60;
 		
@@ -1532,32 +1534,7 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="31" Count="5" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParameters">
-      <LineId Id="1095" Count="8" />
-      <LineId Id="1298" Count="0" />
-      <LineId Id="1104" Count="3" />
-      <LineId Id="1299" Count="0" />
-      <LineId Id="1301" Count="5" />
-      <LineId Id="1308" Count="2" />
-      <LineId Id="1300" Count="0" />
-      <LineId Id="1108" Count="34" />
-      <LineId Id="1256" Count="9" />
-      <LineId Id="1149" Count="37" />
-      <LineId Id="1288" Count="0" />
-      <LineId Id="1277" Count="9" />
-      <LineId Id="1289" Count="0" />
-      <LineId Id="1276" Count="0" />
-      <LineId Id="1274" Count="0" />
-      <LineId Id="1188" Count="0" />
-      <LineId Id="1239" Count="2" />
-      <LineId Id="1238" Count="0" />
-      <LineId Id="1200" Count="4" />
-      <LineId Id="1319" Count="2" />
-      <LineId Id="1205" Count="14" />
-      <LineId Id="1242" Count="0" />
-      <LineId Id="1244" Count="3" />
-      <LineId Id="1243" Count="0" />
-      <LineId Id="1248" Count="0" />
-      <LineId Id="1220" Count="2" />
+      <LineId Id="1330" Count="161" />
       <LineId Id="28" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParametersRFID">
