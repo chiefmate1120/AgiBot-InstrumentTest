@@ -3751,7 +3751,7 @@
 </div>
 <div id="TcHmiRectangle_936" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="26" data-tchmi-height-unit="px" data-tchmi-left="1032" data-tchmi-left-unit="px" data-tchmi-top="1057" data-tchmi-top-unit="px" data-tchmi-width="82" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_937" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="590" data-tchmi-height-unit="px" data-tchmi-left="621" data-tchmi-left-unit="px" data-tchmi-top="568" data-tchmi-top-unit="px" data-tchmi-width="607" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
+<div id="TcHmiRectangle_937" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="529" data-tchmi-height-unit="px" data-tchmi-left="621" data-tchmi-left-unit="px" data-tchmi-top="568" data-tchmi-top-unit="px" data-tchmi-width="607" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
 </div>
 <div id="TcHmiTextblock_1172" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="45" data-tchmi-height-unit="px" data-tchmi-left="1248" data-tchmi-left-unit="px" data-tchmi-text="控制信息" data-tchmi-top="249" data-tchmi-top-unit="px" data-tchmi-width="585" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-radius" type="application/json">
@@ -4856,7 +4856,7 @@
 }
 </script>
 </div>
-<div id="TcHmiButton_397" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="684" data-tchmi-left-unit="px" data-tchmi-text="写入RFID信息" data-tchmi-top="1237" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
+<div id="TcHmiButton_397" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="40" data-tchmi-height-unit="px" data-tchmi-left="644" data-tchmi-left-unit="px" data-tchmi-text="写入RFID信息" data-tchmi-top="1398" data-tchmi-top-unit="px" data-tchmi-width="85" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
 [
   {
@@ -4977,7 +4977,7 @@
 }
 </script>
 </div>
-<div id="TcHmiButton_398" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="807" data-tchmi-left-unit="px" data-tchmi-text="读取RFID信息" data-tchmi-top="1237" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
+<div id="TcHmiButton_398" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="40" data-tchmi-height-unit="px" data-tchmi-left="751" data-tchmi-left-unit="px" data-tchmi-text="读取RFID信息" data-tchmi-top="1398" data-tchmi-top-unit="px" data-tchmi-width="88" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
 [
   {
@@ -5098,64 +5098,64 @@
 }
 </script>
 </div>
-<div id="TcHmiTextblock_1578" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_RFIDTimes%/s%" data-tchmi-top="1361" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1578" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="38" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_RFIDTimes%/s%" data-tchmi-top="1521" data-tchmi-top-unit="px" data-tchmi-width="91" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
   "color": "rgba(0, 0, 0, 1)"
 }</script>
 </div>
-<div id="TcHmiTextblock_1579" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="器械使用次数" data-tchmi-top="1326" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1579" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="器械使用次数" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1305" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-top="1361" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1305" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="38" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-top="1521" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1306" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="676" data-tchmi-left-unit="px" data-tchmi-top="1326" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1306" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="676" data-tchmi-left-unit="px" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiTextblock_1580" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1%/s%" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1580" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="882" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L1%/s%" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="91" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
   "color": "rgba(0, 0, 0, 1)"
 }</script>
 </div>
-<div id="TcHmiTextblock_1581" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-text="电机1位置" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1581" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="882" data-tchmi-left-unit="px" data-tchmi-text="电机1位置" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="91" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1307" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="675" data-tchmi-left-unit="px" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1307" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="882" data-tchmi-left-unit="px" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="92" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1308" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="676" data-tchmi-left-unit="px" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1308" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="883" data-tchmi-left-unit="px" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="90" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiTextblock_1582" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L2%/s%" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1582" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="998" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L2%/s%" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
   "color": "rgba(0, 0, 0, 1)"
 }</script>
 </div>
-<div id="TcHmiTextblock_1583" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="电机2位置" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1583" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="998" data-tchmi-left-unit="px" data-tchmi-text="电机2位置" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1309" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1309" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="998" data-tchmi-left-unit="px" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1310" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="792" data-tchmi-left-unit="px" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1310" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="999" data-tchmi-left-unit="px" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="92" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiTextblock_1584" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="907" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L3%/s%" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1584" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1114" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.m_Instrument_pos_L3%/s%" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
   "color": "rgba(0, 0, 0, 1)"
 }</script>
 </div>
-<div id="TcHmiTextblock_1585" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="907" data-tchmi-left-unit="px" data-tchmi-text="电机3位置" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1585" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="1114" data-tchmi-left-unit="px" data-tchmi-text="电机3位置" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1311" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="907" data-tchmi-left-unit="px" data-tchmi-top="1486" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1311" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1114" data-tchmi-left-unit="px" data-tchmi-top="1438" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1312" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="908" data-tchmi-left-unit="px" data-tchmi-top="1451" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1312" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="27" data-tchmi-height-unit="px" data-tchmi-left="1115" data-tchmi-left-unit="px" data-tchmi-top="1411" data-tchmi-top-unit="px" data-tchmi-width="92" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiTextblock_1586" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_RFID_SN%/s%" data-tchmi-top="1361" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1586" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="38" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_RFID_SN%/s%" data-tchmi-top="1521" data-tchmi-top-unit="px" data-tchmi-width="337" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
   "color": "rgba(0, 0, 0, 1)"
 }</script>
 </div>
-<div id="TcHmiTextblock_1587" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="34" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="器械SN码" data-tchmi-top="1325" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1587" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="34" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-text="器械SN码" data-tchmi-top="1485" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1313" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-top="1361" data-tchmi-top-unit="px" data-tchmi-width="339" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1313" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="38" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-top="1521" data-tchmi-top-unit="px" data-tchmi-width="338" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1314" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="36" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-top="1325" data-tchmi-top-unit="px" data-tchmi-width="338" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1314" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="36" data-tchmi-height-unit="px" data-tchmi-left="791" data-tchmi-left-unit="px" data-tchmi-top="1485" data-tchmi-top-unit="px" data-tchmi-width="338" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
-<div id="TcHmiRectangle_1315" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="408" data-tchmi-height-unit="px" data-tchmi-left="621" data-tchmi-left-unit="px" data-tchmi-top="1168" data-tchmi-top-unit="px" data-tchmi-width="607" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
+<div id="TcHmiRectangle_1315" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="240" data-tchmi-height-unit="px" data-tchmi-left="621" data-tchmi-left-unit="px" data-tchmi-top="1336" data-tchmi-top-unit="px" data-tchmi-width="597" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
 </div>
-<div id="TcHmiTextblock_1588" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="45" data-tchmi-height-unit="px" data-tchmi-left="631" data-tchmi-left-unit="px" data-tchmi-text="RFID信息" data-tchmi-top="1174" data-tchmi-top-unit="px" data-tchmi-width="587" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1588" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="45" data-tchmi-height-unit="px" data-tchmi-left="634" data-tchmi-left-unit="px" data-tchmi-text="RFID信息" data-tchmi-top="1344" data-tchmi-top-unit="px" data-tchmi-width="587" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-border-radius" type="application/json">
 {
   "topLeft": 1.0,
@@ -6138,7 +6138,7 @@
 }
 </script>
 </div>
-<div id="TcHmiButton_417" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1034" data-tchmi-left-unit="px" data-tchmi-text="启用/停用研发补偿角度" data-tchmi-top="1096" data-tchmi-top-unit="px" data-tchmi-width="80" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
+<div id="TcHmiButton_417" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1138" data-tchmi-left-unit="px" data-tchmi-text="启用/停用研发补偿角度" data-tchmi-top="872" data-tchmi-top-unit="px" data-tchmi-width="80" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
 [
   {
@@ -7224,6 +7224,86 @@
                 "asyncWait": true
               }
             ]
+          },
+          {
+            "caseValue": {
+              "objectType": "StaticValue",
+              "valueType": "tchmi:general#/definitions/INT",
+              "value": 72
+            },
+            "actions": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiTextblock_1617::Text%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/String",
+                  "value": "无创抓钳"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "caseValue": {
+              "objectType": "StaticValue",
+              "valueType": "tchmi:general#/definitions/INT",
+              "value": 73
+            },
+            "actions": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiTextblock_1617::Text%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/String",
+                  "value": "持针钳"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "caseValue": {
+              "objectType": "StaticValue",
+              "valueType": "tchmi:general#/definitions/INT",
+              "value": 74
+            },
+            "actions": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiTextblock_1617::Text%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/String",
+                  "value": "双极弧形电凝钳"
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "caseValue": {
+              "objectType": "StaticValue",
+              "valueType": "tchmi:general#/definitions/INT",
+              "value": 75
+            },
+            "actions": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiTextblock_1617::Text%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/String",
+                  "value": "双极鸭嘴电凝钳"
+                },
+                "asyncWait": true
+              }
+            ]
           }
         ],
         "asyncWait": true
@@ -7233,7 +7313,7 @@
 ]
 </script>
 </div>
-<div id="TcHmiRectangle_1336" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="452" data-tchmi-left-unit="px" data-tchmi-top="373" data-tchmi-top-unit="px" data-tchmi-width="134" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiRectangle_1336" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="452" data-tchmi-left-unit="px" data-tchmi-top="371" data-tchmi-top-unit="px" data-tchmi-width="134" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
 <div id="TcHmiButton_436" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="516" data-tchmi-left-unit="px" data-tchmi-text="开合Jog-1" data-tchmi-top="192" data-tchmi-top-unit="px" data-tchmi-width="80" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4">
 <script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
@@ -8637,5 +8717,479 @@
 <div id="TcHmiTextblock_1974" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="38" data-tchmi-height-unit="px" data-tchmi-left="325" data-tchmi-left-unit="px" data-tchmi-text="MES信息写入" data-tchmi-top="723" data-tchmi-top-unit="px" data-tchmi-width="281" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
 </div>
 <div id="TcHmiImage_2" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiImage" data-tchmi-height="282" data-tchmi-height-unit="px" data-tchmi-left="1245" data-tchmi-left-unit="px" data-tchmi-top="1075" data-tchmi-top-unit="px" data-tchmi-width="384" data-tchmi-width-unit="px" data-tchmi-src="Imports/Images/20250428-170310.jpg">
+</div>
+<div id="TcHmiButton_466" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="47" data-tchmi-height-unit="px" data-tchmi-left="1138" data-tchmi-left-unit="px" data-tchmi-text="强力模式" data-tchmi-top="630" data-tchmi-top-unit="px" data-tchmi-width="80" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4" data-tchmi-is-enabled="%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarModeAllowed%/s%">
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiButton_466.onPressed",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarMode%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarMode%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarMode%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      },
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarMode%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_466::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(19, 235, 45, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_466::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarModeAllowed%/s%",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_forceBipolarMode%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_466::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(28, 235, 85, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_466::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+
+
+
+
+
+
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(3, 0, 0, 1)"
+}
+</script>
+</div>
+<div id="TcHmiTextblock_2015" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="24" data-tchmi-height-unit="px" data-tchmi-left="648" data-tchmi-left-unit="px" data-tchmi-text="摩擦力测试" data-tchmi-top="1109" data-tchmi-top-unit="px" data-tchmi-width="587" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-radius" type="application/json">
+{
+  "topLeft": 1.0,
+  "topRight": 1.0,
+  "bottomLeft": 1.0,
+  "bottomRight": 1.0,
+  "topLeftUnit": "px",
+  "topRightUnit": "px",
+  "bottomLeftUnit": "px",
+  "bottomRightUnit": "px"
+}
+</script>
+</div>
+<div id="TcHmiButton_469" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiButton" data-tchmi-height="46" data-tchmi-height-unit="px" data-tchmi-left="656" data-tchmi-left-unit="px" data-tchmi-text="器械摩擦力测试" data-tchmi-top="1142" data-tchmi-top-unit="px" data-tchmi-width="87" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-icon-horizontal-alignment="Center" data-tchmi-icon-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-text-font-style="Auto" data-tchmi-text-font-weight="Auto" data-tchmi-zindex="4" data-tchmi-is-enabled="%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTestAllowed%/s%">
+<script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
+[
+  {
+    "event": "TcHmiButton_469.onPressed",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTest%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTest%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": false
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTest%/s%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      },
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTest%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_469::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(19, 235, 45, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_469::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      }
+    ]
+  },
+  {
+    "event": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTestAllowed%/s%",
+    "actions": [
+      {
+        "objectType": "Condition",
+        "active": true,
+        "parts": [
+          {
+            "if": [
+              {
+                "compare1": {
+                  "objectType": "Symbol",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_instruFrictionTest%/s%"
+                },
+                "compare2": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:general#/definitions/BOOL",
+                  "value": true
+                },
+                "compareOperator": "==",
+                "logic": null
+              }
+            ],
+            "then": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_469::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": {
+                    "color": "rgba(28, 235, 85, 1)"
+                  }
+                },
+                "asyncWait": true
+              }
+            ]
+          },
+          {
+            "else": [
+              {
+                "objectType": "WriteToSymbol",
+                "active": true,
+                "symbolExpression": "%ctrl%TcHmiButton_469::BackgroundColor%/ctrl%",
+                "value": {
+                  "objectType": "StaticValue",
+                  "valueType": "tchmi:framework#/definitions/Color",
+                  "value": null
+                },
+                "asyncWait": true
+              }
+            ]
+          }
+        ],
+        "asyncWait": true
+      }
+    ]
+  }
+]
+</script>
+
+
+
+
+
+
+
+<script data-tchmi-target-attribute="data-tchmi-text-color" type="application/json">
+{
+  "color": "rgba(3, 0, 0, 1)"
+}
+</script>
+</div>
+<div id="TcHmiRectangle_1478" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2016" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad[0]%/s%" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2017" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-text="电机1摩擦力" data-tchmi-top="1169" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1479" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2018" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad[1]%/s%" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2019" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-text="电机2摩擦力" data-tchmi-top="1169" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1480" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2020" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad[2]%/s%" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2021" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-text="电机3摩擦力" data-tchmi-top="1169" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1481" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2022" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad[3]%/s%" data-tchmi-top="1203" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2023" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-text="电机4摩擦力" data-tchmi-top="1169" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1482" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2024" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad[0]%/s%" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2025" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="770" data-tchmi-left-unit="px" data-tchmi-text="电机1摩擦力" data-tchmi-top="1255" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1483" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2026" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad[1]%/s%" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2027" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="886" data-tchmi-left-unit="px" data-tchmi-text="电机2摩擦力" data-tchmi-top="1255" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1484" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2028" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad[2]%/s%" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2029" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="1005" data-tchmi-left-unit="px" data-tchmi-text="电机3摩擦力" data-tchmi-top="1255" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1485" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2030" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="30" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-text="%s%PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad[3]%/s%" data-tchmi-top="1289" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+<script data-tchmi-target-attribute="data-tchmi-border-color" type="application/json">{
+  "color": "rgba(0, 0, 0, 1)"
+}</script>
+</div>
+<div id="TcHmiTextblock_2031" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="1119" data-tchmi-left-unit="px" data-tchmi-text="电机4摩擦力" data-tchmi-top="1255" data-tchmi-top-unit="px" data-tchmi-width="93" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2032" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="641" data-tchmi-left-unit="px" data-tchmi-text="器械夹紧时摩擦力" data-tchmi-top="1271" data-tchmi-top-unit="px" data-tchmi-width="114" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiTextblock_2033" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="35" data-tchmi-height-unit="px" data-tchmi-left="641" data-tchmi-left-unit="px" data-tchmi-text="器械未夹紧时摩擦力" data-tchmi-top="1195" data-tchmi-top-unit="px" data-tchmi-width="114" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="4">
+</div>
+<div id="TcHmiRectangle_1486" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiRectangle" data-tchmi-height="236" data-tchmi-height-unit="px" data-tchmi-left="621" data-tchmi-left-unit="px" data-tchmi-top="1095" data-tchmi-top-unit="px" data-tchmi-width="611" data-tchmi-width-unit="px" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-zindex="3">
 </div>
 </div>

@@ -12,7 +12,7 @@
     <HmiTitle>Please enter your Title...</HmiTitle>
     <HmiVerboseLevel>2</HmiVerboseLevel>
     <HmiVersion>1.0.0.0</HmiVersion>
-    <HmiCommunicationServerPort>3005</HmiCommunicationServerPort>
+    <HmiCommunicationServerPort>3006</HmiCommunicationServerPort>
     <HmiLogTcHmiServerMessages>false</HmiLogTcHmiServerMessages>
     <HmiLogDesignerModeComMessages>false</HmiLogDesignerModeComMessages>
     <HmiServerVersion>Latest</HmiServerVersion>
@@ -27,8 +27,8 @@
     <HmiViewportUserScaleable>Default</HmiViewportUserScaleable>
     <HmiPostProcessing>True</HmiPostProcessing>
     <Name>AgibotInstrumentTestHmi</Name>
-    <HmiCommunicationRouterPort>10137</HmiCommunicationRouterPort>
-    <HmiCommunicationServerAuthPort>13006</HmiCommunicationServerAuthPort>
+    <HmiCommunicationRouterPort>10138</HmiCommunicationRouterPort>
+    <HmiCommunicationServerAuthPort>13007</HmiCommunicationServerAuthPort>
     <HmiInitial>1.12.760.44</HmiInitial>
     <HmiRecent>1.12.760.44</HmiRecent>
     <HmiServerNodeAdvancedView>False</HmiServerNodeAdvancedView>
