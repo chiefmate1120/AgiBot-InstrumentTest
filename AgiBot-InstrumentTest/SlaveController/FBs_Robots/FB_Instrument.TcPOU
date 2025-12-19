@@ -1079,6 +1079,7 @@ m_onChipData.m_ErrorID:=0;
 m_onChipData.m_InstruReadSucceed:=FALSE;
 m_instruType:=InstruType_UNKNOWM;
 
+m_instruTypeInfo.m_instruNameCH := "";
 m_onChipData.m_InstruIDFromRFID := 0;
 m_onChipData.m_InstruseriesNumRFID :=0;
 m_onChipData.m_InstruReadSucceedRFID:=FALSE;
@@ -1574,6 +1575,7 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="11" Count="1" />
       <LineId Id="16" Count="0" />
       <LineId Id="59" Count="0" />
+      <LineId Id="161" Count="0" />
       <LineId Id="150" Count="1" />
       <LineId Id="26" Count="0" />
       <LineId Id="152" Count="0" />

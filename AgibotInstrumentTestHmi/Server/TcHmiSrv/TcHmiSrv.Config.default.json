@@ -5540,6 +5540,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_InstruTestUIVars.g_instruNameCN": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_InstruTestUIVars::g_instruNameCN",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -6895,6 +6905,16 @@
             },
             "USEMAPPING": true
         },
+        "PLC1.GVL_SystemParameters.g_InstruTestVersion": {
+            "ACCESS": 3,
+            "DOMAIN": "ADS",
+            "DYNAMIC": true,
+            "MAPPING": "PLC1::GVL_SystemParameters::g_InstruTestVersion",
+            "SCHEMA": {
+                "$ref": "tchmi:general#/definitions/STRING%2880%29"
+            },
+            "USEMAPPING": true
+        },
         "PLC1.SlaveArmControl.m_slaveRobot.m_enableMode": {
             "ACCESS": 3,
             "DOMAIN": "ADS",
@@ -7981,6 +8001,7 @@
                 "PLC1.GVL_InstruTestUIVars.g_instruFrictionTest": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruFrictionTestAllowed": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruManualTestFlag": 3,
+                "PLC1.GVL_InstruTestUIVars.g_instruNameCN": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfAllUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruNumberOfUses": 3,
                 "PLC1.GVL_InstruTestUIVars.g_instruSN": 3,
@@ -8092,6 +8113,7 @@
                 "PLC1.GVL_MES.g_attitudeOK": 3,
                 "PLC1.GVL_MES.g_serialNum": 3,
                 "PLC1.GVL_MES.g_serialNumLen": 3,
+                "PLC1.GVL_SystemParameters.g_InstruTestVersion": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_enableMode": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionNoLoad": 3,
                 "PLC1.SlaveArmControl.m_slaveRobot.m_frictionTest.0.m_jntFrictionWithLoad": 3,

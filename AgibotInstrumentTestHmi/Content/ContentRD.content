@@ -6710,7 +6710,7 @@
 }
 </script>
 </div>
-<div id="TcHmiTextblock_1617" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="453" data-tchmi-left-unit="px" data-tchmi-top="373" data-tchmi-top-unit="px" data-tchmi-width="134" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4">
+<div id="TcHmiTextblock_1617" data-tchmi-type="TcHmi.Controls.Beckhoff.TcHmiTextblock" data-tchmi-height="50" data-tchmi-height-unit="px" data-tchmi-left="450" data-tchmi-left-unit="px" data-tchmi-top="371" data-tchmi-top-unit="px" data-tchmi-width="134" data-tchmi-width-unit="px" data-tchmi-word-wrap="true" data-tchmi-background-image-horizontal-alignment="Center" data-tchmi-background-image-vertical-alignment="Center" data-tchmi-text-horizontal-alignment="Center" data-tchmi-text-vertical-alignment="Center" data-tchmi-zindex="4" data-tchmi-text="%s%PLC1.GVL_InstruTestUIVars.g_instruNameCN%/s%">
 <script data-tchmi-target-attribute="data-tchmi-trigger" type="application/json">
 [
   {
@@ -6718,7 +6718,7 @@
     "actions": [
       {
         "objectType": "SwitchCase",
-        "active": true,
+        "active": false,
         "compare": {
           "objectType": "Symbol",
           "valueType": "tchmi:general#/definitions/INT",

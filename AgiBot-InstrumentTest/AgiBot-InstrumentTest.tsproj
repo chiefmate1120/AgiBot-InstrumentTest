@@ -678,7 +678,7 @@
 			<PlcAuxTask Affinity="#x00000008"/>
 		</Plc>
 		<Io>
-			<Device Id="4" DevType="111" DevFlags="#x0003" AmsPort="28676" AmsNetId="169.254.165.150.5.1" RemoteName="Device 4 (EtherCAT)" InfoImageId="5">
+			<Device Id="4" Disabled="true" DevType="111" DevFlags="#x0003" AmsPort="28676" AmsNetId="169.254.165.150.5.1" RemoteName="Device 4 (EtherCAT)" InfoImageId="5">
 				<Name>Device 4 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
@@ -1003,7 +1003,6 @@
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500840000403}" Id="#x02030010"/>
 		<OwnerA Name="TIPC^SlaveController^SlaveController Instance">
 			<OwnerB Name="TIID^Device 4 (EtherCAT)^Box 3 (AX58200_MotorControl)">
 				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value for aix2"/>

@@ -27,7 +27,7 @@
     <HmiViewportUserScaleable>Default</HmiViewportUserScaleable>
     <HmiPostProcessing>True</HmiPostProcessing>
     <Name>AgibotInstrumentTestHmi</Name>
-    <HmiCommunicationRouterPort>10138</HmiCommunicationRouterPort>
+    <HmiCommunicationRouterPort>10139</HmiCommunicationRouterPort>
     <HmiCommunicationServerAuthPort>13007</HmiCommunicationServerAuthPort>
     <HmiInitial>1.12.760.44</HmiInitial>
     <HmiRecent>1.12.760.44</HmiRecent>
