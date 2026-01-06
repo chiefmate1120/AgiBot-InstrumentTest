@@ -1,8 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <GVL Name="GVL_SystemParameters" Id="{6ebbff17-e303-4344-870e-d2871229e24f}">
     <Declaration><![CDATA[VAR_GLOBAL CONSTANT
 	
+	g_InstruTestVersion : WSTRING := "STST01 器械测试平台 V1(1.2.0.1) ";
 	g_mArmNum :INT := 2;	
 	g_mJntNum :INT := 7;	
 	g_sArmNum :INT := 1;	
@@ -25,7 +26,7 @@
 	
 	// wait time before robot init  for ethercat to stablize 
 	g_robotInitWaitTime : LREAL := 1.0;
-
+	RecipeDefinitionName :ARRAY [1..2] OF STRING := ['account', 'caliLinkEncoder'];
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

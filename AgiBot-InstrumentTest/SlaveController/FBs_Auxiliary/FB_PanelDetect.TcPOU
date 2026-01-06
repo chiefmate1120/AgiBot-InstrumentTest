@@ -23,9 +23,9 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//Panel single  At installation--2#0000   not installation --2#0101
-IF (IOValue AND 16#05) = 0 THEN
+IF (IOValue AND 16#06) = 6 THEN
 	m_panelOnCounts := MIN( m_panelOnCounts +1,m_panelOnCountThres);
-ELSIF (IOValue AND 16#05) = 5  THEN
+ELSIF (IOValue AND 16#06) = 0  THEN
 	m_panelOnCounts :=0;
 END_IF
 run := m_panelOnCounts >= m_panelOnCountThres;

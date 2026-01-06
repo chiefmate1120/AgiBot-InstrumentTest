@@ -31,8 +31,13 @@
 	SlaveArmState_InstruVerify :=26,
 	SlaveArmState_MotorGoHome:= 27,
 	SlaveArmState_PowerBoxCalibration:= 28,
+	SlaveArmState_EndoscopeTest:= 29,
+	SlaveArmState_FrictionTest:= 30,
 	
-	SlaveArmState_totalNum :=SlaveArmState_PowerBoxCalibration
+	SlaveArmState_Jnt5Ready:=31,
+	SlaveArmState_Jnt5Rotate:=32,
+//	SlaveArmState_totalNum :=SlaveArmState_FrictionTest
+	SlaveArmState_totalNum :=SlaveArmState_Jnt5Rotate
 );
 END_TYPE
 ]]></Declaration>

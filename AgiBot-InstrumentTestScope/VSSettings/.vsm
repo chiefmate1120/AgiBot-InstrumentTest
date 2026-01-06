@@ -5,40 +5,64 @@
   <Children>
     <Node>
       <Title>YT Scope Project</Title>
-      <Expanded>False</Expanded>
-      <FileName>C:\Users\Ni Feijian\Career\AgiBot\Develop Code\New Architecture\instrumentTest\PR\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.tcscopex</FileName>
+      <Expanded>True</Expanded>
+      <FileName>C:\Users\admin1\Desktop\无框动力盒\TEST\AgiBot-InstrumentTest\AgiBot-InstrumentTestScope\YT Scope Project.tcscopex</FileName>
       <Children>
         <Node>
           <Title>DataPool</Title>
-          <Expanded>False</Expanded>
+          <Expanded>True</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
-              <Title>m_filtJntCurrent[4]</Title>
+              <Title>m_cmdCurrent</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children />
             </Node>
             <Node>
-              <Title>m_filtJntCurrent[5]</Title>
+              <Title>m_cmdMotorEncoder</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children />
             </Node>
             <Node>
-              <Title>m_nextSlaveArmState[1]</Title>
+              <Title>m_controlWord</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children />
             </Node>
             <Node>
-              <Title>m_slaveArmState[1]</Title>
+              <Title>m_current</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children />
             </Node>
             <Node>
-              <Title>m_timePeriod</Title>
+              <Title>m_linkEncoder</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_motorEncoder</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_opMode</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_rawJntCurrent[8]</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>m_statusWord</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children />
@@ -47,22 +71,40 @@
         </Node>
         <Node>
           <Title>YT Chart</Title>
-          <Expanded>False</Expanded>
+          <Expanded>True</Expanded>
           <FileName></FileName>
           <Children>
             <Node>
-              <Title>Axis Group</Title>
+              <Title>Axis Group (1)</Title>
               <Expanded>False</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
-                  <Title>m_nextSlaveArmState[1]</Title>
+                  <Title>m_linkEncoder</Title>
                   <Expanded>False</Expanded>
                   <FileName></FileName>
                   <Children />
                 </Node>
                 <Node>
-                  <Title>m_slaveArmState[1]</Title>
+                  <Title>m_current</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_cmdCurrent</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_opMode</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+                <Node>
+                  <Title>m_controlWord</Title>
                   <Expanded>False</Expanded>
                   <FileName></FileName>
                   <Children />
@@ -70,29 +112,61 @@
               </Children>
             </Node>
             <Node>
-              <Title>Axis Group (1)</Title>
-              <Expanded>False</Expanded>
+              <Title>Axis Group (4)</Title>
+              <Expanded>True</Expanded>
               <FileName></FileName>
               <Children>
                 <Node>
-                  <Title>m_timePeriod</Title>
+                  <Title>m_motorEncoder</Title>
                   <Expanded>False</Expanded>
                   <FileName></FileName>
                   <Children />
                 </Node>
                 <Node>
-                  <Title>m_filtJntCurrent[4]</Title>
-                  <Expanded>False</Expanded>
-                  <FileName></FileName>
-                  <Children />
-                </Node>
-                <Node>
-                  <Title>m_filtJntCurrent[5]</Title>
+                  <Title>m_cmdMotorEncoder</Title>
                   <Expanded>False</Expanded>
                   <FileName></FileName>
                   <Children />
                 </Node>
               </Children>
+            </Node>
+            <Node>
+              <Title>Axis Group (5)</Title>
+              <Expanded>True</Expanded>
+              <FileName></FileName>
+              <Children>
+                <Node>
+                  <Title>m_statusWord</Title>
+                  <Expanded>False</Expanded>
+                  <FileName></FileName>
+                  <Children />
+                </Node>
+              </Children>
+            </Node>
+          </Children>
+        </Node>
+        <Node>
+          <Title>YT Chart (1)</Title>
+          <Expanded>True</Expanded>
+          <FileName></FileName>
+          <Children>
+            <Node>
+              <Title>Axis Group (2)</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>Axis Group</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
+            </Node>
+            <Node>
+              <Title>Axis Group (3)</Title>
+              <Expanded>False</Expanded>
+              <FileName></FileName>
+              <Children />
             </Node>
           </Children>
         </Node>
@@ -103,6 +177,12 @@
           <Children />
         </Node>
       </Children>
+    </Node>
+    <Node>
+      <Title>YT Scope Project.svdx</Title>
+      <Expanded>False</Expanded>
+      <FileName></FileName>
+      <Children />
     </Node>
   </Children>
 </Node>

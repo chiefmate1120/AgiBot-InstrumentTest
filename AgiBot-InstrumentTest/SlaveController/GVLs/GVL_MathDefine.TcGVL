@@ -32,6 +32,7 @@
 	g_onesVec3d: Vec3d:=[3(1)];
 	
 	g_zeroVec4b :Vec4b := [4(FALSE)];
+	g_zeroVec4d :Vec4d:= [4(0)];
 	
 	g_zeroVec6d: Vec6d:=[6(0)];
 	g_onesVec6d: Vec6d:=[6(1)];

@@ -27,11 +27,17 @@ VAR_GLOBAL
 	g_gripperOpenFlag :BOOL :=FALSE; // 命令器械张开按键, 按下反弹
 	g_gripperCloseFlag :BOOL :=FALSE; // 命令器械闭合按键, 按下反弹
 	g_maxGripForceFlag :BOOL :=FALSE;// 命令器械最大加紧力按键, 按下反弹
+	g_forceBipolarMode : BOOL := FALSE;
+	g_forceBipolarModeAllowed : BOOL := FALSE;
 	
 	// control variable for instrument verify
 	g_instruVerifyFlag :BOOL :=FALSE; // 器械验证按键，按下不反弹
 	g_instruVerifyLastStepFlag :BOOL:=FALSE; // 下一步按键， 按下反弹
 	g_instruVerifyNextStepFlag :BOOL :=FALSE; // 上一步按键，按下反弹
+	
+	//friction test
+	g_instruFrictionTestAllowed : BOOL;
+	g_instruFrictionTest : BOOL;
 	
 	//################ output variables  HMI ########################
 	g_curInstruJntPos :Vec5d;   // 当前器械角度位置
@@ -90,13 +96,22 @@ VAR_GLOBAL
 	// 目标额定电流
 	g_targetRatedCurrent: LREAL;
 	// 实际额定电流
-	g_actualRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(250)];
+	g_actualRatedCurrent: ARRAY[1..g_sJntNum] OF LREAL := [8(800)];
 	// 动力盒标定状态
 	g_powerBoxCalibrationFlag: BOOL := TRUE;
 	// 动力盒标定
 	g_powerBoxCalibration: BOOL;
 	// 动力盒回零位
 	g_goHome: BOOL;
+	
+	// 读取器械用途
+	g_readInstruPurpose: UINT;
+	// 读取器械的用途
+	g_readPurposeTime: UINT;	
+	g_instruNameCN : WSTRING := " ";
+	
+	g_jnt5RotateFlag:BOOL:=FALSE;
+
 END_VAR
 VAR_GLOBAL RETAIN PERSISTENT
 	// 动力盒零位已校准
@@ -179,6 +194,7 @@ VAR_GLOBAL
 	g_readRFIDFlag: BOOL;
 	// 器械标定状态
 	g_instruCaliState: BOOL;
+	g_jogClose:BOOL;
 	
 	writeInstruZeroPos :Vec5d; // 当前写入器械零位
 	g_clearInformation:BOOL;//清除账户账号信息
@@ -196,6 +212,41 @@ VAR_GLOBAL
 	m_postureTestStep:INT;
 	m_cycleStart: BOOL;
 	m_cycleStop: BOOL;
+	g_endoscopeAngle: INT;
+	g_endoscopeTest: BOOL;
+	g_endoscopeUpturnFlagBit: BOOL;
+	g_endoscopeUpturn30FlagBit: BOOL;
+	g_manualPowerBoxCalibration: BOOL;
+	g_writeZeroPosFlagErr:BOOL;
+	g_logOutEnable:BOOL;
+	g_maxAngleEnable:BOOL;
+	g_maxAngle:LREAL;
+	g_cycleEndoscopeTest:INT;
+	g_startEndoscopeTest:BOOL;
+	g_instruSNLen:INT;
+	g_snappingSeparatoring:BOOL;
+	g_instruAutoSnapping:BOOL;
+	g_instruCalibrationing:BOOL;
+	g_disableAccount:BOOL;
+	g_accountDelete:BOOL;
+	g_accountSN:INT;
+	g_queryAccountSN:INT;
+	g_queryAccountFlag:BOOL;
+	g_queryAccountNumber:STRING;
+	g_queryPassWord:STRING;
+	g_queryPermission:USINT;
+	g_queryWorkNum:UDINT;
+	g_queryName:STRING;
+	g_queryTime:STRING;
+	g_queryClear:BOOL;
+	g_maxRollEnable:BOOL;
+	g_maxRoll:LREAL;
+	g_maxPitchEnable:BOOL;
+	g_maxPitch:LREAL;
+	g_maxYawEnable:BOOL;
+	g_maxYaw:LREAL;
+	g_standbyEnable:BOOL;
+	g_testEnable:BOOL;
 END_VAR]]></Declaration>
   </GVL>
 </TcPlcObject>

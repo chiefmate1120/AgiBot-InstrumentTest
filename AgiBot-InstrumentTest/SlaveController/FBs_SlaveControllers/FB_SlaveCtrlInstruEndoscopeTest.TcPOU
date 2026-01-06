@@ -1,0 +1,319 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_SlaveCtrlInstruEndoscopeTest" Id="{98b61168-e2a0-4c98-b362-93100d269153}" SpecialFunc="None">
+    <Declaration><![CDATA[// Brief: Slave Arm test
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlInstruEndoscopeTest EXTENDS FB_SlaveArmCtrlBase
+VAR
+																
+	// final target DH joint position and grip angle
+	m_targetDHJntPos:Vec3d;
+	m_targetGripAng:LREAL;
+	m_targetGripForceLevel :LREAL :=0;
+	m_maxGripCurrent:LREAL:=350.0;
+	m_maxGripCtrlCurrent:LREAL:=540.0;
+	
+	// interploated command joint position and grip angle 
+	m_cmdDHJntPos :Vec6d;
+	m_cmdDHJntVel :Vec6d;
+	m_cmdGripAng:LREAL;
+
+	// last joint position 
+	m_lastCmdJntPos :Vec8d ;
+	
+	// instrument controller
+	m_instruController : FB_BasicInstruControl;
+	m_usKnifeController : FB_UltrosonicKnifeControl;
+	m_instruCmdJntPos,m_instruCmdJntVel : Vec5d;
+	m_instruCmdJntTrq :Vec5d;
+	
+	// OTG
+	m_DHJntOTG:ARRAY[1..3] OF FB_secOrdTrajFilter;
+	m_gripAngleOTG : FB_secOrdTrajFilter;
+	m_maxJntVel:Vec3d:=[3(2.0)];
+	m_maxJntAcc:Vec3d:=[3(4.0)];
+	
+	// instrument tyep
+	m_instruType : E_InstrumentType;
+
+	
+	m_endoscopeAdjustment:BOOL;
+	m_endoscopeOverturn:BOOL;
+	m_endoscopeAdjustmentLast:BOOL;
+	m_endoscopeOverturnLast:BOOL;
+	
+	m_tonEndoscopeOverturn:TON;
+	m_endoscopeOverturn30:BOOL;
+	m_endoscopeOverturn30Last:BOOL;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="calcCmdJntPos" Id="{c9aa0990-ac3e-4e28-8427-99636dfb990b}">
+      <Declaration><![CDATA[METHOD PROTECTED calcCmdJntPos : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	i:INT :=0;
+
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//0/30°调整信号
+IF (i_slaveArm.m_panelInstrumentOnIO  = 111) THEN      
+	m_endoscopeAdjustment:=TRUE;
+ELSE
+	m_endoscopeAdjustment:=FALSE;
+END_IF
+//内窥镜翻转调整信号
+IF (i_slaveArm.m_panelInstrumentOnIO =95) THEN    
+	m_endoscopeOverturn:=TRUE;
+ELSE
+	m_endoscopeOverturn:=FALSE;
+END_IF
+m_tonEndoscopeOverturn(IN:=i_slaveArm.m_panelInstrumentOnIO  = 111,PT:=T#3S);
+IF m_tonEndoscopeOverturn.Q THEN
+	m_endoscopeOverturn30:=TRUE;
+ELSE
+	m_endoscopeOverturn30:=FALSE;
+END_IF
+//0/30°镜切换
+IF m_endoscopeAdjustment AND NOT m_endoscopeAdjustmentLast THEN
+	IF GVL_InstruTestUIVars.g_endoscopeAngle=0 THEN
+		GVL_InstruTestUIVars.g_endoscopeAngle:=30;
+	ELSE
+		GVL_InstruTestUIVars.g_endoscopeAngle:=0;
+	END_IF
+END_IF
+IF m_endoscopeOverturn30 AND NOT m_endoscopeOverturn30Last THEN
+	IF GVL_InstruTestUIVars.g_endoscopeUpturn30FlagBit THEN
+		m_targetDHJntPos[1]:=i_slaveArm.curDHJntPos[4]+30*g_deg2rad;
+		GVL_InstruTestUIVars.g_endoscopeUpturn30FlagBit:=0;
+	ELSE
+		m_targetDHJntPos[1]:=i_slaveArm.curDHJntPos[4]-30*g_deg2rad;	
+		GVL_InstruTestUIVars.g_endoscopeUpturn30FlagBit:=1;
+	END_IF
+END_IF
+//内窥镜翻转信号
+IF m_endoscopeOverturn AND NOT m_endoscopeOverturnLast THEN
+	IF GVL_InstruTestUIVars.g_endoscopeUpturnFlagBit THEN
+		m_targetDHJntPos[1]:=i_slaveArm.curDHJntPos[4]+180*g_deg2rad;
+		GVL_InstruTestUIVars.g_endoscopeUpturnFlagBit:=0;
+	ELSE
+		m_targetDHJntPos[1]:=i_slaveArm.curDHJntPos[4]-180*g_deg2rad;	
+		GVL_InstruTestUIVars.g_endoscopeUpturnFlagBit:=1;
+	END_IF
+END_IF
+IF GVL_InstruTestUIVars.g_startEndoscopeTest THEN 
+	m_targetDHJntPos[1]:=i_slaveArm.curDHJntPos[4]+GVL_InstruTestUIVars.g_cycleEndoscopeTest*2*pi;
+	GVL_InstruTestUIVars.g_startEndoscopeTest:=0;
+END_IF
+m_endoscopeOverturnLast:=m_endoscopeOverturn;
+m_endoscopeAdjustmentLast:=m_endoscopeAdjustment;
+m_endoscopeOverturn30Last:=m_endoscopeOverturn30;
+// run OTG
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].run(m_targetDHJntPos[i],0.0, o_cmdAcc=>,o_cmdVel=>m_cmdDHJntVel[i],o_cmdPos=> m_cmdDHJntPos[i+3]);
+END_FOR
+m_gripAngleOTG.run(m_targetGripAng,0.0, o_cmdAcc=>,o_cmdVel=>,o_cmdPos=>m_cmdGripAng);
+// calculate target motor joint position from DH joint position
+i_slaveArm.instrument.instruIK(m_cmdDHJntPos,m_cmdGripAng, o_jntPos=>m_cmdJntPos);
+
+// command velocity
+vecSub(m_cmdJntPos, m_lastCmdJntPos, m_cmdJntVel);
+vecSelfMultiNum(m_cmdJntVel, g_slaveArmCtrlFreq);
+m_lastCmdJntPos:=m_cmdJntPos;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="calcCmdJntTrq" Id="{2da40593-a24a-4845-bace-4e133d17efa9}">
+      <Declaration><![CDATA[// override this function in each exact controller
+METHOD PROTECTED calcCmdJntTrq : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	nullspaceMat :Mat7d;
+	ctrlTrq : Vec7d;
+	i : int ;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// set joint torque to zero in default
+m_cmdJntTrq := g_zeroVec8d;
+
+// instrument joint control
+FOR i:=1 TO 5 DO 
+	m_instruCmdJntPos[i]:=m_cmdJntPos[i+3];
+	m_instruCmdJntVel[i]:=m_cmdJntVel[i+3];
+END_FOR
+
+IF i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeS OR i_slaveArm.instrument.instruType = InstruType_UltrasoundKnifeU THEN
+	m_usKnifeController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+ELSE
+	m_instruController.run(m_instruCmdJntPos,m_instruCmdJntVel, m_cmdDHJntPos[6], m_cmdDHJntVel[6], m_targetGripForceLevel, i_slaveArm, o_cmdJntTrq=>m_instruCmdJntTrq);
+END_IF
+
+FOR i:=1 TO 5 DO
+	m_cmdJntTrq[i+3]:=m_instruCmdJntTrq[i];
+	m_cmdJntTrq[6]:=0;
+END_FOR
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{c1bb20a2-2b9b-4ec9-8bbd-3f31c8edc1f6}">
+      <Declaration><![CDATA[METHOD PUBLIC init : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm	:FB_SlaveArm;
+END_VAR
+VAR_IN_OUT 
+	r_slaveArmCtrlCmd :ST_SlaveArmCtrlCmds;
+END_VAR
+
+VAR
+	i:int;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+m_lastCmdJntPos:=m_cmdJntPos;
+m_jntOPMode[1] := DriverOPMode_PosTrq;
+m_jntOPMode[2] := DriverOPMode_PosTrq;
+m_jntOPMode[3] := DriverOPMode_PosTrq;
+m_jntOPMode[4] := DriverOPMode_Trq;
+m_jntOPMode[5] := DriverOPMode_Trq;
+m_jntOPMode[6] := DriverOPMode_Trq;
+m_jntOPMode[7] := DriverOPMode_Trq;
+m_jntOPMode[8] := DriverOPMode_Trq;
+
+m_cmdDHJntPos :=i_slaveArm.curDHJntPos;
+m_cmdDHJntVel :=g_zeroVec6d;
+m_targetGripAng := i_slaveArm.curGripAngle;
+m_targetDHJntPos[1] := i_slaveArm.curDHJntPos[4];
+m_targetDHJntPos[2] := i_slaveArm.curDHJntPos[5];
+m_targetDHJntPos[3] := i_slaveArm.curDHJntPos[6];
+
+// init instrument controller
+m_instruController.init(i_slaveArm,m_maxGripCurrent,m_maxGripCtrlCurrent);
+m_usKnifeController.init(i_slaveArm);
+
+FOR i:=1 TO 3  DO
+	m_DHJntOTG[i].init(m_cmdDHJntPos[i+3], 0, m_maxJntVel[i], m_maxJntAcc[i], g_slaveArmCtrlCycleTime);
+END_FOR
+
+m_gripAngleOTG.init(m_targetGripAng, 0, 2*m_maxJntVel[3], 2*m_maxJntAcc[3], g_slaveArmCtrlCycleTime);
+// update commands to arm
+copyCmds(r_slaveArmCtrlCmd);
+
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="InstruBacklash" Id="{d4ec803b-fdb5-4579-8233-cee7615a1549}">
+      <Declaration><![CDATA[PROPERTY InstruBacklash : Vec5d]]></Declaration>
+      <Get Name="Get" Id="{dd6c0bb4-646a-4cbc-9681-302aede45454}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[IF m_instruType = InstruType_UltrasoundKnifeS OR m_instruType = InstruType_UltrasoundKnifeU THEN
+	instruBacklash := g_zeroVec5d;
+ELSE
+	instruBacklash := m_instruController.m_jntBacklash;
+END_IF]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_SlaveCtrlInstruEndoscopeTest">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruEndoscopeTest.calcCmdJntPos">
+      <LineId Id="918" Count="4" />
+      <LineId Id="914" Count="0" />
+      <LineId Id="923" Count="4" />
+      <LineId Id="915" Count="0" />
+      <LineId Id="996" Count="0" />
+      <LineId Id="995" Count="0" />
+      <LineId Id="997" Count="0" />
+      <LineId Id="999" Count="1" />
+      <LineId Id="998" Count="0" />
+      <LineId Id="931" Count="6" />
+      <LineId Id="928" Count="0" />
+      <LineId Id="1001" Count="0" />
+      <LineId Id="1004" Count="5" />
+      <LineId Id="1002" Count="1" />
+      <LineId Id="938" Count="1" />
+      <LineId Id="947" Count="1" />
+      <LineId Id="952" Count="0" />
+      <LineId Id="950" Count="1" />
+      <LineId Id="953" Count="0" />
+      <LineId Id="949" Count="0" />
+      <LineId Id="929" Count="0" />
+      <LineId Id="980" Count="0" />
+      <LineId Id="979" Count="0" />
+      <LineId Id="982" Count="0" />
+      <LineId Id="981" Count="0" />
+      <LineId Id="966" Count="0" />
+      <LineId Id="857" Count="0" />
+      <LineId Id="1010" Count="0" />
+      <LineId Id="391" Count="3" />
+      <LineId Id="397" Count="0" />
+      <LineId Id="396" Count="0" />
+      <LineId Id="164" Count="0" />
+      <LineId Id="287" Count="0" />
+      <LineId Id="211" Count="0" />
+      <LineId Id="187" Count="1" />
+      <LineId Id="131" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruEndoscopeTest.calcCmdJntTrq">
+      <LineId Id="121" Count="0" />
+      <LineId Id="34" Count="1" />
+      <LineId Id="135" Count="0" />
+      <LineId Id="137" Count="1" />
+      <LineId Id="161" Count="0" />
+      <LineId Id="139" Count="0" />
+      <LineId Id="195" Count="4" />
+      <LineId Id="141" Count="0" />
+      <LineId Id="200" Count="0" />
+      <LineId Id="142" Count="1" />
+      <LineId Id="215" Count="0" />
+      <LineId Id="144" Count="0" />
+      <LineId Id="177" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruEndoscopeTest.init">
+      <LineId Id="13" Count="0" />
+      <LineId Id="101" Count="0" />
+      <LineId Id="86" Count="6" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="120" Count="0" />
+      <LineId Id="84" Count="1" />
+      <LineId Id="93" Count="0" />
+      <LineId Id="175" Count="1" />
+      <LineId Id="174" Count="0" />
+      <LineId Id="81" Count="2" />
+      <LineId Id="148" Count="0" />
+      <LineId Id="197" Count="0" />
+      <LineId Id="128" Count="0" />
+      <LineId Id="149" Count="1" />
+      <LineId Id="110" Count="0" />
+      <LineId Id="136" Count="0" />
+      <LineId Id="111" Count="0" />
+      <LineId Id="109" Count="0" />
+      <LineId Id="80" Count="0" />
+      <LineId Id="59" Count="0" />
+      <LineId Id="12" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlInstruEndoscopeTest.InstruBacklash.Get">
+      <LineId Id="3" Count="3" />
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

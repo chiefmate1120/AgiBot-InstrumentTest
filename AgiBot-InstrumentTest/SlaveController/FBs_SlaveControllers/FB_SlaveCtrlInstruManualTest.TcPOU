@@ -34,7 +34,10 @@ VAR
 	m_instruType : E_InstrumentType;
 	bStart: BOOL;
 	iStep: INT;
+	fbTon: TON;
 
+	m_maxGripCurrent:LREAL:=350.0;
+	m_maxGripCtrlCurrent:LREAL:=540.0;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -66,8 +69,13 @@ IF GVL_InstruTestUIVars.g_moveToSetPosFlag THEN
 	m_targetDHJntPos[1] := GVL_InstruTestUIVars.g_targetRollAng*g_deg2rad;
 	m_targetDHJntPos[2] := (GVL_InstruTestUIVars.g_targetPitchAng-90)*g_deg2rad;
 	m_targetDHJntPos[3] := GVL_InstruTestUIVars.g_targetYawAng*g_deg2rad;
-	m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
-	m_targetGripForceLevel := LIMIT(0, GVL_InstruTestUIVars.g_targetGripForceLevel, 100);
+	IF GVL_InstruTestUIVars.g_targetGripAng>-15 THEN 
+		m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
+		m_targetGripForceLevel:=0;
+	ELSE
+		m_targetGripAng := -15*g_deg2rad;
+		m_targetGripForceLevel := LIMIT(0, ABS(GVL_InstruTestUIVars.g_targetGripAng), 100);
+	END_IF
 ELSIF GVL_InstruTestUIVars.g_gripperOpenFlag THEN
 	m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
 	m_targetGripForceLevel :=0;
@@ -75,40 +83,10 @@ ELSIF GVL_InstruTestUIVars.g_gripperCloseFlag THEN
 	m_targetGripAng := 0;
 	m_targetGripForceLevel :=0;
 ELSIF GVL_InstruTestUIVars.g_maxGripForceFlag THEN
-	m_targetGripAng := -45;
-	m_targetGripForceLevel :=0;
+	m_targetGripAng := -45*g_deg2rad;
+	m_targetGripForceLevel :=100;
 END_IF
-(*
-FOR i:=1 TO 3 BY 1 DO
-	m_compensationAngleDH[i]:=0;
-	IF GVL_InstruTestUIVars.g_account.actualPermission=3 THEN
-		IF GVL_InstruTestUIVars.g_enableBackendCompensation THEN
-			m_compensationAngleDH:=GVL_InstruTestUIVars.g_compensationAngleBackendDH;
-		END_IF
-		IF GVL_InstruTestUIVars.g_enableRDCompensation THEN
-			GVL_InstruTestUIVars.g_enableBackendCompensation:=FALSE;
-			m_compensationAngleDH:=GVL_InstruTestUIVars.g_compensationAngleDH;
-		END_IF
-	END_IF
-	IF ABS( m_targetDHJntPosLast[i]-m_targetDHJntPos[i])>0.0001  THEN
-	  IF  m_targetDHJntPosLast[i]-m_targetDHJntPos[i]>0.0001   THEN
-		  m_curCmdDHJntPos[i]:=m_targetDHJntPos[i]-m_compensationAngleDH[i]*g_deg2rad;
-	  ELSE
-		  m_curCmdDHJntPos[i]:=m_targetDHJntPos[i];
-	  END_IF                       
-	END_IF
-	m_targetDHJntPosLast:=m_targetDHJntPos;
-END_FOR
-IF ABS( m_targetGripAngLast-m_targetGripAng)>0.0001  THEN
-  IF  m_targetGripAngLast-m_targetGripAng<0.0001   THEN
-	  m_curCmdAng:=m_targetGripAng+m_compensationAngleDH[3]*g_deg2rad;
-  ELSE
-	  m_curCmdAng:=m_targetGripAng;;
-  END_IF                       
-END_IF
-m_targetGripAngLast:=m_targetGripAng;
 
-*)
 IF GVL_InstruTestUIVars.m_cycleStart THEN 
 	bStart:=TRUE;
 	GVL_InstruTestUIVars.m_cycleStart:=FALSE;
@@ -117,10 +95,11 @@ IF GVL_InstruTestUIVars.m_cycleStop THEN
 	bStart:=FALSE;
 	GVL_InstruTestUIVars.m_cycleStop:=FALSE;
 END_IF
+fbTon(IN:=iStep=10,PT:=T#1S);
 IF bStart THEN
 	CASE iStep OF 
 		0:
-			m_targetGripAng := GVL_InstruTestUIVars.g_maxGripAng;
+			m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
 			m_targetGripForceLevel :=0;
 			iStep:=5;
 		5:
@@ -128,9 +107,11 @@ IF bStart THEN
 				iStep:=10;
 			END_IF
 		10:
-			m_targetGripAng := GVL_InstruTestUIVars.g_minGripAngle;
-			m_targetGripForceLevel :=0;
-			iStep:=15;
+			IF fbTon.Q THEN
+				m_targetGripAng := -90*g_deg2rad;
+				m_targetGripForceLevel :=0;
+				iStep:=15;
+			END_IF
 		15:
 		    IF ABS(m_cmdGripAng- m_targetGripAng)< g_jntCtrlAngTolLow THEN
 				iStep:=0;
@@ -223,14 +204,20 @@ m_targetDHJntPos[2] := i_slaveArm.curDHJntPos[5];
 m_targetDHJntPos[3] := i_slaveArm.curDHJntPos[6];
 
 // init instrument controller
-m_instruController.init(i_slaveArm);
+m_instruController.init(i_slaveArm,m_maxGripCurrent,m_maxGripCtrlCurrent);
 m_usKnifeController.init(i_slaveArm);
 iStep:=0;
 bStart:=FALSE;
+IF GVL_InstruTestUIVars.g_rotationAngularVel=0 THEN GVL_InstruTestUIVars.g_rotationAngularVel:=5;END_IF
+IF GVL_InstruTestUIVars.g_pitchAngularVel=0 THEN GVL_InstruTestUIVars.g_pitchAngularVel:=5;END_IF
+IF GVL_InstruTestUIVars.g_deviationAngularVel=0 THEN GVL_InstruTestUIVars.g_deviationAngularVel:=5;END_IF
+IF GVL_InstruTestUIVars.g_rotationAngularAcc=0 THEN GVL_InstruTestUIVars.g_rotationAngularAcc:=30;END_IF
+IF GVL_InstruTestUIVars.g_pitchAngularAcc=0 THEN GVL_InstruTestUIVars.g_pitchAngularAcc:=30;END_IF
+IF GVL_InstruTestUIVars.g_deviationAngularAcc=0 THEN GVL_InstruTestUIVars.g_deviationAngularAcc:=30;END_IF
 FOR i:=1 TO 3  DO
 	m_maxJntVel[i]:=5;
 	m_maxJntAcc[i]:=30;
-	IF GVL_InstruTestUIVars.g_account.actualPermission=3 THEN
+	IF GVL_InstruTestUIVars.g_account.actualPermission=2 THEN
 		m_maxJntVel[1]:=GVL_InstruTestUIVars.g_rotationAngularVel;
 		m_maxJntVel[2]:=GVL_InstruTestUIVars.g_pitchAngularVel;
 		m_maxJntVel[3]:=GVL_InstruTestUIVars.g_deviationAngularVel;
@@ -272,32 +259,24 @@ END_IF]]></ST>
     </LineIds>
     <LineIds Name="FB_SlaveCtrlInstruManualTest.calcCmdJntPos">
       <LineId Id="443" Count="0" />
-      <LineId Id="428" Count="14" />
+      <LineId Id="428" Count="3" />
+      <LineId Id="914" Count="1" />
+      <LineId Id="917" Count="3" />
+      <LineId Id="916" Count="0" />
+      <LineId Id="434" Count="8" />
       <LineId Id="326" Count="0" />
-      <LineId Id="828" Count="0" />
-      <LineId Id="640" Count="0" />
-      <LineId Id="683" Count="0" />
-      <LineId Id="645" Count="0" />
-      <LineId Id="642" Count="2" />
-      <LineId Id="647" Count="0" />
-      <LineId Id="807" Count="0" />
-      <LineId Id="648" Count="0" />
-      <LineId Id="646" Count="0" />
-      <LineId Id="573" Count="0" />
-      <LineId Id="463" Count="7" />
-      <LineId Id="398" Count="0" />
-      <LineId Id="685" Count="3" />
-      <LineId Id="692" Count="0" />
-      <LineId Id="695" Count="1" />
-      <LineId Id="684" Count="0" />
-      <LineId Id="827" Count="0" />
       <LineId Id="826" Count="0" />
       <LineId Id="848" Count="6" />
       <LineId Id="847" Count="0" />
+      <LineId Id="893" Count="0" />
       <LineId Id="855" Count="1" />
       <LineId Id="858" Count="0" />
       <LineId Id="860" Count="6" />
-      <LineId Id="868" Count="6" />
+      <LineId Id="868" Count="0" />
+      <LineId Id="894" Count="0" />
+      <LineId Id="869" Count="2" />
+      <LineId Id="895" Count="0" />
+      <LineId Id="872" Count="2" />
       <LineId Id="867" Count="0" />
       <LineId Id="859" Count="0" />
       <LineId Id="857" Count="0" />
@@ -338,6 +317,7 @@ END_IF]]></ST>
       <LineId Id="162" Count="0" />
       <LineId Id="195" Count="0" />
       <LineId Id="218" Count="0" />
+      <LineId Id="230" Count="5" />
       <LineId Id="188" Count="0" />
       <LineId Id="191" Count="0" />
       <LineId Id="196" Count="0" />

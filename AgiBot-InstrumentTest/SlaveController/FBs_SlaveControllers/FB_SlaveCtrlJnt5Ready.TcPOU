@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
+  <POU Name="FB_SlaveCtrlJnt5Ready" Id="{46a28a14-c1e7-45d8-9b63-79c28d3be7be}" SpecialFunc="None">
+    <Declaration><![CDATA[// Brief: Slave Arm Standby
+FUNCTION_BLOCK PUBLIC FB_SlaveCtrlJnt5Ready EXTENDS FB_SlaveArmCtrlBase
+VAR_INPUT
+END_VAR
+VAR_OUTPUT
+END_VAR
+VAR
+	m_testFlag:bool:=false;
+	m_jnt5Planner:Cubic_Polynomial_Interpolation;
+	m_initAngle,m_initVel,m_initAcc,m_initT:LREAL;
+	m_targetAngle,m_targetVel,m_targetAcc,m_deltaAngle:LREAL;
+	m_cmdAngle,m_cmdVel,m_cmdAcc:LREAL;
+	m_initFlag:BOOL:=FALSE;
+	m_finishFlag:BOOL:=TRUE;
+	m_endT:REAL:=5;
+	m_dT:REAL:=0.0025;
+	m_T:REAL:=0;
+	m_rotateStart:BOOL:=FALSE;
+
+	m_rotateIndex:INT:=1;	
+	
+	// instrument zero position
+	m_instruZeroDeviation :Vec5d;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Method Name="calcCmdJntPos" Id="{09d5ab12-2bb7-4ffb-b6ad-6134915dd31e}">
+      <Declaration><![CDATA[// override this function in each exact controller
+METHOD PROTECTED calcCmdJntPos : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	i :INT;
+	trackErr:LREAL;
+	linkValue:LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_cmdJntPos:=i_slaveArm.curJntPos;
+
+IF NOT m_initFlag AND m_finishFlag THEN
+	m_instruZeroDeviation[5]:=0.001;	
+
+	m_initAngle := i_slaveArm.curJntPos[8];
+	m_targetAngle := m_initAngle + m_instruZeroDeviation[5];
+
+	m_jnt5Planner.init(0,m_endT,m_initAngle,m_targetAngle,0,0,0,0);
+	
+	m_initT := m_timePeriod;
+	m_T:=0;
+	m_initFlag:=TRUE;
+	m_finishFlag:=FALSE;	
+ELSIF NOT m_finishFlag AND m_initFlag THEN
+	m_T := m_timePeriod - m_initT;
+	m_jnt5Planner.run(m_T,m_cmdAngle,m_cmdVel,m_cmdAcc,m_finishFlag);
+	
+	m_cmdJntPos[8]:=m_cmdAngle;
+	m_cmdJntVel[8]:=m_cmdVel;
+	m_cmdJntAcc[8]:=m_cmdAcc;
+ELSIF m_finishFlag AND m_initFlag THEN					
+	m_rotateStart :=FALSE;
+	m_isFinished := TRUE;
+	
+	m_jntEnableFlag := g_zeroVec8i;
+END_IF
+
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{ce4b763d-bab3-4c62-a94a-1d25c6fc8104}">
+      <Declaration><![CDATA[METHOD PUBLIC init : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm	:FB_SlaveArm;
+END_VAR
+VAR_IN_OUT 
+	r_slaveArmCtrlCmd :ST_SlaveArmCtrlCmds;
+END_VAR
+
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[//init
+//SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+
+// check if to hold the command joint position unchanged
+m_holdLastCmds := checkToHoldLastCmds(i_slaveArm);
+
+SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+
+m_T:=0;
+m_endT:=0.07;
+m_initFlag:=FALSE;
+m_finishFlag:=TRUE;
+
+// update commands to arm
+copyCmds(r_slaveArmCtrlCmd);]]></ST>
+      </Implementation>
+    </Method>
+    <LineIds Name="FB_SlaveCtrlJnt5Ready">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlJnt5Ready.calcCmdJntPos">
+      <LineId Id="281" Count="0" />
+      <LineId Id="259" Count="0" />
+      <LineId Id="225" Count="0" />
+      <LineId Id="346" Count="0" />
+      <LineId Id="299" Count="0" />
+      <LineId Id="327" Count="7" />
+      <LineId Id="326" Count="0" />
+      <LineId Id="253" Count="2" />
+      <LineId Id="349" Count="0" />
+      <LineId Id="264" Count="2" />
+      <LineId Id="256" Count="0" />
+      <LineId Id="344" Count="1" />
+      <LineId Id="347" Count="1" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="98" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlJnt5Ready.init">
+      <LineId Id="86" Count="0" />
+      <LineId Id="74" Count="0" />
+      <LineId Id="96" Count="4" />
+      <LineId Id="104" Count="6" />
+      <LineId Id="95" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>

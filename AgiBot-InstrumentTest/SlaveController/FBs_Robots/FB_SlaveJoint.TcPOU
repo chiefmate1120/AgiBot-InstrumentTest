@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveJoint" Id="{13c09c14-ad6e-446d-ae84-5ae40081815a}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveJoint EXTENDS FB_JointBase
 VAR_INPUT
@@ -8,7 +8,7 @@ VAR_OUTPUT
 END_VAR
 VAR
 	// power box joint motor rated current
-	m_wristJntRatedCurrent : DINT := 250;
+	m_wristJntRatedCurrent : DINT := 540;
 
 END_VAR
 
@@ -128,38 +128,38 @@ VAR
 END_VAR]]></Declaration>
       <Implementation>
         <ST><![CDATA[//动力盒移动关节和器械旋转关节，共享一个控制字，由SDO写入
-IF (m_jntIdx=3) OR (m_jntIdx=8)  THEN
-	SDOSubIndexMode :=16#609B;
-	SDOSubIndexCur:=16#6098;
-//动力盒3、5号电机为一个驱动器，共享一个控制字，由SDO写入
-ELSIF (m_jntIdx=4) OR (m_jntIdx=6)  THEN
-	SDOSubIndexMode :=16#609C;
-	SDOSubIndexCur:=16#6099;
-//动力盒2、4号电机为一个驱动器，共享一个控制字，由SDO写入
-ELSIF (m_jntIdx=5) OR (m_jntIdx=7)  THEN
-	SDOSubIndexMode :=16#609D;
-	SDOSubIndexCur:=16#609A;
-END_IF
-
+//IF (m_jntIdx=3) OR (m_jntIdx=8)  THEN
+//	SDOSubIndexMode :=16#609B;
+//	SDOSubIndexCur:=16#6098;
+////动力盒3、5号电机为一个驱动器，共享一个控制字，由SDO写入
+//ELSIF (m_jntIdx=4) OR (m_jntIdx=6)  THEN
+//	SDOSubIndexMode :=16#609C;
+//	SDOSubIndexCur:=16#6099;
+////动力盒2、4号电机为一个驱动器，共享一个控制字，由SDO写入
+//ELSIF (m_jntIdx=5) OR (m_jntIdx=7)  THEN
+//	SDOSubIndexMode :=16#609D;
+//	SDOSubIndexCur:=16#609A;
+//END_IF
+SDOSubIndexCur:=16#6090;
 IF m_jntIdx <3 THEN
 	RETURN;
 END_IF
 
 // write driver operation mode if it changs
-IF  m_jntIdx >=3 AND m_jntIdx <=8 THEN
-	m_opModeSDOWrite(sNetID:= GVL_SlaveJointEncoderCaliData.g_slaveArmNetID[m_armIdx],
-					nSlaveAddr := GVL_SlaveJointEncoderCaliData.g_slaveJointNetPort[m_armIdx,m_jntIdx],
-					nSubIndex:=0,nIndex:=SDOSubIndexMode,pSrcBuf:=ADR(m_motorOutputs.m_opMode),cbBufLen:=SIZEOF(m_motorOutputs.m_opMode),bExecute:=TRUE);
-	IF NOT m_opModeSDOWrite.bBusy THEN
-		m_opModeSDOWrite(bExecute:=FALSE);
-	END_IF
-END_IF
-
+//IF  m_jntIdx >=3 AND m_jntIdx <=8 THEN
+//	m_opModeSDOWrite(sNetID:= GVL_SlaveJointEncoderCaliData.g_slaveArmNetID[m_armIdx],
+//					nSlaveAddr := GVL_SlaveJointEncoderCaliData.g_slaveJointNetPort[m_armIdx,m_jntIdx],
+//					nSubIndex:=0,nIndex:=SDOSubIndexMode,pSrcBuf:=ADR(m_motorOutputs.m_opMode),cbBufLen:=SIZEOF(m_motorOutputs.m_opMode),bExecute:=TRUE);
+//	IF NOT m_opModeSDOWrite.bBusy THEN
+//		m_opModeSDOWrite(bExecute:=FALSE);
+//	END_IF
+//END_IF
+m_wristJntRatedCurrent := LREAL_TO_DINT(m_maxCurrent);
 // write max motor current if it changes and works in position mode
-IF m_jntIdx >=4 AND m_jntIdx <=8  THEN 
+IF m_jntIdx =4 OR m_jntIdx =6  THEN 
 	m_MotorCurrentSDOWrite(sNetID:= GVL_SlaveJointEncoderCaliData.g_slaveArmNetID[m_armIdx],
 					nSlaveAddr := GVL_SlaveJointEncoderCaliData.g_slaveJointNetPort[m_armIdx,m_jntIdx],
-					nSubIndex:=0,nIndex:=SDOSubIndexCur,pSrcBuf:=ADR(m_wristJntRatedCurrent),cbBufLen:=SIZEOF(m_wristJntRatedCurrent),bExecute:=TRUE);
+					nSubIndex:=06,nIndex:=SDOSubIndexCur,pSrcBuf:=ADR(m_wristJntRatedCurrent),cbBufLen:=SIZEOF(m_wristJntRatedCurrent),bExecute:=TRUE);
 	IF NOT m_MotorCurrentSDOWrite.bBusy THEN
 		m_MotorCurrentSDOWrite(bExecute:=FALSE);
 	END_IF

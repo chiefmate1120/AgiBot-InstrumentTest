@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveCtrlPanelReady" Id="{f4ef749e-f294-45ac-8079-35edcc11796e}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Panel Ready
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlPanelReady EXTENDS FB_SlaveArmCtrlBase
@@ -8,13 +8,146 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	m_jnt5Planner:Cubic_Polynomial_Interpolation;
+	m_initAngle,m_initVel,m_initAcc,m_initT:LREAL;
+	m_targetAngle,m_targetVel,m_targetAcc:LREAL;
+	m_cmdAngle,m_cmdVel,m_cmdAcc:LREAL;
+	m_initFlag:BOOL:=FALSE;
+	m_finishFlag:BOOL:=TRUE;
+	m_endT:REAL:=5;
+	m_dT:REAL:=0.0025;
+	m_T:REAL:=0;
+	m_writeSdoTimeStart:BOOL:=FALSE;
+	
+		//the number of joint 5 when the number of instrument uses is 0
+	m_jnt5BasePos: LREAL := 80*g_deg2rad;
+	m_unitAngle:LREAL :=24*g_deg2rad;
+	m_jnt5Backlash:LREAL :=14*g_deg2rad;
+	m_jnt5Pos: LREAL;
+	//number of rotations allowed
+	m_rotaNum : INT := 360/24;
 END_VAR
 ]]></Declaration>
     <Implementation>
       <ST><![CDATA[]]></ST>
     </Implementation>
+    <Method Name="calcCmdJntPos" Id="{884403eb-d392-4960-a8e1-e0b19cd70000}">
+      <Declaration><![CDATA[// override this function in each exact controller
+METHOD PROTECTED calcCmdJntPos : BOOL
+VAR_IN_OUT CONSTANT
+	i_endoscopePose : ST_Frame;
+	i_masterStatus :ST_MasterStatus;
+	i_setupStatus: ST_SetupStatus;
+	i_slaveArm :FB_SlaveArm;
+END_VAR
+
+VAR 
+	i :INT;
+	trackErr:LREAL;
+	linkValue:LREAL;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF GVL_InstruTestUIVars.g_incInstruNumOfUses THEN
+	m_writeSdoTimeStart := TRUE;
+ELSE	
+	IF m_writeSdoTimeStart THEN
+			IF NOT m_initFlag THEN
+	//			//*壳体次数清零
+	//			//首先读取当前使用次数
+	//			IF linkSingle[8] - m_instrument.m_jnt5BasePos < 0 THEN 
+	//				m_jnt5Pos := linkSingle[8] - m_instrument.m_jnt5BasePos + 2*pi;
+	//			ELSE
+	//				m_jnt5Pos := linkSingle[8] - m_instrument.m_jnt5BasePos;
+	//			END_IF
+				
+	//			curUseNum := LREAL_TO_UINT(FLOOR(lr_in:= m_jnt5Pos/m_instrument.m_unitAngle));
+				
+				linkValue := i_slaveArm.curJntPos[8];
+				
+	//			diff := ULINT_TO_INT(m_instrument.onChipData.m_InstruUsageCounts - curUseNum);			
+	//			IF diff<0 THEN
+	//				diff := diff + m_instrument.m_rotaNum;
+	//			END_IF
+	//			m_jnt5TargetPos := linkValue - (diff * m_instrument.m_unitAngle + m_instrument.m_jnt5Backlash);
+	
+				m_initAngle:=linkValue;
+				m_targetAngle:=linkValue+m_unitAngle + m_jnt5Backlash;
+				m_jnt5Planner.init(0,m_endT,m_initAngle,m_targetAngle,0,0,0,0);
+				
+				m_initT := 0;
+				m_T:=0;
+				m_initFlag:=TRUE;
+				m_finishFlag:=FALSE;
+			ELSIF NOT m_finishFlag THEN
+				m_T:=m_T+m_dT;
+				m_jnt5Planner.run(m_T,m_cmdAngle,m_cmdVel,m_cmdAcc,m_finishFlag);
+				m_cmdJntPos[8]:=m_cmdAngle;
+				m_cmdJntVel[8]:=m_cmdVel;
+				m_cmdJntAcc[8]:=m_cmdAcc;
+			ELSIF m_finishFlag THEN
+				m_writeSdoTimeStart :=FALSE;
+				m_isFinished := TRUE;
+			END_IF
+	END_IF
+END_IF
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="init" Id="{b63859be-ac5e-4ccf-b134-ba77785c6ce4}">
+      <Declaration><![CDATA[METHOD PUBLIC init : BOOL
+VAR_IN_OUT CONSTANT
+	i_slaveArm	:FB_SlaveArm;
+END_VAR
+VAR_IN_OUT 
+	r_slaveArmCtrlCmd :ST_SlaveArmCtrlCmds;
+END_VAR
+
+VAR
+	i:INT;
+	cycleNum:LREAL;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// check if to hold the command joint position unchanged
+m_holdLastCmds := checkToHoldLastCmds(i_slaveArm);
+
+SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+
+m_jntEnableFlag :=g_zeroVec8i;
+m_jntEnableFlag[8] := 1;
+
+m_T:=0;
+m_endT:=5;
+m_initFlag:=FALSE;
+m_finishFlag:=TRUE;
+
+// update commands to arm
+copyCmds(r_slaveArmCtrlCmd);]]></ST>
+      </Implementation>
+    </Method>
     <LineIds Name="FB_SlaveCtrlPanelReady">
       <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlPanelReady.calcCmdJntPos">
+      <LineId Id="260" Count="1" />
+      <LineId Id="224" Count="0" />
+      <LineId Id="259" Count="0" />
+      <LineId Id="225" Count="0" />
+      <LineId Id="227" Count="28" />
+      <LineId Id="264" Count="2" />
+      <LineId Id="256" Count="2" />
+      <LineId Id="205" Count="0" />
+      <LineId Id="208" Count="0" />
+      <LineId Id="263" Count="0" />
+      <LineId Id="98" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_SlaveCtrlPanelReady.init">
+      <LineId Id="152" Count="3" />
+      <LineId Id="247" Count="2" />
+      <LineId Id="241" Count="0" />
+      <LineId Id="244" Count="2" />
+      <LineId Id="242" Count="0" />
+      <LineId Id="189" Count="2" />
     </LineIds>
   </POU>
 </TcPlcObject>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.11">
   <POU Name="FB_SlaveCtrlStandBy" Id="{82e389e4-7a38-4619-a14b-0246d1236311}" SpecialFunc="None">
     <Declaration><![CDATA[// Brief: Slave Arm Standby
 FUNCTION_BLOCK PUBLIC FB_SlaveCtrlStandBy EXTENDS FB_SlaveArmCtrlBase
@@ -8,6 +8,25 @@ END_VAR
 VAR_OUTPUT
 END_VAR
 VAR
+	m_testFlag:bool:=false;
+		m_jnt5Planner:Cubic_Polynomial_Interpolation;
+	m_initAngle,m_initVel,m_initAcc,m_initT:LREAL;
+	m_targetAngle,m_targetVel,m_targetAcc:LREAL;
+	m_cmdAngle,m_cmdVel,m_cmdAcc:LREAL;
+	m_initFlag:BOOL:=FALSE;
+	m_finishFlag:BOOL:=TRUE;
+	m_endT:REAL:=5;
+	m_dT:REAL:=0.0025;
+	m_T:REAL:=0;
+	m_writeSdoTimeStart:BOOL:=FALSE;
+	
+		//the number of joint 5 when the number of instrument uses is 0
+	m_jnt5BasePos: LREAL := 80*g_deg2rad;
+	m_unitAngle:LREAL :=24*g_deg2rad;
+	m_jnt5Backlash:LREAL :=14*g_deg2rad;
+	m_jnt5Pos: LREAL;
+	//number of rotations allowed
+	m_rotaNum : INT := 360/24;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -25,7 +44,8 @@ END_VAR
 ]]></Declaration>
       <Implementation>
         <ST><![CDATA[//init
-SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);]]></ST>
+SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);
+]]></ST>
       </Implementation>
     </Method>
     <LineIds Name="FB_SlaveCtrlStandBy">
@@ -34,6 +54,7 @@ SUPER^.Init(i_slaveArm,r_slaveArmCtrlCmd);]]></ST>
     <LineIds Name="FB_SlaveCtrlStandBy.init">
       <LineId Id="86" Count="0" />
       <LineId Id="74" Count="0" />
+      <LineId Id="95" Count="0" />
     </LineIds>
   </POU>
 </TcPlcObject>
