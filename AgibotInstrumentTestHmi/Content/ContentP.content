@@ -1356,6 +1356,17 @@
           "value": true
         },
         "asyncWait": true
+      },
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_jnt5RotateFlag%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": true
+        },
+        "asyncWait": true
       }
     ]
   },
@@ -1366,6 +1377,17 @@
         "objectType": "WriteToSymbol",
         "active": true,
         "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_incInstruNumOfUses%/s%",
+        "value": {
+          "objectType": "StaticValue",
+          "valueType": "tchmi:general#/definitions/BOOL",
+          "value": false
+        },
+        "asyncWait": true
+      },
+      {
+        "objectType": "WriteToSymbol",
+        "active": true,
+        "symbolExpression": "%s%PLC1.GVL_InstruTestUIVars.g_jnt5RotateFlag%/s%",
         "value": {
           "objectType": "StaticValue",
           "valueType": "tchmi:general#/definitions/BOOL",
