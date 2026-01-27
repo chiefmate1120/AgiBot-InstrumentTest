@@ -110,8 +110,8 @@ VAR_GLOBAL
 	g_readPurposeTime: UINT;	
 	g_instruNameCN : WSTRING := " ";
 	
+	// 清除壳体次数
 	g_jnt5RotateFlag:BOOL:=FALSE;
-
 END_VAR
 VAR_GLOBAL RETAIN PERSISTENT
 	// 动力盒零位已校准
