@@ -48,6 +48,8 @@ VAR
 	m_instruVerify :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruVerify;
 	m_frictionTest :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlFrictionTest;
 	
+	m_jnt5Rotate :ARRAY[1..g_sArmNum] OF FB_SlaveCtrlJnt5Rotate;
+	
 	// arm controller interface
 	m_armCtrl :ARRAY[1..g_sArmNum] OF I_SlaveArmCtrl;
 	m_armCtrlCmds :ARRAY[1..g_sArmNum] OF ST_SlaveArmCtrlCmds;
@@ -147,6 +149,9 @@ END_VAR
 	m_armCtrlFactory[i,SlaveArmState_PowerBoxCalibration] := m_powerBoxCalibration[i];
 	m_armCtrlFactory[i,SlaveArmState_EndoscopeTest] := m_endoscopeTest[i];
 	m_armCtrlFactory[i,SlaveArmState_FrictionTest] := m_frictionTest[i];
+	
+	m_armCtrlFactory[i,SlaveArmState_Jnt5Rotate] := m_jnt5Rotate[i];
+	
 	// assign controller
 	m_armCtrl[i]:=m_armCtrlFactory[i,m_slaveArmState[i]];
 	m_armCtrl[i].Init(m_slaveArms[i],m_armCtrlCmds[i]);
@@ -431,8 +436,15 @@ FOR i:=1 TO g_sArmNum DO
 			// to stop
 			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished OR NOT GVL_InstruTestUIVars.g_instruFrictionTest  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
+			END_IF	
+		
+		SlaveArmState_Jnt5Rotate:
+			// to standby
+			IF  m_armCtrl[i].isFinished THEN
+				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 	END_CASE
+	
 	IF NOT m_slaveArms[i].instruOn THEN
 		GVL_InstruTestUIVars.g_instruCaliState:=FALSE;
 	END_IF
@@ -443,6 +455,13 @@ FOR i:=1 TO g_sArmNum DO
 		GVL_InstruTestUIVars.g_motorStops:=FALSE;
 		m_nextSlaveArmState[i]:=SlaveArmState_Stop;
 	END_IF
+	
+	
+	IF GVL_InstruTestUIVars.g_jnt5RotateFlag THEN
+		m_nextSlaveArmState[i]:=SlaveArmState_Jnt5Rotate;
+		GVL_InstruTestUIVars.g_jnt5RotateFlag:=FALSE;
+	END_IF
+	
 	IF m_slaveArmState[i]<>SlaveArmState_PowerBoxCalibration AND m_slaveArmState[i]<>SlaveArmState_Standby THEN
 		GVL_InstruTestUIVars.g_powerBoxCalibration:=FALSE;
 	END_IF
@@ -558,6 +577,7 @@ END_FOR
       <LineId Id="110" Count="0" />
       <LineId Id="206" Count="0" />
       <LineId Id="213" Count="0" />
+      <LineId Id="220" Count="2" />
       <LineId Id="72" Count="0" />
       <LineId Id="12" Count="0" />
       <LineId Id="101" Count="0" />
@@ -573,55 +593,7 @@ END_FOR
       <LineId Id="22" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.stateMachine">
-      <LineId Id="1260" Count="59" />
-      <LineId Id="1489" Count="0" />
-      <LineId Id="1320" Count="72" />
-      <LineId Id="1478" Count="0" />
-      <LineId Id="1480" Count="1" />
-      <LineId Id="1479" Count="0" />
-      <LineId Id="1598" Count="0" />
-      <LineId Id="1603" Count="0" />
-      <LineId Id="1599" Count="0" />
-      <LineId Id="1602" Count="0" />
-      <LineId Id="1393" Count="0" />
-      <LineId Id="1477" Count="0" />
-      <LineId Id="1395" Count="37" />
-      <LineId Id="1594" Count="0" />
-      <LineId Id="1433" Count="5" />
-      <LineId Id="1595" Count="0" />
-      <LineId Id="1439" Count="7" />
-      <LineId Id="1596" Count="0" />
-      <LineId Id="1474" Count="1" />
-      <LineId Id="1473" Count="0" />
-      <LineId Id="1476" Count="0" />
-      <LineId Id="1597" Count="0" />
-      <LineId Id="1570" Count="0" />
-      <LineId Id="1573" Count="2" />
-      <LineId Id="1578" Count="0" />
-      <LineId Id="1447" Count="16" />
-      <LineId Id="1611" Count="1" />
-      <LineId Id="1464" Count="0" />
-      <LineId Id="1498" Count="0" />
-      <LineId Id="1503" Count="2" />
-      <LineId Id="1499" Count="0" />
-      <LineId Id="1501" Count="0" />
-      <LineId Id="1531" Count="0" />
-      <LineId Id="1561" Count="0" />
-      <LineId Id="1500" Count="0" />
-      <LineId Id="1465" Count="0" />
-      <LineId Id="1614" Count="0" />
-      <LineId Id="1613" Count="0" />
-      <LineId Id="1016" Count="0" />
-      <LineId Id="1513" Count="0" />
-      <LineId Id="1522" Count="0" />
-      <LineId Id="1521" Count="0" />
-      <LineId Id="1523" Count="0" />
-      <LineId Id="1539" Count="0" />
-      <LineId Id="1586" Count="0" />
-      <LineId Id="1601" Count="0" />
-      <LineId Id="1548" Count="2" />
-      <LineId Id="1552" Count="1" />
-      <LineId Id="1551" Count="0" />
+      <LineId Id="1665" Count="268" />
       <LineId Id="1547" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.updateArmLight">

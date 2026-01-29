@@ -433,6 +433,9 @@
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlInstruManualTest.TcPOU">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlJnt5Rotate.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrlMountInstru.TcPOU">
       <SubType>Code</SubType>
     </Compile>
@@ -497,6 +500,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_SlaveControllers\FB_SlaveCtrMotorGoHome.TcPOU">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FBs_TrajectoryPlanning\Cubic_Polynomial_Interpolation.TcPOU">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FBs_TrajectoryPlanning\FB_BasicDoubleS.TcPOU">

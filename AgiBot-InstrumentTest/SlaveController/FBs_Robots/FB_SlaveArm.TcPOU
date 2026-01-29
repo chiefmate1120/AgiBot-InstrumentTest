@@ -3,6 +3,17 @@
   <POU Name="FB_SlaveArm" Id="{623926f8-06e2-46b6-bb1f-baa6bc16e9cb}" SpecialFunc="None">
     <Declaration><![CDATA[FUNCTION_BLOCK FB_SlaveArm
 VAR
+	//
+	M_TESTfLAG:BOOL:=FALSE;
+	m_jnt5Planner:Cubic_Polynomial_Interpolation;
+	m_initAngle,m_initVel,m_initAcc,m_initT:REAL;
+	m_targetAngle,m_targetVel,m_targetAcc:REAL;
+	m_cmdAngle,m_cmdVel,m_cmdAcc:REAL;
+	m_initFlag:BOOL:=FALSE;
+	m_finishFlag:BOOL:=TRUE;
+	m_endT:REAL:=5;
+	m_dT:REAL:=0.0025;
+	m_T:REAL:=0;
 	// arm index, from 1 to 4
 	m_armIdx: INT;
 	
@@ -356,6 +367,7 @@ IF m_endoscopePostureSwitch.check((m_panelInstrumentOnIO AND 16#10)=16) AND m_in
 END_IF
 
 IF GVL_InstruTestUIVars.g_incInstruNumOfUses THEN
+	GVL_InstruTestUIVars.g_jnt5RotateFlag:=TRUE;
 	m_writeSdoTimeStart := TRUE;
 ELSE
 	IF m_writeSdoTimeStart THEN
@@ -2040,7 +2052,7 @@ END_FOR
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.checkIO">
-      <LineId Id="2216" Count="773" />
+      <LineId Id="3008" Count="774" />
       <LineId Id="2034" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.checkLight">
@@ -2133,26 +2145,7 @@ END_FOR
       <LineId Id="29" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.init">
-      <LineId Id="159" Count="2" />
-      <LineId Id="198" Count="0" />
-      <LineId Id="162" Count="2" />
-      <LineId Id="187" Count="0" />
-      <LineId Id="165" Count="0" />
-      <LineId Id="188" Count="2" />
-      <LineId Id="166" Count="11" />
-      <LineId Id="208" Count="0" />
-      <LineId Id="207" Count="0" />
-      <LineId Id="209" Count="0" />
-      <LineId Id="229" Count="0" />
-      <LineId Id="228" Count="0" />
-      <LineId Id="230" Count="0" />
-      <LineId Id="232" Count="0" />
-      <LineId Id="231" Count="0" />
-      <LineId Id="220" Count="0" />
-      <LineId Id="218" Count="0" />
-      <LineId Id="217" Count="0" />
-      <LineId Id="219" Count="0" />
-      <LineId Id="206" Count="0" />
+      <LineId Id="251" Count="36" />
       <LineId Id="80" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveArm.initJntPos">

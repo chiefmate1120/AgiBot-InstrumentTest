@@ -323,7 +323,7 @@ CASE m_instruMountStatus OF
 	// To lock panel with instrument
 	0:
 		//buckle panel with instrument
-		FOR i:=1 TO 4 DO
+		FOR i:=1 TO 5 DO
 			// check if buckled 
 			IF (i= 4 AND ABS(i_slaveArm.filtJntCurrent[i+3])> m_maxJntCurrent[i] AND ABS(i_slaveArm.curJntVel[i+3])<1.0*g_deg2Rad) 
 				OR (i<> 4 AND ABS(i_slaveArm.filtJntCurrent[i+3])> m_maxJntCurrent[i] )THEN 
@@ -341,7 +341,7 @@ CASE m_instruMountStatus OF
 		
 		
 		// check transition condition
-		IF (m_jointMounted[1] AND m_jointMounted[2] AND m_jointMounted[3] AND m_jointMounted[4])  THEN
+		IF (m_jointMounted[1] AND m_jointMounted[2] AND m_jointMounted[3] AND m_jointMounted[4] AND m_jointMounted[5])  THEN
 			IF i_slaveArm.instrument.onChipData.m_InstruReadSucceed THEN//Check whether the data is read successfully
 				IF i_slaveArm.instrument.instruTypeInfo.m_isSingleFinger THEN
 					m_instruMountStatus:=1;
@@ -373,7 +373,7 @@ CASE m_instruMountStatus OF
  		END_IF
 		
 	1:// calculation deviates from the instrument zero position
-		FOR i:=1 TO 4 DO
+		FOR i:=1 TO 5 DO
 			m_instruZeroDeviation[i] :=  i_slaveArm.linkSingle[i+3] - i_slaveArm.instrument.onChipData.m_InstruPos[i];
 		END_FOR
 		m_instruMountStatus :=2;
@@ -394,8 +394,7 @@ CASE m_instruMountStatus OF
 			m_instruZeroDeviation[4] := m_instruZeroDeviation[4] + 2*pi;
 		END_IF
 		
-		// set target joint position
-		FOR i:=1 TO 4 DO
+		FOR i:=1 TO 5 DO
 			m_targetMountPos[i+3]:=curJntPos[i+3] - m_instruZeroDeviation[i];
 		END_FOR
 		m_instruMountStatus :=3;
@@ -421,7 +420,7 @@ CASE m_instruMountStatus OF
 END_CASE
 
 // traj plan
-FOR i:=1 TO 4 DO
+FOR i:=1 TO 5 DO
 	m_jntOTG[i].run(m_targetMountPos[i+3],0.0, o_cmdAcc=>m_cmdJntAcc[3+i],o_cmdVel=>m_cmdJntVel[3+i],o_cmdPos=>m_cmdJntPos[i+3]);
 END_FOR
 
@@ -676,27 +675,7 @@ END_FOR]]></ST>
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountInstrument">
-      <LineId Id="695" Count="13" />
-      <LineId Id="823" Count="0" />
-      <LineId Id="709" Count="0" />
-      <LineId Id="712" Count="3" />
-      <LineId Id="717" Count="0" />
-      <LineId Id="824" Count="2" />
-      <LineId Id="722" Count="6" />
-      <LineId Id="864" Count="1" />
-      <LineId Id="867" Count="1" />
-      <LineId Id="866" Count="0" />
-      <LineId Id="730" Count="1" />
-      <LineId Id="835" Count="0" />
-      <LineId Id="837" Count="18" />
-      <LineId Id="836" Count="0" />
-      <LineId Id="732" Count="6" />
-      <LineId Id="740" Count="20" />
-      <LineId Id="805" Count="0" />
-      <LineId Id="762" Count="3" />
-      <LineId Id="821" Count="1" />
-      <LineId Id="766" Count="0" />
-      <LineId Id="768" Count="18" />
+      <LineId Id="1599" Count="112" />
       <LineId Id="5" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveCtrlMountInstru.mountNewEndoscope">

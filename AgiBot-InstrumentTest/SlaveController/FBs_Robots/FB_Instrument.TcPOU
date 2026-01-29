@@ -87,6 +87,15 @@ VAR
 	m_purposeMode:UINT;
 	m_StepRFID:INT;
 	m_ReadDelayRFID:TON;
+	
+	//the number of joint 5 when the number of instrument uses is 0
+	m_jnt5BasePos :LREAL := 80*g_deg2Rad;
+	m_unitAngle :LREAL := 24*g_deg2Rad;
+	m_jnt5Backlash : LREAL := 14*g_deg2Rad;
+	m_jnt5Pos : LREAL;
+	//Number of rotations allowed
+	m_rotaNum : INT := 360/24;
+	m_InstruReadUseCounts : ULINT;
 END_VAR
 
 ]]></Declaration>
@@ -108,6 +117,31 @@ IF NOT m_SdoWrite.bBusy THEN
 	addNumOfUseToChip:=TRUE;
 END_IF
 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="calcInstruUseNumPos" Id="{fc8b092d-2788-451c-b5d7-fa73ff58fd07}">
+      <Declaration><![CDATA[METHOD calcInstruUseNumPos : LREAL
+VAR_IN_OUT CONSTANT
+	i_linkSingle : Vec8d;
+END_VAR
+VAR_STAT
+	curUseNum : UINT;
+	instruUseNumDiff :INT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[IF i_linkSingle[8] - m_jnt5BasePos < 0 THEN
+	m_jnt5Pos := i_linkSingle[8] - m_jnt5BasePos + 2*pi;
+ELSE
+	m_jnt5Pos :=  i_linkSingle[8] - m_jnt5BasePos;
+END_IF
+
+curUseNum := LREAL_TO_UINT(FLOOR(lr_in:= m_jnt5Pos/m_unitAngle));
+instruUseNumDiff :=ULINT_TO_INT(m_onChipData.m_InstruUsageCounts - curUseNum);
+IF instruUseNumDiff <0 AND m_InstruReadUseCounts = m_onChipData.m_InstruUsageCounts THEN
+	instruUseNumDiff := instruUseNumDiff + m_rotaNum;
+END_IF
+calcInstruUseNumPos := instruUseNumDiff * m_unitAngle + m_jnt5Backlash;
 ]]></ST>
       </Implementation>
     </Method>
@@ -830,6 +864,7 @@ CASE m_Step OF
 	90://处理器械使用次数读取结果
 		m_onChipData.m_InstruusageCounts:=m_UsageReadResult;
 		m_InstruUsageToLED:=LIMIT(0,m_UsageReadResult,99);
+		m_InstruReadUseCounts := m_onChipData.m_InstruusageCounts;
 		m_Step:=100;
 		
 		
@@ -1398,6 +1433,13 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="59" Count="0" />
       <LineId Id="32" Count="0" />
     </LineIds>
+    <LineIds Name="FB_Instrument.calcInstruUseNumPos">
+      <LineId Id="8" Count="4" />
+      <LineId Id="22" Count="0" />
+      <LineId Id="13" Count="4" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
     <LineIds Name="FB_Instrument.checkInstruType">
       <LineId Id="468" Count="0" />
       <LineId Id="541" Count="0" />
@@ -1535,7 +1577,8 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="31" Count="5" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParameters">
-      <LineId Id="1330" Count="161" />
+      <LineId Id="1685" Count="99" />
+      <LineId Id="1786" Count="62" />
       <LineId Id="28" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParametersRFID">
