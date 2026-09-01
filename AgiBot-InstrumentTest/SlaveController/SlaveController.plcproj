@@ -298,6 +298,9 @@
     <Compile Include="DUTs\Type\Vec2i.TcDUT">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="DUTs\Type\Vec3i.TcDUT">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="DUTs\Type\Vec3d.TcDUT">
       <SubType>Code</SubType>
     </Compile>

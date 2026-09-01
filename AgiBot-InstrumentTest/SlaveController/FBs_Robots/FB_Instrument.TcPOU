@@ -87,6 +87,9 @@ VAR
 	m_purposeMode:UINT;
 	m_StepRFID:INT;
 	m_ReadDelayRFID:TON;
+	
+	// max Usage Counts of derived intruments
+	m_mapInstruMaxUsage :INT :=0;
 END_VAR
 
 ]]></Declaration>
@@ -127,6 +130,9 @@ FOR i:=1 TO g_instruTypeNum DO
 	IF g_instruTypePool[i].m_InstruID = m_onChipData.m_InstruID THEN
 		checkInstruType:=TRUE;
 		m_instruTypeInfo := g_instruTypePool[i];
+		IF m_mapInstruMaxUsage>0 THEN 
+			m_instruTypeInfo.m_maxUseNum:=m_mapInstruMaxUsage;
+		END_IF
 		EXIT;
 	END_IF
 END_FOR
@@ -374,6 +380,23 @@ ELSE
 	r_gripAngle:=gripAngle;
 END_IF
 
+]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="InstruIDMap" Id="{96e5900a-7472-4d40-8506-9f4246e74934}">
+      <Declaration><![CDATA[METHOD InstruIDMap : INT
+VAR
+	i:INT;
+END_VAR
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[m_mapInstruMaxUsage:=0;
+FOR i:=1 TO g_derivedInstruNum DO
+	IF g_InstruTypeMap[i][1] =  m_onChipData.m_InstruID THEN 
+		m_onChipData.m_InstruID := g_InstruTypeMap[i][2];
+		m_mapInstruMaxUsage:=g_InstruTypeMap[i][3];
+	END_IF
+END_FOR
 ]]></ST>
       </Implementation>
     </Method>
@@ -802,6 +825,7 @@ CASE m_Step OF
 		ELSIF m_onChipData.m_InstruID = InstruType_CENewEndoscope THEN
 			m_onChipData.m_InstruID := InstruType_NewEndoscope;
 		END_IF
+		InstruIDMap();
 		m_Step:=60;
 		
 	60://读取6096---器械零点位置
@@ -1404,7 +1428,10 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="549" Count="0" />
       <LineId Id="534" Count="1" />
       <LineId Id="537" Count="0" />
-      <LineId Id="539" Count="1" />
+      <LineId Id="539" Count="0" />
+      <LineId Id="557" Count="1" />
+      <LineId Id="556" Count="0" />
+      <LineId Id="540" Count="0" />
       <LineId Id="538" Count="0" />
       <LineId Id="536" Count="0" />
       <LineId Id="476" Count="1" />
@@ -1464,6 +1491,11 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="509" Count="0" />
       <LineId Id="428" Count="57" />
       <LineId Id="159" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Instrument.InstruIDMap">
+      <LineId Id="12" Count="5" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="2" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.InstruIDRecord">
       <LineId Id="13" Count="15" />
@@ -1535,7 +1567,9 @@ o_q1 := g_2pi *  posCode/16#3FF;
       <LineId Id="31" Count="5" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParameters">
-      <LineId Id="1330" Count="161" />
+      <LineId Id="1330" Count="71" />
+      <LineId Id="1500" Count="0" />
+      <LineId Id="1402" Count="89" />
       <LineId Id="28" Count="0" />
     </LineIds>
     <LineIds Name="FB_Instrument.readParametersRFID">

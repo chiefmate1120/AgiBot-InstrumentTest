@@ -32,7 +32,7 @@ VAR
 	
 	// max gripper finger control force/current(mA)
 	m_maxGripCtrlForce:LREAL;
-	m_maxGripCtrlCurrent:LREAL:=540.0;
+	m_maxGripCtrlCurrent:LREAL:=650.0;
 	
 	// PID for instrument joint position
 	m_instruJntCtrl:ARRAY[1..5] OF FB_PID;
@@ -223,6 +223,7 @@ END_VAR]]></Declaration>
 //m_yawKiLimit := i_maxGripCurrent;
 //m_yawCtrlLimit := i_maxGripCtrlCurrent;
 // init controller
+m_maxGripCurrent:= i_slaveArm.instrument.instruTypeInfo.m_normGripTrq; 
 m_currentRatioMotor2Jnt:=GVL_SlaveMotorParameters.g_motorTrqConst[4]*GVL_SlaveMotorParameters.g_motorReduction[4]/1000;
 m_maxGripForce := m_maxGripCurrent * m_currentRatioMotor2Jnt;
 m_maxGripCtrlForce := m_maxGripCtrlCurrent * m_currentRatioMotor2Jnt;
@@ -275,7 +276,11 @@ VAR
 END_VAR
 ]]></Declaration>
       <Implementation>
-        <ST><![CDATA[m_graspForceLevel:=LIMIT(0,i_cmdGripForceLevel ,  100)	;
+        <ST><![CDATA[IF i_cmdGripForceLevel >0 THEN
+	m_graspForceLevel:=LIMIT(0,i_cmdGripForceLevel ,  100)	;
+ELSE
+	m_graspForceLevel:=LIMIT(-100,i_cmdGripForceLevel ,  0)	;
+END_IF
 
 // calculate instrument backlash
 calcBacklash(i_cmdInstruJntPos, i_cmdYawPos, i_slaveArm);
@@ -325,6 +330,10 @@ IF m_graspForceLevel >0  THEN
 	m_instruJntCtrlTrq[2]:= m_maxGripForce*m_graspForceLevel/100.0 - m_instruYawCtrlTrq;
 	m_instruJntCtrlTrq[1]:=LIMIT(-m_maxGripForce/10.0,m_instruJntCtrlTrq[1], m_maxGripCtrlForce);
 	m_instruJntCtrlTrq[2]:=LIMIT(-m_maxGripForce/10.0,m_instruJntCtrlTrq[2], m_maxGripCtrlForce);
+// JUST FOR TEST
+ELSIF m_graspForceLevel <0 THEN 
+	m_instruJntCtrlTrq[1]:= m_maxGripForce*m_graspForceLevel/100.0;
+	m_instruJntCtrlTrq[2]:= m_maxGripForce*m_graspForceLevel/100.0;
 END_IF
 
 o_cmdJntTrq := m_instruJntCtrlTrq;]]></ST>
@@ -350,11 +359,13 @@ m_maxGripForce := m_maxGripCurrent * m_currentRatioMotor2Jnt;]]></ST>
       <LineId Id="629" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.init">
-      <LineId Id="270" Count="21" />
+      <LineId Id="270" Count="5" />
+      <LineId Id="301" Count="0" />
+      <LineId Id="276" Count="15" />
       <LineId Id="133" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.run">
-      <LineId Id="1263" Count="51" />
+      <LineId Id="1345" Count="59" />
       <LineId Id="70" Count="0" />
     </LineIds>
     <LineIds Name="FB_BasicInstruControl.setMaxGripTrq">

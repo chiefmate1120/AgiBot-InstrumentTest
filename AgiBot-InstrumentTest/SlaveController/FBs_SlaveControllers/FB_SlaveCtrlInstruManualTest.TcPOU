@@ -69,12 +69,15 @@ IF GVL_InstruTestUIVars.g_moveToSetPosFlag THEN
 	m_targetDHJntPos[1] := GVL_InstruTestUIVars.g_targetRollAng*g_deg2rad;
 	m_targetDHJntPos[2] := (GVL_InstruTestUIVars.g_targetPitchAng-90)*g_deg2rad;
 	m_targetDHJntPos[3] := GVL_InstruTestUIVars.g_targetYawAng*g_deg2rad;
-	IF GVL_InstruTestUIVars.g_targetGripAng>-15 THEN 
+	IF GVL_InstruTestUIVars.g_targetGripAng>-15 AND GVL_InstruTestUIVars.g_targetGripAng<100  THEN 
 		m_targetGripAng := GVL_InstruTestUIVars.g_targetGripAng*g_deg2rad;
 		m_targetGripForceLevel:=0;
-	ELSE
+	ELSIF GVL_InstruTestUIVars.g_targetGripAng<=-15 AND GVL_InstruTestUIVars.g_targetGripAng>=-100 THEN 
 		m_targetGripAng := -15*g_deg2rad;
 		m_targetGripForceLevel := LIMIT(0, ABS(GVL_InstruTestUIVars.g_targetGripAng), 100);
+	ELSIF GVL_InstruTestUIVars.g_targetGripAng<-101 THEN 
+		m_targetGripAng := 60 *g_deg2rad;
+		m_targetGripForceLevel := LIMIT(-100, 100+GVL_InstruTestUIVars.g_targetGripAng, 0);
 	END_IF
 ELSIF GVL_InstruTestUIVars.g_gripperOpenFlag THEN
 	m_targetGripAng := i_slaveArm.instrument.instruTypeInfo.m_maxGripAngle;
@@ -262,6 +265,8 @@ END_IF]]></ST>
       <LineId Id="428" Count="3" />
       <LineId Id="914" Count="1" />
       <LineId Id="917" Count="3" />
+      <LineId Id="940" Count="1" />
+      <LineId Id="939" Count="0" />
       <LineId Id="916" Count="0" />
       <LineId Id="434" Count="8" />
       <LineId Id="326" Count="0" />

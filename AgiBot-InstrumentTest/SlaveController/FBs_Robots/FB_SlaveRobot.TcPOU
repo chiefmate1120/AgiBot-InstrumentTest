@@ -57,6 +57,10 @@ VAR
 	fbTonPowerBoxCalibrationState: TON;
 	m_endoscopeTest: ARRAY[1..g_sArmNum] OF FB_SlaveCtrlInstruEndoscopeTest;
 	m_enableMode:BOOL;
+	
+	m_frictionTestButtonRise :R_TRIG;
+	m_frictionTestButtonFall :F_TRIG;
+	m_frictionTestStart, m_frictionTestEnd:BOOL;
 END_VAR
 ]]></Declaration>
     <Implementation>
@@ -210,6 +214,9 @@ END_FOR
 GVL_InstruTestUIVars.g_curGripAng := m_slaveArms[1].curGripAngle;
 GVL_InstruTestUIVars.g_enabled := m_slaveArms[1].m_joints[6].isEnabled() ;
 
+m_frictionTestButtonRise(CLK:=GVL_InstruTestUIVars.g_instruFrictionTest,  Q=>m_frictionTestStart);
+m_frictionTestButtonFall(CLK:=GVL_InstruTestUIVars.g_instruFrictionTest,  Q=>m_frictionTestEnd);
+
 ]]></ST>
       </Implementation>
     </Method>
@@ -233,6 +240,7 @@ FOR i:=1 TO g_sArmNum DO
 		m_instrumentMountedFlag[i]:=FALSE;
 	END_IF
 END_FOR
+
 // state machine transit
 FOR i:=1 TO g_sArmNum DO
 	CASE m_slaveArmState[i] OF
@@ -363,7 +371,7 @@ FOR i:=1 TO g_sArmNum DO
 				m_nextSlaveArmState[i] := SlaveArmState_EndoscopeTest;
 				
 			//to friction Test
-			ELSIF GVL_InstruTestUIVars.g_instruFrictionTest THEN
+			ELSIF m_frictionTestStart THEN
 				m_nextSlaveArmState[i] := SlaveArmState_FrictionTest;
 			END_IF
 			
@@ -429,7 +437,7 @@ FOR i:=1 TO g_sArmNum DO
 			
 		SlaveArmState_FrictionTest:
 			// to stop
-			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished OR NOT GVL_InstruTestUIVars.g_instruFrictionTest  THEN
+			IF  NOT( m_slaveArms[1].instruOn) OR m_armCtrl[i].isFinished OR m_frictionTestEnd  THEN
 				m_nextSlaveArmState[i]:=SlaveArmState_Standby;
 			END_IF
 	END_CASE
@@ -456,7 +464,7 @@ GVL_InstruTestUIVars.g_stateMachine:=m_slaveArmState[i];
 		FOR j:=4 TO g_sJntNum DO
 			GVL_InstruTestUIVars.g_powerBoxCalibrationPos[i,j]:=SlaveArmControl.m_slaveRobot.m_slaveArms[i].m_joints[j].m_motorInputs.m_linkEncoder;
 		END_FOR
-		GVL_SlaveJointEncoderCaliData.g_caliLinkEncoder:=GVL_InstruTestUIVars.g_powerBoxCalibrationPos;
+		//GVL_SlaveJointEncoderCaliData.g_caliLinkEncoder:=GVL_InstruTestUIVars.g_powerBoxCalibrationPos;
 		GVL_InstruTestUIVars.g_manualPowerBoxCalibration:=FALSE;
 		GVL_InstruTestUIVars.g_powerBoxCalibrationFlag:=FALSE;
 		m_slaveArms[i].setSaveCaliLinkEncoder();
@@ -569,11 +577,16 @@ END_FOR
       <LineId Id="297" Count="11" />
       <LineId Id="335" Count="0" />
       <LineId Id="313" Count="0" />
+      <LineId Id="348" Count="0" />
+      <LineId Id="347" Count="0" />
+      <LineId Id="349" Count="0" />
       <LineId Id="323" Count="0" />
       <LineId Id="22" Count="0" />
     </LineIds>
     <LineIds Name="FB_SlaveRobot.stateMachine">
-      <LineId Id="1260" Count="59" />
+      <LineId Id="1260" Count="9" />
+      <LineId Id="1622" Count="0" />
+      <LineId Id="1270" Count="49" />
       <LineId Id="1489" Count="0" />
       <LineId Id="1320" Count="72" />
       <LineId Id="1478" Count="0" />

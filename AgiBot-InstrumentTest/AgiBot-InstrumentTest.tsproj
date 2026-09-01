@@ -279,6 +279,15 @@
 			</SubItem>
 		</DataType>
 		<DataType>
+			<Name GUID="{18071995-0000-0000-0000-002000000018}" IecBaseType="true" AutoDeleteType="true" HideSubItems="true">ARRAY [0..2] OF BYTE</Name>
+			<BitSize>24</BitSize>
+			<BaseType GUID="{18071995-0000-0000-0000-000000000001}">BYTE</BaseType>
+			<ArrayInfo>
+				<LBound>0</LBound>
+				<Elements>3</Elements>
+			</ArrayInfo>
+		</DataType>
+		<DataType>
 			<Name GUID="{3CB7ED90-7127-49D3-B07C-B1898FA8B8B3}" PersistentType="true">MSCommu_Vec3d</Name>
 			<Comment><![CDATA[ data type specialized for master-slave control box communication]]></Comment>
 			<BitSize>192</BitSize>
@@ -402,6 +411,9 @@
 			</SubItem>
 		</DataType>
 	</DataTypes>
+	<ImageDatas>
+		<ImageData Id="1000">424dd6020000000000003600000028000000100000000e0000000100180000000000a0020000120b0000120b00000000000000000000ff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff0000ffff00ffff00ffff00ff0000ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff0000ffff00ffff00ff0000ff0000ff0000ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff0000ff0000ff0000ffff00ffff00ff0000ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ffff00ff0000ffff00ffff00ffff00ff0000ffff00ff008000008000008000008000008000008000008000008000404040404040404040404040404040404040404040404040008000007fff007fff00800000800000800000800000800040404000800000800000800000800000800000800040404000800000800000800000800000800000800000800000800040404000800000800000800000800000800000800040404000800000800000800000800000800000800000800000800040404000800000800000800000800000800000800040404000800000800000800000800000800000800000800000800040404040404040404040404040404040404040404040404000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000ffff00800000ffff00800000800000ffff00800000ffff00800000800000800000ffff00800000ffff00800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000800000ffff00800000ffff00800000800000ffff00800000ffff00800000800000800000ffff00800000ffff008000008000008000008000008000008000008000008000008000008000008000008000008000008000008000008000008000</ImageData>
+	</ImageDatas>
 	<Project ProjectGUID="{33418E7D-C79D-4569-90F7-EA8084A60D49}" Target64Bit="true" ShowHideConfigurations="#x6">
 		<System>
 			<Settings MaxCpus="12">
@@ -678,116 +690,191 @@
 			<PlcAuxTask Affinity="#x00000008"/>
 		</Plc>
 		<Io>
-			<Device Id="4" DevType="111" DevFlags="#x0003" AmsPort="28676" AmsNetId="169.254.165.150.5.1" RemoteName="Device 4 (EtherCAT)" InfoImageId="5">
-				<Name>Device 4 (EtherCAT)</Name>
+			<Device Id="3" DevType="111" DevFlags="#x0003" AmsPort="28675" AmsNetId="192.168.2.195.4.1" RemoteName="Device 3 (EtherCAT)" InfoImageId="3">
+				<Name>Device 3 (EtherCAT)</Name>
 				<AddressInfo>
 					<Pnp>
 						<DeviceDesc>??? 2 (TwinCAT-Intel PCI Ethernet Adapter (Gi</DeviceDesc>
-						<DeviceName>\DEVICE\{DFF8102E-B860-45B4-81F9-64631F205420}</DeviceName>
-						<DeviceData>00e2699528ec</DeviceData>
+						<DeviceName>\DEVICE\{CBC412AB-C401-497E-B857-7C4D83AC7013}</DeviceName>
+						<DeviceData>68eda467852c</DeviceData>
 					</Pnp>
 				</AddressInfo>
-				<Image Id="4" AddrType="9" ImageType="3">
+				<Image Id="2" AddrType="9" ImageType="3">
 					<Name>Image</Name>
 				</Image>
-				<Box Id="3" BoxType="9099">
-					<Name>Box 3 (AX58200_MotorControl)</Name>
-					<ImageId>114</ImageId>
-					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000301" RevisionNo="#x00211001" InfoDataAddr="true" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_3axis" Desc="AX58200_MotorControl" PortABoxInfo="#x00ffffff">
-						<SyncMan>001080002600010001000000000000008000001026010000</SyncMan>
-						<SyncMan>801080002200010002000000000000008000801022010000</SyncMan>
-						<SyncMan>00112a006400010003000000000000002a00001164010000</SyncMan>
-						<SyncMan>001442002000010004000000000000003e00001420010000</SyncMan>
+				<Box Id="1" BoxType="9099" BoxFlags="#x00000020">
+					<Name>Box 1 (AX58200_MotorControl)</Name>
+					<ImageId>1000</ImageId>
+					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000401" RevisionNo="#x00211001" InfoDataAddr="true" InfoDataSoeDS401="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_V1001" Desc="AX58200_MotorControl" PortABoxInfo="#x00ffffff">
+						<SyncMan>001080002600010001000000240080008000001026010000</SyncMan>
+						<SyncMan>801080002200010002000000240080008000801022010000</SyncMan>
+						<SyncMan>001132006400010003000000000000002a00001164010000</SyncMan>
+						<SyncMan>001446002000010004000000000000003e00001420010000</SyncMan>
 						<Fmmu>0000000000000000001100020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000001400010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
 						<BootStrapData>0010800080108000</BootStrapData>
-						<DcMode>53796e6368726f6e000000000000000053796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000</DcMode>
-						<DcMode>444300000000000000000000000000004443000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030100000000000000000000000000000000000000000000000000000000000000</DcMode>
-						<Pdo Name="TxPdoMappingCspCsv" Index="#x1a00" Flags="#x0010" SyncMan="3">
+						<DcMode>53796e6368726f6e0000000000000000534d2d53796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000</DcMode>
+						<DcMode>4443000000000000000000000000000044432d53796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000030100000000000000000000000000000000000000000000000000000000000000</DcMode>
+						<Pdo Name="TxPdoMappingCspCsv" Index="#x1a00" Flags="#x0010">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="ENC2 for aix1" Index="#x6067">
+							<Entry Name="Velocity actual value" Index="#x606c">
 								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Velocity actual value" Index="#x606c">
+							<Entry Name="ENC" Index="#x607f">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Position actual value for aix2" Index="#x6864">
+							<Entry Name="ENC for axis2" Index="#x687f">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="ENC2 for aix2" Index="#x6867">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Torque actual value for aix2" Index="#x6877">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Velocity actual value for aix2" Index="#x686c">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Position actual value for aix3" Index="#x7064">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="ENC2 for aix3" Index="#x7067">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Torque actual value for aix3" Index="#x7077">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Velocity actual value for aix3" Index="#x706c">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="analog input" Index="#x6091">
+							<Entry Name="Analog input" Index="#x6891">
 								<Type>UDINT</Type>
 							</Entry>
-							<Entry Name="digital input" Index="#x6092">
+							<Entry Name="Digital input" Index="#x6892">
 								<Type>UDINT</Type>
 							</Entry>
-							<Entry Name="Heartbeat" Index="#x60aa">
+							<Entry Name="Error message" Index="#x6893">
 								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value" Index="#x68ab">
+								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Modes of operation display" Index="#x6061">
 								<Type>SINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT24</Type>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="TxPdoMappingCsp" Index="#x1a01" Flags="#x0010">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
+							<Entry Name="Statusword for axis2" Index="#x6841">
+								<Type>UINT</Type>
+							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Velocity actual value" Index="#x606c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value" Index="#x6077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC" Index="#x607f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis2" Index="#x6864">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis2" Index="#x686c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis2" Index="#x6877">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis2" Index="#x687f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Analog input" Index="#x6891">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Digital input" Index="#x6892">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Error message" Index="#x6893">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value" Index="#x68ab">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value for axis2" Index="#x68ac">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
-						<Pdo Name="TxPdoMappingCsv" Index="#x1a02" Flags="#x0010">
+						<Pdo Name="TxPdoMappingCsv" Index="#x1a02" Flags="#x0010" SyncMan="3">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Velocity actual value" Index="#x606c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value" Index="#x6077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC" Index="#x607f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis2" Index="#x6864">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis2" Index="#x686c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis2" Index="#x6877">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis2" Index="#x687f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis3" Index="#x7064">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis3" Index="#x706c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis3" Index="#x7077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis3" Index="#x707f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Analog input" Index="#x6891">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Digital input" Index="#x6892">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Error message" Index="#x6893">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
-						<Pdo Name="RxPdoMappingCspCsv" Index="#x1600" InOut="1" Flags="#x0010" SyncMan="2">
+						<Pdo Name="RxPdoMappingCspCsv" Index="#x1600" InOut="1" Flags="#x0010">
 							<Entry Name="Controlword" Index="#x6040">
 								<Type>UINT</Type>
-							</Entry>
-							<Entry Name="Target Torque value" Index="#x6071">
-								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Target position" Index="#x607a">
 								<Type>DINT</Type>
@@ -795,29 +882,20 @@
 							<Entry Name="Target velocity" Index="#x60ff">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target Torque value for aix2" Index="#x6871">
+							<Entry Name="Target torque" Index="#x6071">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target position value for aix2" Index="#x687a">
+							<Entry Name="Host heartbeat" Index="#x68ba">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target velocity for aix2" Index="#x68ff">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target Torque value for aix3" Index="#x7071">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target position value for aix3" Index="#x707a">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target velocity for aix3" Index="#x70ff">
+							<Entry Name="Digital output" Index="#x68bb">
 								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Modes of operation" Index="#x6060">
 								<Type>SINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT24</Type>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="RxPdoMappingCsp" Index="#x1601" InOut="1" Flags="#x0010">
@@ -827,121 +905,257 @@
 							<Entry Name="Target position" Index="#x607a">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
+							<Entry Name="Target velocity" Index="#x60ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque" Index="#x6071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Controlword for axis2" Index="#x6840">
 								<Type>UINT</Type>
 							</Entry>
+							<Entry Name="Target position for axis2" Index="#x687a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis2" Index="#x68ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis2" Index="#x6871">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Host heartbeat" Index="#x68ba">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Digital output" Index="#x68bb">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
+							</Entry>
 						</Pdo>
-						<Pdo Name="RxPdoMappingCsv" Index="#x1602" InOut="1" Flags="#x0010">
+						<Pdo Name="RxPdoMappingCsv" Index="#x1602" InOut="1" Flags="#x0010" SyncMan="2">
 							<Entry Name="Controlword" Index="#x6040">
 								<Type>UINT</Type>
+							</Entry>
+							<Entry Name="Target position" Index="#x607a">
+								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Target velocity" Index="#x60ff">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Target torque" Index="#x6071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target position for axis2" Index="#x687a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis2" Index="#x68ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis2" Index="#x6871">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target position for axis3" Index="#x707a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis3" Index="#x70ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis3" Index="#x7071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Host heartbeat" Index="#x68ba">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Digital output" Index="#x68bb">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
+						<CoeProfile ProfileNo="131474"/>
 					</EtherCAT>
 				</Box>
-				<Box Id="4" BoxType="9099">
-					<Name>Box 4 (AX58200_MotorControl)</Name>
-					<ImageId>114</ImageId>
-					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000301" RevisionNo="#x00211001" InfoDataAddr="true" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_3axis" Desc="AX58200_MotorControl" PortABoxInfo="#x01000003">
-						<SyncMan>001080002600010001000000000000008000001026010000</SyncMan>
-						<SyncMan>801080002200010002000000000000008000801022010000</SyncMan>
-						<SyncMan>00112a006400010003000000000000002a00001164010000</SyncMan>
-						<SyncMan>001442002000010004000000000000003e00001420010000</SyncMan>
+				<Box Id="2" BoxType="9099" BoxFlags="#x00000020">
+					<Name>Box 2 (AX58200_MotorControl)</Name>
+					<ImageId>1000</ImageId>
+					<EtherCAT SlaveType="2" PdiType="#x0e05" MboxDataLinkLayer="true" StateMBoxPolling="true" CycleMBoxPollingTime="0" CoeType="39" FoeType="1" VendorId="#x00000002" ProductCode="#x80000401" RevisionNo="#x00211001" InfoDataAddr="true" InfoDataSoeDS401="true" TimeoutStateChange1="2000" TimeoutStateChange2="9000" TimeoutMailbox2="2000" PortPhys="17" MaxSlotCount="256" MaxSlotGroupCount="1" SlotPdoIncrement="1" SlotIndexIncrement="16" Type="AX58200_MotorControl_V1001" Desc="AX58200_MotorControl" PortABoxInfo="#x01000001">
+						<SyncMan>001080002600010001000000240080008000001026010000</SyncMan>
+						<SyncMan>801080002200010002000000240080008000801022010000</SyncMan>
+						<SyncMan>001132006400010003000000000000002a00001164010000</SyncMan>
+						<SyncMan>001446002000010004000000000000003e00001420010000</SyncMan>
 						<Fmmu>0000000000000000001100020100000001000000000000000000000000000000</Fmmu>
 						<Fmmu>0000000000000000001400010100000002000000000000000000000000000000</Fmmu>
 						<Fmmu>00000000000000000d0800010100000003000000000000000000000000000000</Fmmu>
 						<BootStrapData>0010800080108000</BootStrapData>
-						<DcMode>53796e6368726f6e000000000000000053796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000</DcMode>
-						<DcMode>444300000000000000000000000000004443000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000030100000000000000000000000000000000000000000000000000000000000000</DcMode>
-						<Pdo Name="TxPdoMappingCspCsv" Index="#x1a00" Flags="#x0010" SyncMan="3">
+						<DcMode>53796e6368726f6e0000000000000000534d2d53796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000</DcMode>
+						<DcMode>4443000000000000000000000000000044432d53796e6368726f6e000000000000000000000000000000000000000000000000000000000000000000000000030100000000000000000000000000000000000000000000000000000000000000</DcMode>
+						<Pdo Name="TxPdoMappingCspCsv" Index="#x1a00" Flags="#x0010">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="ENC2 for aix1" Index="#x6067">
+							<Entry Name="Velocity actual value" Index="#x606c">
 								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Torque actual value" Index="#x6077">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Velocity actual value" Index="#x606c">
+							<Entry Name="ENC" Index="#x607f">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Position actual value for aix2" Index="#x6864">
+							<Entry Name="ENC for axis2" Index="#x687f">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="ENC2 for aix2" Index="#x6867">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Torque actual value for aix2" Index="#x6877">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Velocity actual value for aix2" Index="#x686c">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Position actual value for aix3" Index="#x7064">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="ENC2 for aix3" Index="#x7067">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Torque actual value for aix3" Index="#x7077">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Velocity actual value for aix3" Index="#x706c">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="analog input" Index="#x6091">
+							<Entry Name="Analog input" Index="#x6891">
 								<Type>UDINT</Type>
 							</Entry>
-							<Entry Name="digital input" Index="#x6092">
+							<Entry Name="Digital input" Index="#x6892">
 								<Type>UDINT</Type>
 							</Entry>
-							<Entry Name="Heartbeat" Index="#x60aa">
+							<Entry Name="Error message" Index="#x6893">
 								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value" Index="#x68ab">
+								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Modes of operation display" Index="#x6061">
 								<Type>SINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT24</Type>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="TxPdoMappingCsp" Index="#x1a01" Flags="#x0010">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
+							<Entry Name="Statusword for axis2" Index="#x6841">
+								<Type>UINT</Type>
+							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Velocity actual value" Index="#x606c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value" Index="#x6077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC" Index="#x607f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis2" Index="#x6864">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis2" Index="#x686c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis2" Index="#x6877">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis2" Index="#x687f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Analog input" Index="#x6891">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Digital input" Index="#x6892">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Error message" Index="#x6893">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value" Index="#x68ab">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Flux actual value for axis2" Index="#x68ac">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
-						<Pdo Name="TxPdoMappingCsv" Index="#x1a02" Flags="#x0010">
+						<Pdo Name="TxPdoMappingCsv" Index="#x1a02" Flags="#x0010" SyncMan="3">
 							<Entry Name="Statusword" Index="#x6041">
 								<Type>UINT</Type>
 							</Entry>
 							<Entry Name="Position actual value" Index="#x6064">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Velocity actual value" Index="#x606c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value" Index="#x6077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC" Index="#x607f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis2" Index="#x6864">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis2" Index="#x686c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis2" Index="#x6877">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis2" Index="#x687f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Position actual value for axis3" Index="#x7064">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Velocity actual value for axis3" Index="#x706c">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Torque actual value for axis3" Index="#x7077">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="ENC for axis3" Index="#x707f">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Analog input" Index="#x6891">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Digital input" Index="#x6892">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Error message" Index="#x6893">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Heartbeat" Index="#x68aa">
+								<Type>UDINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation display" Index="#x6061">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
-						<Pdo Name="RxPdoMappingCspCsv" Index="#x1600" InOut="1" Flags="#x0010" SyncMan="2">
+						<Pdo Name="RxPdoMappingCspCsv" Index="#x1600" InOut="1" Flags="#x0010">
 							<Entry Name="Controlword" Index="#x6040">
 								<Type>UINT</Type>
-							</Entry>
-							<Entry Name="Target Torque value" Index="#x6071">
-								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Target position" Index="#x607a">
 								<Type>DINT</Type>
@@ -949,29 +1163,20 @@
 							<Entry Name="Target velocity" Index="#x60ff">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target Torque value for aix2" Index="#x6871">
+							<Entry Name="Target torque" Index="#x6071">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target position value for aix2" Index="#x687a">
+							<Entry Name="Host heartbeat" Index="#x68ba">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="Target velocity for aix2" Index="#x68ff">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target Torque value for aix3" Index="#x7071">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target position value for aix3" Index="#x707a">
-								<Type>DINT</Type>
-							</Entry>
-							<Entry Name="Target velocity for aix3" Index="#x70ff">
+							<Entry Name="Digital output" Index="#x68bb">
 								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Modes of operation" Index="#x6060">
 								<Type>SINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT24</Type>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
 						<Pdo Name="RxPdoMappingCsp" Index="#x1601" InOut="1" Flags="#x0010">
@@ -981,21 +1186,82 @@
 							<Entry Name="Target position" Index="#x607a">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
+							<Entry Name="Target velocity" Index="#x60ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque" Index="#x6071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Controlword for axis2" Index="#x6840">
 								<Type>UINT</Type>
 							</Entry>
+							<Entry Name="Target position for axis2" Index="#x687a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis2" Index="#x68ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis2" Index="#x6871">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Host heartbeat" Index="#x68ba">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Digital output" Index="#x68bb">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
+							</Entry>
 						</Pdo>
-						<Pdo Name="RxPdoMappingCsv" Index="#x1602" InOut="1" Flags="#x0010">
+						<Pdo Name="RxPdoMappingCsv" Index="#x1602" InOut="1" Flags="#x0010" SyncMan="2">
 							<Entry Name="Controlword" Index="#x6040">
 								<Type>UINT</Type>
+							</Entry>
+							<Entry Name="Target position" Index="#x607a">
+								<Type>DINT</Type>
 							</Entry>
 							<Entry Name="Target velocity" Index="#x60ff">
 								<Type>DINT</Type>
 							</Entry>
-							<Entry Name="E0000:00">
-								<Type>UINT</Type>
+							<Entry Name="Target torque" Index="#x6071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target position for axis2" Index="#x687a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis2" Index="#x68ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis2" Index="#x6871">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target position for axis3" Index="#x707a">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target velocity for axis3" Index="#x70ff">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Target torque for axis3" Index="#x7071">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Host heartbeat" Index="#x68ba">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Digital output" Index="#x68bb">
+								<Type>DINT</Type>
+							</Entry>
+							<Entry Name="Modes of operation" Index="#x6060">
+								<Type>SINT</Type>
+							</Entry>
+							<Entry>
+								<Type GUID="{18071995-0000-0000-0000-002000000018}">ARRAY [0..2] OF BYTE</Type>
 							</Entry>
 						</Pdo>
+						<CoeProfile ProfileNo="131474"/>
 					</EtherCAT>
 				</Box>
 				<EtherCAT/>
@@ -1003,46 +1269,46 @@
 		</Io>
 	</Project>
 	<Mappings>
-		<MappingInfo Identifier="{00000000-2001-0850-0020-500840000403}" Id="#x02030010"/>
+		<MappingInfo Identifier="{00000000-2001-0850-0020-500820000403}" Id="#x02030010"/>
 		<OwnerA Name="TIPC^SlaveController^SlaveController Instance">
-			<OwnerB Name="TIID^Device 4 (EtherCAT)^Box 3 (AX58200_MotorControl)">
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_statusWord" VarB="TxPdoMappingCspCsv^Statusword"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_statusWord" VarB="TxPdoMappingCspCsv^Statusword"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_panelInstrumentOnIO" VarB="TxPdoMappingCspCsv^digital input"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_controlWord" VarB="RxPdoMappingCspCsv^Controlword"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_opMode" VarB="RxPdoMappingCspCsv^Modes of operation"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position value for aix3"/>
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^Box 1 (AX58200_MotorControl)">
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_current" VarB="TxPdoMappingCsv^Torque actual value for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCsv^ENC for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCsv^Position actual value for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorInputs^m_statusWord" VarB="TxPdoMappingCsv^Statusword"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_current" VarB="TxPdoMappingCsv^Torque actual value for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCsv^ENC for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCsv^Position actual value for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorInputs^m_statusWord" VarB="TxPdoMappingCsv^Statusword"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_panelInstrumentOnIO" VarB="TxPdoMappingCsv^Digital input"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCsv^Target torque for axis2"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCsv^Target position for axis2"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_controlWord" VarB="RxPdoMappingCsv^Controlword"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[4].m_motorOutputs^m_opMode" VarB="RxPdoMappingCsv^Modes of operation"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCsv^Target torque for axis3"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[5].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCsv^Target position for axis3"/>
 			</OwnerB>
-			<OwnerB Name="TIID^Device 4 (EtherCAT)^Box 4 (AX58200_MotorControl)">
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_statusWord" VarB="TxPdoMappingCspCsv^Statusword"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_statusWord" VarB="TxPdoMappingCspCsv^Statusword"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_current" VarB="TxPdoMappingCspCsv^Torque actual value"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCspCsv^ENC2 for aix1"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCspCsv^Position actual value"/>
-				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_statusWord" VarB="TxPdoMappingCspCsv^Statusword"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position value for aix2"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_controlWord" VarB="RxPdoMappingCspCsv^Controlword"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_opMode" VarB="RxPdoMappingCspCsv^Modes of operation"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position value for aix3"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCspCsv^Target Torque value"/>
-				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCspCsv^Target position"/>
+			<OwnerB Name="TIID^Device 3 (EtherCAT)^Box 2 (AX58200_MotorControl)">
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_current" VarB="TxPdoMappingCsv^Torque actual value for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCsv^ENC for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCsv^Position actual value for axis2"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorInputs^m_statusWord" VarB="TxPdoMappingCsv^Statusword"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_current" VarB="TxPdoMappingCsv^Torque actual value for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCsv^ENC for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCsv^Position actual value for axis3"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorInputs^m_statusWord" VarB="TxPdoMappingCsv^Statusword"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_current" VarB="TxPdoMappingCsv^Torque actual value"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_linkEncoder" VarB="TxPdoMappingCsv^ENC"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_motorEncoder" VarB="TxPdoMappingCsv^Position actual value"/>
+				<Link VarA="TaskSlaveArmControl Inputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorInputs^m_statusWord" VarB="TxPdoMappingCsv^Statusword"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCsv^Target torque for axis2"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCsv^Target position for axis2"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_controlWord" VarB="RxPdoMappingCsv^Controlword"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[6].m_motorOutputs^m_opMode" VarB="RxPdoMappingCsv^Modes of operation"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCsv^Target torque for axis3"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[7].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCsv^Target position for axis3"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorOutputs^m_cmdCurrent" VarB="RxPdoMappingCsv^Target torque"/>
+				<Link VarA="TaskSlaveArmControl Outputs^SlaveArmControl.m_slaveRobot.m_slaveArms[1].m_joints[8].m_motorOutputs^m_cmdMotorEncoder" VarB="RxPdoMappingCsv^Target position"/>
 			</OwnerB>
 		</OwnerA>
 	</Mappings>
